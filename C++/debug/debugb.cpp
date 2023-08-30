@@ -1,0 +1,31 @@
+#include<cstdio>
+int  main()
+{
+	int x,a,b,n=0,i=2,j=2;
+	for(x=201;x<=998;x++)//循环被除数筛选素数
+	{
+		for(i=2;i<x;i++)//筛选素数
+		{
+			if(x%i==0)//非素数
+				break;
+		}
+		if(i==x)//x是素数
+		{
+			a=i;
+			b=a+2;
+			i=2;
+			for(j=2;j<=b;j++)//筛选素数
+			{
+				if(b%j==0)//非素数
+					break;
+			}
+			if(j==b)
+			{
+				printf("%d\t%d\n",a,b);
+				n++;
+				j=2;
+			}
+		}
+	}
+	printf("\n共%d对。",n);
+}
