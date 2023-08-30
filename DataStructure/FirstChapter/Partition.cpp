@@ -16,9 +16,18 @@ int maxSum(int data[], int first, int end)
          * 将序列分为左边右边和中间三类，肯定存在一组之中有最大子序列，所以目标就是找到三组之中的最大值，然后每一组再进行递归查询，得到
          * 最小子序列最大值，然后进行合并，最终得到组合的最大值。
          * */
+<<<<<<< HEAD
         int sumLeft = maxSum(data, first, mid);    // 情况1
         int sumRight = maxSum(data, mid + 1, end); // 情况2
         //! 注意两种情况的序列集合不可以有交集，右边的情况必须从 mid+1 开始！
+=======
+
+        int sumLeft = maxSum(data, first, mid);    // 情况1
+        int sumRight = maxSum(data, mid + 1, end); // 情况2
+        //! 注意两种情况的序列集合不可以有交集，右边的情况必须从 mid+1 开始！
+        
+
+>>>>>>> cd5ff6773acab791dbd21fea97e848fb8e5d8fbc
         // 情况3：
         int s1 = 0, lefts = 0;
         for (int i = mid; i >= first; i--)
