@@ -2,7 +2,9 @@
 
 #define OK 1
 using namespace std;
+
 // ÇØ¾ÅÉØ·¨ f(x) = a0 + x(a1 +x(a2+x(...))=ao+a1x+a2x^2+a3x^3+...
+
 double f(int n, double a[], double x)
 {
     int i;
