@@ -1,39 +1,30 @@
 #include <iostream>
 using namespace std;
-int maxTri(int a, int b, int c)
+int *insertSort(int data[])
 {
-    return a > b ? (a > c ? a : c) : (b > c ? b : c);
-}
-int maxSum(int data[], int first, int end)
-{
-    if (first == end)
-        return data[first];
-    int mid = (first + end) / 2;
-    int sumLeft = maxSum(data, first, mid);
-    int sumRight = maxSum(data, mid + 1, end);
-
-    int sum1 = 0, left = 0;
-    for (int i = mid; i >= first; i--)
+    int len = sizeof(data) / sizeof(data[0]);
+    for (int j = 2; j <= len; j++)
     {
-        left += data[i];
-        if (left > sum1)
-            sum1 = left;
+        int key = data[j];
+        int i = j - 1;
+        while (i > 0 && data[i] > key)
+        {
+            data[i + 1] = data[i];
+            i = i - 1;
+        }
+        data[i + 1] = key;
     }
-    int sum2 = 0, right = 0;
-    for (int i = mid + 1; i <= end; i++)
-    {
-        right += data[i];
-        if (right > sum2)
-            sum2 = right;
-    }
-    int sum = sum1 + sum2;
-
-    return maxTri(sum, sumLeft, sumRight);
+    return data;
 }
 
 int main()
 {
-    int data[] = {-3, 23, 3, -23, -1, 23, -2, 3};
-    printf("max value: %d", maxSum(data, 0, sizeof(data) / sizeof(int) - 1));
+    int data[] = {5, 2, 3, 6, 1, 3};
+    int *p = insertSort(data);
+    int len = sizeof(data) / sizeof(data[0]);
+    for (int i = 0; i < len; i++)
+    {
+        cout << *(p + i);
+    }
     return 0;
 }
