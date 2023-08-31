@@ -2,9 +2,7 @@
 using namespace std;
 int maxTri(int a, int b, int c)
 {
-    a = a > b ? a : b;
-    a = a > c ? a : c;
-    return a;
+    return a > b ? (a > c ? a : c) : (b > c ? b : c);
 }
 int maxSum(int data[], int first, int end)
 {
