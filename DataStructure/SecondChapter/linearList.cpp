@@ -1,166 +1,164 @@
-/**
- * 顺序存储结构的线性表
- * */
-#include <cstdio>
-#define MAX_SIZE 20
-#define OK 1
+#include <iostream>
+#include <vector>
+using namespace std;
+#define LIST_INIT_SIZE 100
+#define OVERFLOW 1
 #define ERROR 0
+#define LIST_INCREMENT 10
+#define OK 1
 #define TRUE 1
 #define FALSE 0
-
+#define NONE 0
+typedef int ElemType;
 typedef int Status;
-typedef int ElemType; // Elem可以是任何类型的数据，这里以int为例子
 
 typedef struct
 {
-    ElemType data[MAX_SIZE];
+    ElemType *elem;
     int length;
-} SqList, *SqListPtr;
+    int listSize;
+} SqList;
+
 /**
- * 初始化线性表
- * */
-Status initSqList(SqListPtr L)
+ * init the sequential list
+ */
+Status initSqList(SqList &L)
 {
-    L->length = 0;
+    if (L.listSize != 0)
+        destroySqList(L);
+    L.elem = (ElemType *)malloc(LIST_INIT_SIZE * sizeof(ElemType));
+    if (!L.elem)
+        exit(OVERFLOW);
+    L.listSize = LIST_INIT_SIZE;
     return OK;
 }
 /**
- * 销毁线性表
+ * destroy the sequential list
  */
-Status destroyList()
+Status destroySqList(SqList &L)
 {
+    free(L.elem);
+    L.length = 0;
+    L.listSize = 0;
+    return OK;
 }
 /**
- * 判断线性表是否为空
- * */
-Status ListSqListEmpty(SqList L)
+ * clear the previous data in the SqList
+ */
+Status clearSqList(SqList &L)
+{
+    return initSqList(L);
+}
+/**
+ * judge whether the sequential list is empty or not
+ */
+bool SqListEmpty(SqList L)
 {
     if (L.length == 0)
-    {
-        return TRUE;
-    }
+        return true;
     else
-    {
-        return FALSE;
-    }
+        return false;
 }
 /**
- * 使线性表L为空表
- * */
-Status ClearSqList(SqListPtr L)
-{
-    L->length = 0;
-    return OK;
-}
-/**
- * 获取线性表L的长度
- * */
+ * get the length of the sequential list
+ */
 int SqListLength(SqList L)
 {
     return L.length;
 }
 /**
- * 一个一个找罢了
- * 顺序存储结构的线性表的获取元素操作 时间复杂度为O(1) 用e返回其值
- * */
-Status GetElem(SqList L, int i, ElemType *e)
+ * get the specified element in the list
+ */
+Status getElem(SqList L, int i, ElemType &e)
 {
-    if (L.length == 0 || i < 1 || i > L.length)
-    {
+    if (i < 1 || i > L.length)
         return ERROR;
+    else
+    {
+        e = L.elem[i - 1];
+        return OK;
     }
-    *e = L.data[i - 1];
-    return OK;
 }
 /**
- * 返回线性表L中第一个与e相等的元素的位置，若找不到，返回0
- * */
-int LocateElem(SqList L, ElemType e)
+ * return the element's location in the sequential list
+ */
+int locateElem(SqList L, ElemType e, Status (*compare)(ElemType, ElemType))
 {
-    for (int i = 0; i < L.length; i++)
-    {
-        if (L.data[i] == e)
-        { // 这里以int为例子 就直接进行比较了
-            return i + 1;
-        }
-    }
-    return 0;
+    int i = 1;
+    ElemType *p = L.elem;
+    while (i <= L.length && !(*compare)(*p++, e))
+        ++i;
+    if (i <= L.length)
+        return i;
+    else
+        return NONE;
 }
 /**
- * 就像排队一样，插了一个人进来其他人就要往后挪
- * 在L的第i个元素之前插入数据元素e，L的长度加1
- * */
-Status SqListInsert(SqListPtr L, int i, ElemType e)
+ * write a function to judge the equal properties
+ */
+Status equal(ElemType a, ElemType b)
 {
-    if (L->length == MAX_SIZE || i < 1 || i > L->length + 1)
-    {
+    if (a == b)
+        return 1;
+    else
+        return false;
+}
+/**
+ * get the prior element of someone
+ */
+Status priorElem(SqList L, ElemType cur_e, ElemType &pre_e)
+{
+    int location = locateElem(L, cur_e, equal);
+    if (location == 0)
         return ERROR;
-    }
-    if (i <= L->length)
-    { // 如果不是插入到最后一个位置，插入数据的位置后的数据往后挪
-        for (int k = L->length - 1; k >= i - 1; k--)
-        {
-            L->data[k + 1] = L->data[k + 1];
-        }
-    }
-    L->data[i - 1] = e;
-    L->length++;
-    return OK;
-}
-/**
- * 删除L的第i个元素，并用e返回删除的元素，L的长度减1
- * */
-Status SqListDelete(SqListPtr L, int i, ElemType *e)
-{
-    if (L->length == 0 || i < 1 || i > L->length)
+    else if (location == 1)
+        return NONE;
+    else
     {
+        pre_e = L.elem[location - 1];
+        return OK;
+    }
+}
+
+/**
+ * get the next element of someone
+ */
+Status nextElem(SqList L, ElemType cur_e, ElemType &next_e)
+{
+    int location = locateElem(L, cur_e, equal);
+    if (location == 0)
         return ERROR;
+    else if (location == L.length)
+        return NONE;
+    else
+    {
+        next_e = L.elem[location + 1];
+        return OK;
     }
-    *e = L->data[i - 1];
-    if (i < L->length)
-    { // 如果删除的不是最后一个位置，删除数据的位置后的数据往前挪
-        for (int k = i; k < L->length; k++)
-        {
-            L->data[k - 1] = L->data[k];
-        }
-    }
-    L->length--; // 并不是不用真正意义上的删除，那个数据还存在，后面可能会被覆盖罢了
-    return OK;
 }
 /**
- * 合并线性表并且除去相同元素
- * */
-void UnionSqList(SqListPtr La, SqList Lb)
+ * insert the specified element in the list
+ */
+Status insertElem(SqList &L, int i, ElemType e)
 {
-    int la_len = SqListLength(*La);
-    int lb_len = SqListLength(Lb);
-    ElemType e;
-    for (int i = 0; i < lb_len; i++)
+    if (i < 1 || i > L.length + 1)
+        return ERROR;
+    if (L.length >= L.listSize)
     {
-        GetElem(Lb, i + 1, &e);
-        if (!LocateElem(*La, e))
+        ElemType *newList = (ElemType *)realloc(L.elem, L.listSize + sizeof(ElemType) * LIST_INCREMENT);
+        if (!newList)
+            exit(OVERFLOW);
+        else
         {
-            SqListInsert(La, ++la_len, e);
+            L.elem = newList;
+            L.listSize += LIST_INCREMENT;
         }
     }
-}
-int main(int argc, char const **argv)
-{
-    SqList La, Lb;
-    ElemType e;
-    for (int i = 0; i < 10; i++)
-    {
-        SqListInsert(&La, i + 1, i + 1);
-        SqListInsert(&Lb, i + 1, i + 11);
-    }
-    UnionSqList(&La, Lb);
-    SqListDelete(&La, 20, &e);
-    printf("%d\n", e);
-    int la_len = SqListLength(La);
-    for (int i = 0; i < la_len; i++)
-    {
-        GetElem(La, i + 1, &e);
-        printf("%d ", e);
-    }
-    return 0;
+    ElemType *p = &L.elem[i - 1];
+    ElemType *q = L.elem + L.length - 1;
+    for (; q >= p; q--)
+        *(q + 1) = *q;
+    *p = e;
+    L.length++;
+    return OK;
 }
