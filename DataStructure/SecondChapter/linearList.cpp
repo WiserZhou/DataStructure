@@ -162,3 +162,77 @@ Status insertElem(SqList &L, int i, ElemType e)
     L.length++;
     return OK;
 }
+/**
+ * delete the specified element
+ */
+Status deleteElem(SqList &L, int i, ElemType &e)
+{
+    if (i < 1 || i > L.length)
+        return ERROR;
+    else
+    {
+        e = L.elem[i - 1];
+        ElemType *p = &L.elem[i - 1];
+        ElemType *q = L.elem + L.length - 1;
+        for (p++; p <= q; p++)
+        {
+            *(p - 1) = *p;
+        }
+        L.length--;
+        return OK;
+    }
+}
+/**
+ * traverse the list
+ */
+Status traverseList(SqList L, Status (*visit)(ElemType e))
+{
+    for (int i = 0; i < L.length; i++)
+    {
+        if (!(*visit)(L.elem[i]))
+            return ERROR;
+    }
+    return OK;
+}
+/**
+ * merge the different list
+ */
+Status MergeList(SqList La, SqList Lb, SqList &Lc)
+{
+    ElemType *pa = La.elem;
+    ElemType *pa_last = La.elem + La.length - 1;
+    ElemType *pb = Lb.elem;
+    ElemType *pb_last = Lb.elem + Lb.length - 1;
+    ElemType *pc = Lc.elem;
+    Lc.listSize = Lc.length = La.length + Lb.length;
+    if (pc != nullptr)
+        free(pc);
+    pc = (ElemType *)malloc(Lc.listSize * sizeof(ElemType));
+    if (!Lc.elem)
+        exit(OVERFLOW);
+    while (pa <= pa_last && pb <= pb_last)
+    {
+        if (*pa <= *pb)
+            *pc++ = *pa++;
+        else
+            *pc++ = *pb++;
+    }
+    while (pa <= pa_last)
+        *pc++ = *pa++;
+    while (pb <= pb_last)
+        *pc++ = *pb++;
+    return OK;
+}
+/**
+ * union the list
+ */
+Status unionList(SqList &La, SqList Lb)
+{
+    for (int i = 0; i < Lb.length; i++)
+    {
+        int location = locateElem(La, Lb.elem[i], equal);
+        if (location < 1 || location > La.length)
+            insertElem(La, La.length + 1, Lb.elem[i - 1]);
+    }
+    return OK;
+}
