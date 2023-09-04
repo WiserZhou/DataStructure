@@ -63,20 +63,73 @@ Status PriorElem(SqList L, int cur_e, ElemType &pre_e)
 
 Status ListInsert_Sq(SqList &L, int i, ElemType e)
 {
-        if (i < 1 || i > L.length + 1)
+    if (i < 1 || i > L.length + 1)
         return ERROR;
-        if (L.length >= L.listsize)
-        {
+    if (L.length >= L.listsize)
+    {
         ElemType *newbase = (ElemType *)realloc(L.elem, (L.listsize + LISTINCREMENT) * sizeof(ElemType));
         if (!newbase)
             exit(OVERFLOW);
-        L.elem = newbase;
-        L.listsize += LISTINCREMENT;
+        else
+        {
+            L.elem = newbase;
+            L.listsize += LISTINCREMENT;
         }
+    }
+
+    ElemType *q = &L.elem[i - 1];
+    ElemType *p = &L.elem[L.length - 1];
+    for (; p >= q; --p)
+    {
+        *(p + 1) = *p;
+    }
+    *q = e;
+    ++L.length;
+    return OK;
+}
+
+Status ListDelete_Sq(SqList &L, int i, ElemType &e)
+{
+    if (i < 1 || i > L.length)
+        return ERROR;
+    ElemType *q = &L.elem[i - 1];
+    e = *q;
+    ElemType *p = &L.elem[L.length - 1];
+    for (++q; q <= p; ++q)
+    {
+        *(q - 1) = *q;
+    }
+    --L.length;
+    return OK;
 }
 
 int main()
 {
+    //创建新表
     SqList L;
     InitList_Sq(L);
+
+    ElemType e = {"lzy", 19, "x", 0};
+    ElemType f = {"zyf", 18, "y", 1};
+    //插入值
+    ListInsert_Sq(L,1,e);
+    ListInsert_Sq(L,2,f);
+
+    //求前驱的值
+    ElemType k;
+    PriorElem(L,2,k);
+    int length_before = ListLength(L);
+    printf("Length Before Delete = %d\n",length_before);
+    printf("%d",k.age);
+
+    //删除值
+    ElemType d;
+    ListDelete_Sq(L,1,d);
+    int length_after = ListLength(L);
+    printf("Length After Delete = %d\n",length_after);
+    
+    //销毁表
+    DestoryList(L);
+
+    return 0;
 }
