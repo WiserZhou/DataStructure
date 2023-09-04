@@ -3,7 +3,7 @@
 #define OK 1
 using namespace std;
 
-// 秦九韶法 f(x) = a0 + x(a1 +x(a2+x(...))=ao+a1x+a2x^2+a3x^3+...
+// 绉︿節闊舵硶 f(x) = a0 + x(a1 +x(a2+x(...))=ao+a1x+a2x^2+a3x^3+...
 
 double f(int n, double a[], double x)
 {
@@ -24,4 +24,4 @@ int main()
 
 
 
-// 分治法求解最大子列和问题
+// 鍒嗘不娉曟眰瑙ｆ渶澶у瓙鍒楀拰闂
