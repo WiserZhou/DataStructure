@@ -7,5 +7,11 @@ int main()
    
     for (int i = 0; i < 10; i++)
         cout << a[i] << " 你好";
+<<<<<<< HEAD
+=======
+
+
+        
+>>>>>>> 1fe273d5c54639f3d53f3f978d3e5a017a31bf47
     return 0;
 }
