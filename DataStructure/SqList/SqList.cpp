@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cmath>
+#include <cstring>
 #define LIST_INIT_SIZE 100
 #define LISTINCREMENT 10
 #define OVERFLOW 1
@@ -103,6 +105,41 @@ Status ListDelete_Sq(SqList &L, int i, ElemType &e)
     return OK;
 }
 
+int LocateElem_Sq(SqList L, ElemType e, Status (*compare)(ElemType, ElemType))
+{
+    int i = 1;
+    ElemType *p = L.elem;
+    while (i <= L.length && !(*compare)(*p++, e))
+    {
+        ++i;
+    }
+    if (i <= L.length)
+        return i;
+    else
+        return 0;
+}
+
+Status compare(ElemType a, ElemType b)
+{
+    if (strcmp(a.name, b.name) != 0)
+    {
+        return FALSE;
+    }
+    if (a.age != b.age)
+    {
+        return FALSE;
+    }
+    if (strcmp(a.sex, b.sex) != 0)
+    {
+        return FALSE;
+    }
+    if (fabs(a.score - b.score) > 1e-6)
+    {
+        return FALSE;
+    }
+    return TRUE;
+}
+
 int main()
 {
     //创建新表
@@ -128,8 +165,11 @@ int main()
     int length_after = ListLength(L);
     printf("Length After Delete = %d\n",length_after);
     
+    //定位值
+    int i = LocateElem_Sq(L,e,compare);
+    printf("%d\n",i);
+
     //销毁表
     DestoryList(L);
-
     return 0;
 }
