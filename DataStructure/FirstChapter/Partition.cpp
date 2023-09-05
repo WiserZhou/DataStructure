@@ -31,10 +31,14 @@ int maxSum(int data[], int first, int end)
 
     return maxTri(sum, sumLeft, sumRight);
 }
-
+template <typename T>
+int lengthOfArray(T a[])
+{
+    return sizeof(a) / sizeof(T);
+}
 int main()
 {
     int data[] = {-3, 23, 3, -23, -1, 23, -2, 3};
-    printf("max value: %d", maxSum(data, 0, sizeof(data) / sizeof(int) - 1));
+    printf("max value: %d", maxSum(data, 0, lengthOfArray<int>(data) - 1));
     return 0;
 }

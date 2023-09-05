@@ -22,6 +22,7 @@ typedef struct
 /**
  * init the sequential list
  */
+
 Status initSqList(SqList &L)
 {
     if (L.listSize != 0)
@@ -86,7 +87,7 @@ int locateElem(SqList L, ElemType e, Status (*compare)(ElemType, ElemType))
 {
     int i = 1;
     ElemType *p = L.elem;
-    while (i <= L.length && !(*compare)(*p++, e))
+    while (i <= L.length && !(*compare)(*p++, e)) //  *运算符先获取p指向的内容，然后再执行++，但是++的运算符优先级高于*
         ++i;
     if (i <= L.length)
         return i;
@@ -99,7 +100,7 @@ int locateElem(SqList L, ElemType e, Status (*compare)(ElemType, ElemType))
 Status equal(ElemType a, ElemType b)
 {
     if (a == b)
-        return 1;
+        return true;
     else
         return false;
 }
@@ -204,13 +205,15 @@ Status MergeList(SqList La, SqList Lb, SqList &Lc)
     ElemType *pb = Lb.elem;
     ElemType *pb_last = Lb.elem + Lb.length - 1;
     ElemType *pc = Lc.elem;
-    Lc.listSize = Lc.length = La.length + Lb.length;
+
+    Lc.length = La.length + Lb.length;
+    Lc.listSize = Lc.length + LIST_INCREMENT;
     if (pc != nullptr)
         free(pc);
     pc = (ElemType *)malloc(Lc.listSize * sizeof(ElemType));
     if (!Lc.elem)
         exit(OVERFLOW);
-    while (pa <= pa_last && pb <= pb_last)
+    while (pa <= pa_last && pb <= pb_last) // 归并排序，要求原数组已经进行了排序
     {
         if (*pa <= *pb)
             *pc++ = *pa++;
