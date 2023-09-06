@@ -1,16 +1,7 @@
-#include <iostream>
-#include <vector>
-using namespace std;
-#define LIST_INIT_SIZE 100
-#define OVERFLOW 1
-#define ERROR 0
-#define LIST_INCREMENT 10
-#define OK 1
-#define TRUE 1
-#define FALSE 0
-#define NONE 0
-typedef int ElemType;
-typedef int Status;
+
+#include "..\header\unity.h"
+
+
 
 typedef struct
 {
