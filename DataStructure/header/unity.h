@@ -19,4 +19,5 @@ T maxTri(T a, T b, T c)
 #define NONE 0
 typedef int ElemType;
 typedef int Status;
+typedef int Position;
 

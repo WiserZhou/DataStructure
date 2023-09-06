@@ -1,31 +1,15 @@
-#include <iostream>
-using namespace std;
 
+#include "..\header\LinkedList.h"
+#include "..\header\unity.h"
 int main()
 {
-    int n = 2;
-    int A[n][n] = {{1, 2}, {3, 4}};
-    int B[n][n] = {{1, 2}, {3, 4}};
-    int C[n][n] = {};
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            C[i][j] = 0;
-            for (int k = 0; k < n; k++)
-            {
-                C[i][j] += A[i][k] * B[k][j];
-            }
-        }
-    }
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            cout << C[i][j] << " ";
-        }
-        cout << endl;
-    }
-
+    LinkList list;
+    list.insertHead(2);
+    list.insertEnd(3);
+    list.display();
+    cout << list.getLen() << endl;
+    cout << list.locateElem(3) << endl;
+    list.display();
+    cout << list.getLen() << endl;
     return 0;
 }
