@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/86186/Desktop/Codefile/C++/debug",
-      "program": "c:/Users/86186/Desktop/Codefile/C++/debug/build/Debug/outDebug",
+      "cwd": "c:/Users/86186/Desktop/Codefile/DataStructure/FirstChapter",
+      "program": "c:/Users/86186/Desktop/Codefile/DataStructure/FirstChapter/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

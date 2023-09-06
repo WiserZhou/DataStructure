@@ -1,10 +1,6 @@
-
+#include "..\header\maths.h"
 #include <iostream>
 using namespace std;
-int maxTri(int a, int b, int c)
-{
-    return a > b ? (a > c ? a : c) : (b > c ? b : c);
-}
 int maxSum(int data[], int first, int end)
 {
     if (first == end)
@@ -29,16 +25,11 @@ int maxSum(int data[], int first, int end)
     }
     int sum = sum1 + sum2;
 
-    return maxTri(sum, sumLeft, sumRight);
-}
-template <typename T>
-int lengthOfArray(T a[])
-{
-    return sizeof(a) / sizeof(T);
+    return maxTri<int>(sum, sumLeft, sumRight);
 }
 int main()
 {
     int data[] = {-3, 23, 3, -23, -1, 23, -2, 3};
-    printf("max value: %d", maxSum(data, 0, lengthOfArray<int>(data) - 1));
+    printf("max value: %d", maxSum(data, 0, sizeof(data) / sizeof(int) - 1));
     return 0;
 }
