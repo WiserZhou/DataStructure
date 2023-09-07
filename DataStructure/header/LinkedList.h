@@ -37,6 +37,9 @@ public:
     Node *getPosition(int i);
     Node *getHeadPtr();
     Node *getEndPtr();
+    Node *getFirst();
+    Node *getLast();
+    ElemType getValue(Node *p);
 
     Status setValue(Node *p, ElemType e);
 
@@ -56,6 +59,7 @@ public:
     Status insertHead(ElemType e);
     Status insertEnd(ElemType e);
     Status insertBefore(Node *p, Node *q);
+    Status insertAfter(Node *p, Node *q);
 
     Status changeNode(Node *cur_p, Node *fut_p);
     void changeAfter(Node *p);
@@ -64,10 +68,73 @@ public:
     Node *searchNodeByValue(ElemType e);
     Node *searchNodeByIndex(int i);
 
+    bool isEnd(Node *p);
+    bool isHead(Node *p);
+
     Position locateElem(ElemType e);
     Status traverse(Status (*visit)(ElemType &e));
+    Status static mergeList(LinkList La, LinkList Lb, LinkList &Lc, Status (*compare)(ElemType, ElemType));
     void display();
 };
+Status LinkList::mergeList(LinkList La, LinkList Lb, LinkList &Lc, Status (*compare)(ElemType, ElemType))
+{
+    if (!Lc.initList())
+        return ERROR;
+    Node *pa = La.getFirst();
+    Node *pb = La.getFirst();
+    while (!La.isEnd(pa) && !Lb.isEnd(pb))
+    {
+        ElemType a = La.getValue(pa);
+        ElemType b = Lb.getValue(pb);
+        if (compare(a, b))
+            Lc.insertEnd(a);
+        else
+            Lc.insertEnd(b);
+        pa = La.getNext(pa);
+        pb = Lb.getNext(pb);
+    }
+    while (!La.isEnd(pa))
+    {
+        Lc.insertEnd(La.getValue(pa));
+        pa = La.getNext(pa);
+    }
+    while (!Lb.isEnd(pb))
+    {
+        Lc.insertEnd(Lb.getValue(pb));
+        pb = Lb.getNext(pb);
+    }
+    return OK;
+}
+bool LinkList::isEnd(Node *p)
+{
+    if (p == end)
+        return true;
+    else
+        return false;
+}
+bool LinkList::isHead(Node *p)
+{
+    if (p == head)
+        return true;
+    else
+        return false;
+}
+Node *LinkList::getFirst()
+{
+    return head->next;
+}
+Node *LinkList::getLast()
+{
+    return end->prior;
+}
+
+ElemType LinkList::getValue(Node *p)
+{
+    if (p != nullptr)
+        return p->value;
+    else
+        return NONE;
+}
 Status LinkList::traverse(Status (*visit)(ElemType &e))
 {
     Node *p = head->next;
@@ -113,6 +180,11 @@ Node *LinkList::getNext(Node *p)
 Status LinkList::insertBefore(Node *p, Node *q)
 {
     linkTriNode(p->prior, q, p);
+    return OK;
+}
+Status LinkList::insertAfter(Node *p, Node *q)
+{
+    linkTriNode(p, q, p->next);
     return OK;
 }
 Node *LinkList::getHeadPtr()
@@ -170,6 +242,12 @@ void LinkList::changeAfter(Node *p)
 {
     if (p == nullptr)
         return;
+    else if (p == head || p == end)
+    {
+        cout << "head or end ptr is not permitted for control!" << endl;
+        return;
+    }
+
     Node *a = p->next;
     discard(p);
     linkTriNode(a, p, a->next);
@@ -178,6 +256,12 @@ void LinkList::changeBefore(Node *p)
 {
     if (p == nullptr)
         return;
+    else if (p == head || p == end)
+    {
+        cout << "head or end ptr is not permitted for control!" << endl;
+        return;
+    }
+
     Node *a = p->prior;
     discard(p);
     linkTriNode(a->prior, p, a);
