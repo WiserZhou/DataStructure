@@ -8,7 +8,8 @@ int main()
     list.insertEnd(3);
     list.display();
     cout << list.getLen() << endl;
-    cout << list.locateElem(3) << endl;
+
+    cout << list.locateElem(4) << endl;
     list.display();
     cout << list.getLen() << endl;
     return 0;

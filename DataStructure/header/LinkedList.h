@@ -65,10 +65,10 @@ public:
     Node *searchNodeByIndex(int i);
 
     Position locateElem(ElemType e);
-    Status traverse(Status (*visit)(ElemType e));
+    Status traverse(Status (*visit)(ElemType &e));
     void display();
 };
-Status LinkList::traverse(Status (*visit)(ElemType e))
+Status LinkList::traverse(Status (*visit)(ElemType &e))
 {
     Node *p = head->next;
     for (int i = 0; p != end; i++)
