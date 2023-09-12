@@ -10,7 +10,7 @@ T maxTri(T a, T b, T c)
 }
 
 #define LIST_INIT_SIZE 100
-#define OVERFLOW 1
+#define OVERFLOW -2
 #define ERROR 0
 #define LIST_INCREMENT 10
 #define OK 1
@@ -20,7 +20,7 @@ T maxTri(T a, T b, T c)
 typedef int ElemType;
 typedef int Status;
 typedef int Position;
+typedef int LEN;
 
 #define STACK_INIT_SIZE 100
 #define STACK_INCREMENT 10
-
