@@ -209,6 +209,7 @@ void LinkList::display()
     }
     if (i == 0)
         cout << "empty" << endl;
+    cout << "length:" << length << endl;
 }
 int LinkList::getLen()
 {
