@@ -9,7 +9,13 @@ typedef struct
     ElemType *top;
     int stackSize;
 } Stack;
-
+bool emptyStack(Stack S)
+{
+    if (S.top == S.base)
+        return true;
+    else
+        return false;
+}
 Status initStack(Stack &S)
 {
     S.base = (ElemType *)malloc(sizeof(ElemType) * STACK_INIT_SIZE);
@@ -66,13 +72,7 @@ LEN lengthStack(Stack S)
 {
     return (S.top - S.base);
 }
-bool emptyStack(Stack S)
-{
-    if (S.top == S.base)
-        return true;
-    else
-        return false;
-}
+
 bool noneStack(Stack S)
 {
     if (S.base == nullptr)
@@ -80,6 +80,7 @@ bool noneStack(Stack S)
     else
         return true;
 }
+
 Status traverseStack(Stack &S, Status (*visit)(ElemType e))
 {
     if (noneStack(S))
@@ -89,4 +90,116 @@ Status traverseStack(Stack &S, Status (*visit)(ElemType e))
     ElemType *p = S.top;
     while (p > S.base)
         visit(*--p);
+    return OK;
+}
+void displayStack(Stack S)
+{
+    ElemType *p = S.top;
+    while (p > S.base)
+        cout << (char)*--p << " ";
+}
+void BinaryTransfer()
+{
+    Stack S;
+    initStack(S);
+    int N;
+    cout << "input a number which you want to transfer: ";
+    cin >> N;
+    while (N)
+    {
+        push(S, N % BINARY); // 将N对进制取余，得到的就是转换的结果
+        N /= BINARY;
+        // Nx =an×Y"+...+a2×Y^2 +a1xy^1+a0xy^0
+    }
+    ElemType e;
+    while (!emptyStack(S))
+    {
+        pop(S, e);
+        cout << e;
+    }
+    clearStack(S);
+}
+
+Status checkBracket()
+{
+    char ch;
+    Stack S;
+    initStack(S);
+    ElemType e;
+    while ((ch = getchar()) != '\n')
+    {
+        switch (ch)
+        {
+            // case表达式不可以连续使用逻辑判断符
+        case '(':
+        case '{':
+        case '[':
+            push(S, ch);
+            break;
+        case ')':
+            if (emptyStack(S))
+                return FALSE;
+            pop(S, e);
+            if (e != '(')
+                return FALSE;
+            break;
+        case ']':
+            if (emptyStack(S))
+                return FALSE;
+            pop(S, e);
+            if (e != '[')
+                return FALSE;
+            break;
+        case '}':
+            if (emptyStack(S))
+                return FALSE;
+            pop(S, e);
+            if (e != '{')
+                return FALSE;
+            break;
+        default:
+            break;
+        }
+    }
+    if (emptyStack(S))
+        return TRUE;
+    else
+        return FALSE;
+}
+
+void LineEdit()
+{
+    Stack S;
+    ElemType e;
+    initStack(S);
+    char ch = getchar();
+    while (ch != EOF && ch != '!') // EOF通过ctrl+Z输入
+    {
+        while (ch != EOF && ch != '\n')
+        {
+            switch (ch)
+            {
+            case '#':
+                pop(S, e);
+
+                break;
+            case '@':
+                clearStack(S);
+                break;
+            default:
+                push(S, ch);
+                break;
+            }
+            ch = getchar();
+        }
+        displayStack(S);
+        clearStack(S);
+        if (ch != EOF)
+            ch = getchar();
+    }
+    destroyStack(S);
+}
+int main()
+{
+    LineEdit();
 }

@@ -24,3 +24,4 @@ typedef int LEN;
 
 #define STACK_INIT_SIZE 100
 #define STACK_INCREMENT 10
+#define BINARY 8
