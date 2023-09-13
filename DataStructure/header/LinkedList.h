@@ -41,6 +41,7 @@ public:
     Node *getLast();
     ElemType getValue(Node *p);
 
+
     Status setValue(Node *p, ElemType e);
 
     Status initList();
