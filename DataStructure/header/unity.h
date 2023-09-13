@@ -45,3 +45,4 @@ typedef struct
     int di;
 
 } ElemType;
+typedef int QElemType;

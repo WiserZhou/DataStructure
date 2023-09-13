@@ -37,6 +37,7 @@ Status push(Stack &S, ElemType e)
 {
     if (S.top - S.base >= S.stackSize)
     {
+        
         S.base = (ElemType *)realloc(S.base, sizeof(ElemType) * (STACK_INCREMENT + S.stackSize));
         if (!S.base)
             exit(OVERFLOW);
@@ -201,7 +202,7 @@ Status traverseStack(Stack &S, Status (*visit)(ElemType e))
 // }
 
 typedef int MazeType[11][11];
-MazeType maze = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+MazeType maze = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // 二维数组typedef方法
                  {1, 0, 0, 1, 0, 0, 0, 1, 0, 1},
                  {1, 0, 0, 1, 0, 0, 0, 1, 0, 1},
                  {1, 0, 0, 0, 0, 1, 1, 0, 0, 1},
@@ -241,7 +242,6 @@ PosType NextPos(PosType cur_pos, int di)
     {
     case 1:
         cur_pos.x += 1;
-
         break;
     case 2:
         cur_pos.y += 1;
@@ -275,9 +275,9 @@ Status mazePath(PosType start, PosType end)
     int cur_step = 1;
     do
     {
+        cout << cur_pos;
         if (Pass(cur_pos))
         {
-            cout << cur_pos;
             FootPrint(cur_pos);
             setSElem(e, cur_step, cur_pos, 1);
             push(S, e);
