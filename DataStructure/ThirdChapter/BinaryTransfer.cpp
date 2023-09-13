@@ -1,53 +1,11 @@
-#include <bits/stdc++.h>
 using namespace std;
-
+#include <iostream>
+#include <stack>
 typedef int ElemType;
 #define STACK_INIT_SIZE 100
 #define STACK_INCREMENT 10
 #define ERROR -2
 #define OVERFLOW -1
-class Stack
-{
-private:
-    ElemType *base;
-    ElemType *top;
-    int stackSize;
-
-public:
-    Stack()
-    {
-        base = (ElemType *)malloc(sizeof(ElemType) * STACK_INIT_SIZE);
-        if (!base)
-            exit(OVERFLOW);
-        top = base;
-        stackSize = STACK_INIT_SIZE;
-    }
-    void push(ElemType e)
-    {
-        if (top - base >= stackSize)
-        {
-            ElemType *p = (ElemType *)realloc(base, sizeof(ElemType) * (stackSize + STACK_INCREMENT));
-            if (!p)
-                exit(OVERFLOW);
-            top = base + stackSize;
-            stackSize += STACK_INCREMENT;
-        }
-        *top++ = e;
-    }
-    int pop()
-    {
-        if (base == top)
-            return ERROR;
-        return *--top;
-    }
-    bool empty()
-    {
-        if (top == base)
-            return true;
-        else
-            return false;
-    }
-};
 char transfer(int x)
 {
     if (x < 10)
@@ -67,7 +25,7 @@ char transfer(int x)
 }
 int main()
 {
-    Stack S;
+    stack<int> S;
     int a, b;
     scanf("%d%d", &a, &b);
     while (a)
@@ -77,6 +35,9 @@ int main()
         S.push(e);
     }
     while (!S.empty())
-        printf("%c", transfer(S.pop()));
+    {
+        printf("%c", transfer(S.top()));
+        S.pop();
+    }
     return 0;
 }

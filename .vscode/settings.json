@@ -67,6 +67,7 @@
     "functional": "cpp",
     "shared_mutex": "cpp",
     "regex": "cpp",
-    "iostream": "cpp"
+    "iostream": "cpp",
+    "stack": "cpp"
   }
 }
