@@ -1,1 +1,7 @@
-## Recruit someone to co-write the code for the data structure course
+# 大一学习的代码文件
+
+## C++文件里包含了大一上的所有代码
+
+## DataStructure文件里是数据结构的代码
+
+### 以上代码供参考，代码实时更新，会修改一些bug

@@ -1,10 +1,5 @@
+#include "..\header\unity.h"
 
-#include <iostream>
-using namespace std;
-int maxTri(int a, int b, int c)
-{
-    return a > b ? (a > c ? a : c) : (b > c ? b : c);
-}
 int maxSum(int data[], int first, int end)
 {
     if (first == end)
@@ -29,9 +24,8 @@ int maxSum(int data[], int first, int end)
     }
     int sum = sum1 + sum2;
 
-    return maxTri(sum, sumLeft, sumRight);
+    return maxTri<int>(sum, sumLeft, sumRight);
 }
-
 int main()
 {
     int data[] = {-3, 23, 3, -23, -1, 23, -2, 3};
