@@ -37,7 +37,6 @@ Status push(Stack &S, ElemType e)
 {
     if (S.top - S.base >= S.stackSize)
     {
-        
         S.base = (ElemType *)realloc(S.base, sizeof(ElemType) * (STACK_INCREMENT + S.stackSize));
         if (!S.base)
             exit(OVERFLOW);
@@ -201,7 +200,7 @@ Status traverseStack(Stack &S, Status (*visit)(ElemType e))
 //     destroyStack(S);
 // }
 
-typedef int MazeType[11][11];
+typedef int MazeType[12][12];
 MazeType maze = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // 二维数组typedef方法
                  {1, 0, 0, 1, 0, 0, 0, 1, 0, 1},
                  {1, 0, 0, 1, 0, 0, 0, 1, 0, 1},
@@ -263,11 +262,12 @@ void MarkPrint(PosType seat)
 }
 ostream &operator<<(ostream &os, const PosType &p)
 {
-    os << "(" << p.x << ", " << p.y << ")" << endl;
+    os << "(" << p.x << ", " << p.y << ")";
     return os;
 }
 Status mazePath(PosType start, PosType end)
 {
+    ofstream outFile("output.txt", ios::app);
     ElemType e;
     Stack S;
     initStack(S);
@@ -275,9 +275,10 @@ Status mazePath(PosType start, PosType end)
     int cur_step = 1;
     do
     {
-        cout << cur_pos;
+        outFile << cur_pos;
         if (Pass(cur_pos))
         {
+            outFile << "yes" << endl;
             FootPrint(cur_pos);
             setSElem(e, cur_step, cur_pos, 1);
             push(S, e);
@@ -288,6 +289,7 @@ Status mazePath(PosType start, PosType end)
         }
         else
         {
+            outFile << "no";
             if (!emptyStack(S))
             {
                 pop(S, e);
@@ -305,10 +307,12 @@ Status mazePath(PosType start, PosType end)
             }
         }
     } while (!emptyStack(S));
+    outFile.close();
     return FALSE;
 }
 int main()
 {
+
     PosType start = {1, 1};
     PosType end = {8, 8};
     cout << mazePath(start, end);

@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <vector>
+#include <fstream>
 using namespace std;
 
 template <typename T>
@@ -22,7 +23,7 @@ typedef int Status;
 typedef int Position;
 typedef int LEN;
 
-#define STACK_INIT_SIZE 100
+#define STACK_INIT_SIZE 10000
 #define STACK_INCREMENT 10
 #define BINARY 8
 
@@ -43,6 +44,5 @@ typedef struct
     int ord;
     PosType seat;
     int di;
-
 } ElemType;
 typedef int QElemType;
