@@ -280,9 +280,9 @@ Status mazePath(PosType start, PosType end)
         {
             outFile << "yes" << endl;
             FootPrint(cur_pos);
-            setSElem(e, cur_step, cur_pos, 1);
+            setSElem(e, cur_step, cur_pos, 1);  
             push(S, e);
-            if (equal(cur_pos, end))
+            if (equal(cur_pos, end)) 
                 return TRUE;
             cur_pos = NextPos(cur_pos, 1);
             cur_step++;
@@ -312,7 +312,6 @@ Status mazePath(PosType start, PosType end)
 }
 int main()
 {
-
     PosType start = {1, 1};
     PosType end = {8, 8};
     cout << mazePath(start, end);

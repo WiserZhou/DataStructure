@@ -1,84 +1,133 @@
-#include <bits/stdc++.h>
+#include <iostream> //输入的表达式要以'#'结尾，如‘5+6*3/(3-1)#’
+#include <cstring>
+#include <cstdio>
+#include <cctype>
+#include <stack>
 using namespace std;
 
-void decimalToBinary(int decimalValue)
-{
-    stack<int> binaryStack;
-    while (decimalValue > 0)
-    {
-        int remainder = decimalValue % 2;
-        binaryStack.push(remainder);
-        decimalValue /= 2;
-    }
+stack<char> optr;   // 运算符栈
+stack<double> opnd; // 操作数栈
 
-    while (!binaryStack.empty())
+int getIndex(char theta) // 获取theta所对应的索引
+{
+    int index = 0;
+    switch (theta)
     {
-        cout << binaryStack.top();
-        binaryStack.pop();
+    case '+':
+        index = 0;
+        break;
+    case '-':
+        index = 1;
+        break;
+    case '*':
+        index = 2;
+        break;
+    case '/':
+        index = 3;
+        break;
+    case '(':
+        index = 4;
+        break;
+    case ')':
+        index = 5;
+        break;
+    case '#':
+        index = 6;
+    default:
+        break;
     }
+    return index;
 }
-void decimalToOctal(int decimalValue)
+
+char getPriority(char theta1, char theta2) // 获取theta1与theta2之间的优先级
 {
-    stack<int> octalStack;
-    while (decimalValue > 0)
-    {
-        int remainder = decimalValue % 8;
-        octalStack.push(remainder);
-        decimalValue /= 8;
-    }
-
-    while (!octalStack.empty())
-    {
-        cout << octalStack.top();
-        octalStack.pop();
-    }
-}
-
-void decimalToHexadecimal(int decimalValue)
-{
-    stack<char> hexStack;
-    while (decimalValue > 0)
-    {
-        int remainder = decimalValue % 16;
-
-        if (remainder < 10)
+    const char priority[][7] = // 算符间的优先级关系
         {
-            hexStack.push(remainder + '0');
+            {'>', '>', '<', '<', '<', '>', '>'},
+            {'>', '>', '<', '<', '<', '>', '>'},
+            {'>', '>', '>', '>', '<', '>', '>'},
+            {'>', '>', '>', '>', '<', '>', '>'},
+            {'<', '<', '<', '<', '<', '=', '0'},
+            {'>', '>', '>', '>', '0', '>', '>'},
+            {'<', '<', '<', '<', '<', '0', '='},
+        };
+
+    int index1 = getIndex(theta1);
+    int index2 = getIndex(theta2);
+    return priority[index1][index2];
+}
+
+double calculate(double b, char theta, double a) // 计算b theta a
+{
+    switch (theta)
+    {
+    case '+':
+        return b + a;
+    case '-':
+        return b - a;
+    case '*':
+        return b * a;
+    case '/':
+        return b / a;
+    default:
+        break;
+    }
+}
+
+double getAnswer() // 表达式求值
+{
+    optr.push('#');  // 首先将'#'入栈optr
+    int counter = 0; // 添加变量counter表示有多少个数字相继入栈，实现多位数的四则运算
+    char c = getchar();
+    while (c != '#' || optr.top() != '#') // 终止条件
+    {
+        if (isdigit(c)) // 如果c在'0'~'9'之间
+        {
+            if (counter == 1) // counter==1表示上一字符也是数字，所以要合并，比如12*12，要算12，而不是单独的1和2
+            {
+                double t = opnd.top();
+                opnd.pop();
+                opnd.push(t * 10 + (c - '0'));
+                counter = 1;
+            }
+            else
+            {
+                opnd.push(c - '0'); // 将c对应的数值入栈opnd
+                counter++;
+            }
+            c = getchar();
         }
         else
         {
-            hexStack.push(remainder - 10 + 'A');
+            counter = 0;                        // counter置零
+            switch (getPriority(optr.top(), c)) // 获取运算符栈optr栈顶元素与c之间的优先级，用'>'，'<'，'='表示
+            {
+            case '<': //<则将c入栈optr
+                optr.push(c);
+                c = getchar();
+                break;
+            case '=': //=将optr栈顶元素弹出，用于括号的处理
+                optr.pop();
+                c = getchar();
+                break;
+            case '>': //>则计算
+                char theta = optr.top();
+                optr.pop();
+                double a = opnd.top();
+                opnd.pop();
+                double b = opnd.top();
+                opnd.pop();
+                opnd.push(calculate(b, theta, a));
+            }
         }
-
-        decimalValue /= 16;
     }
-
-    while (!hexStack.empty())
-    {
-        cout << hexStack.top();
-        hexStack.pop();
-    }
+    return opnd.top(); // 返回opnd栈顶元素的值
 }
 
 int main()
 {
-    int decimalValue, base;
-    cin >> decimalValue;
-    cin >> base;
-    if (base == 2)
-    {
-        decimalToBinary(decimalValue);
-    }
-    else if (base == 8)
-    {
-        decimalToOctal(decimalValue);
-    }
-    else if (base == 16)
-    {
-        decimalToHexadecimal(decimalValue);
-    }
-
-    cout << endl;
-    system("pause");
+    // freopen("test.txt", "r", stdin);
+    double ans = getAnswer();
+    cout << ans;
     return 0;
 }
