@@ -72,6 +72,7 @@ double calculate(double b, char theta, double a) // 计算b theta a
     default:
         break;
     }
+    return 0;
 }
 
 double getAnswer() // 表达式求值
