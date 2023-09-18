@@ -56,7 +56,10 @@ void getNext(SString T, int *next)
         {
             ++i;
             ++j;
-            next[i] = j;
+            if (T[i] != T[j])
+                next[i] = j;
+            else
+                next[i] = next[j]; // 优化,既然两个位置的前面的值都是一样的，那么相对于i进行比较的效果也是一样的，所以可以直接使用前面的值
         }
         else
             j = next[j];
