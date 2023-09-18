@@ -31,26 +31,26 @@ int getIndex(char theta) // 获取theta所对应的索引
     case ')':
         index = 5;
         break;
-    case '#':
+    case '\n':
         index = 6;
     default:
         break;
     }
     return index;
 }
+const char priority[7][8] = // 算符间的优先级关系
+    {
+        {'>', '>', '<', '<', '<', '>', '>'},
+        {'>', '>', '<', '<', '<', '>', '>'},
+        {'>', '>', '>', '>', '<', '>', '>'},
+        {'>', '>', '>', '>', '<', '>', '>'},
+        {'<', '<', '<', '<', '<', '=', '0'},
+        {'>', '>', '>', '>', '0', '>', '>'},
+        {'<', '<', '<', '<', '<', '0', '='},
+};
 
 char getPriority(char theta1, char theta2) // 获取theta1与theta2之间的优先级
 {
-    const char priority[][7] = // 算符间的优先级关系
-        {
-            {'>', '>', '<', '<', '<', '>', '>'},
-            {'>', '>', '<', '<', '<', '>', '>'},
-            {'>', '>', '>', '>', '<', '>', '>'},
-            {'>', '>', '>', '>', '<', '>', '>'},
-            {'<', '<', '<', '<', '<', '=', '0'},
-            {'>', '>', '>', '>', '0', '>', '>'},
-            {'<', '<', '<', '<', '<', '0', '='},
-        };
 
     int index1 = getIndex(theta1);
     int index2 = getIndex(theta2);
@@ -75,12 +75,12 @@ double calculate(double b, char theta, double a) // 计算b theta a
     return 0;
 }
 
-double getAnswer() // 表达式求值
+int main()
 {
-    optr.push('#');  // 首先将'#'入栈optr
+    optr.push('\n'); // 首先将'#'入栈optr
     int counter = 0; // 添加变量counter表示有多少个数字相继入栈，实现多位数的四则运算
     char c = getchar();
-    while (c != '#' || optr.top() != '#') // 终止条件
+    while (c != '\n' || optr.top() != '\n') // 终止条件
     {
         if (isdigit(c)) // 如果c在'0'~'9'之间
         {
@@ -119,16 +119,13 @@ double getAnswer() // 表达式求值
                 double b = opnd.top();
                 opnd.pop();
                 opnd.push(calculate(b, theta, a));
+                break;
+            default:
+                break;
             }
         }
     }
-    return opnd.top(); // 返回opnd栈顶元素的值
-}
-
-int main()
-{
-    // freopen("test.txt", "r", stdin);
-    double ans = getAnswer();
+    int ans = opnd.top(); // 返回opnd栈顶元素的值
     cout << ans;
     return 0;
 }

@@ -1,5 +1,5 @@
 #include "..\header\unity.h"
-#include<cstring>
+#include <cstring>
 #define MAXSTRLEN 255                // 规定串的长度
 typedef char SString[MAXSTRLEN + 1]; // 第0位储存串的长度
 
@@ -64,8 +64,14 @@ void getNext(SString T, int *next)
 }
 int index_KMP(SString S, SString T, int pos)
 {
+    ofstream outFile("output.txt", ios::app);
     int next[MAXSTRLEN] = {};
     getNext(T, next);
+    for (int i = 1; i <= T[0]; i++)
+    {
+        outFile << next[i] << endl;
+    }
+    outFile.close();
     int i = pos;
     int j = 1;
     while (i <= S[0] && j <= T[0])
@@ -87,10 +93,11 @@ int main()
 {
     SString S1;
     SString T;
-    strcpy(S1 + 1, "hello world");
-    strcpy(T + 1, "world");
-    S1[0] = strlen("hello world");
-    T[0] = strlen("world");
-
+    strcpy(S1 + 1, "hello  wordworlworldworldworld");
+    strcpy(T + 1, "worldworld");
+    S1[0] = strlen("hello  worldworldworldworldworld");
+    T[0] = strlen("worldworld");
+    cout << S1[0] << endl;
+    cout << T << endl;
     cout << index_KMP(S1, T, 1);
 }
