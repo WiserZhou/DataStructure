@@ -104,7 +104,6 @@ int main()
     {
         merge();
     }
-
     cout << opnd.top();
     return 0;
 }
