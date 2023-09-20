@@ -65,6 +65,7 @@ void getNext(SString T, int *next)
             j = next[j];
     }
 }
+
 int index_KMP(SString S, SString T, int pos)
 {
     ofstream outFile("output.txt", ios::app);
