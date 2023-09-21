@@ -1,6 +1,9 @@
 #include <iostream>
 #include <stack>
+#include <cstdio>
+#include <cstring>
 using namespace std;
+const int N = 2e3 + 1;
 stack<char> optr; // 操作符
 stack<int> opnd;  // 操作数
 int compare(char a)
@@ -22,8 +25,6 @@ int calculate(int a, int b, char c)
         return a * b;
     else if (c == '/')
         return a / b;
-    else
-        return 0;
 }
 int transInt(char c)
 {
@@ -40,31 +41,26 @@ void merge()
     int e = calculate(b, a, d);
     opnd.push(e);
 }
+inline bool check() {
+    return opnd.size() >= 2 && optr.size() >= 1;
+}
+char s[N];
 int main()
 {
     bool flag = false;
-    char c = getchar();
-    // cout << "input:" << c << endl;
-    while (c != '\n')
+    scanf("%s", s);
+    int n = strlen(s);
+    for (int i = 0; i < n; ++i)
     {
-
+        char c = s[i];
+        // printf("%c|", c);
         if (isdigit(c))
         {
-            if (flag)
-            {
-                int a = opnd.top();
-                opnd.pop();
-                a = a * 10 + transInt(c);
-                opnd.push(a);
-            }
-            else
-            {
-                opnd.push(transInt(c));
-                flag = true;
-                // cout << c << endl;
-            }
-
-            // cout << c << endl;
+            int a = 0;
+            if (flag) a = opnd.top(), opnd.pop();
+            a = a * 10 + transInt(c);
+            opnd.push(a);
+            flag = true;
         }
         else
         {
@@ -72,38 +68,33 @@ int main()
             flag = false;
             if (c == ')')
             {
-            back:
-                merge(); // cout << "calculate(+,-): " << e << endl;
+                while (check() && optr.top() != '(') merge(); // cout << "calculate(+,-): " << e << endl;
                 if (optr.top() == '(')
                 {
-                    optr.pop(); // 弹出里面的‘('
-                    // cout << "pop" << endl;
+                    optr.pop(); 
                 }
-
-                else
-                    goto back;
             }
-            else if (!optr.empty() && optr.top() != '(' && (c == '+' || c == '-'))
+            else if (check() && optr.top() != '(' && (c == '+' || c == '-'))
             {
                 merge();
-                // cout << "calculate(*,/): " << e << endl;
                 optr.push(c);
-                //  cout<<"*********"<<endl;
             }
             else
             {
+                if (c == '/' || c == '*') {
+                    while (check() && (optr.top() == '*' || optr.top() == '/')) merge();
+                }
                 optr.push(c);
             }
-
-            // cout << c << endl;
         }
-        c = getchar();
-        // cout << "input:" << c << endl;
     }
-    while (!optr.empty())
+    while (check() && optr.top() != '(')
     {
         merge();
     }
     cout << opnd.top();
     return 0;
 }
+/*
+(1+3*4*5+2+2)
+*/
