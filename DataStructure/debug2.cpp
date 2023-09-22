@@ -61,7 +61,7 @@ int main()
                 else
                     break;
             }
-            if ((double)j / str1.length() - c > 1e-6)
+            if ((double)j / str1.length() - c > 1e-6) // 单纯的比较无法对浮点数的精度进行要求，会出现问题
             {
                 // cout << "j:" << j << endl;
                 a = N;
