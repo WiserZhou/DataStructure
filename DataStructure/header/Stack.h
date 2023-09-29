@@ -1,7 +1,20 @@
-#include ".\unity.h"
+#define OVERFLOW -2
+#define ERROR 0
+
+#define OK 1
+#define TRUE 1
+#define FALSE 0
+#define NONE 0
+// typedef int ElemType;
+typedef int Status;
+typedef int Position;
+typedef int LEN;
 typedef int SElemType;
 #define STACK_INIT_SIZE 100
 #define STACK_INCREMENT 10
+#include <iostream>
+using namespace std;
+
 class Stack
 {
 private:
@@ -20,13 +33,20 @@ public:
     bool isEmpty();
     LEN length();
     void traverse(Status (*visit)(SElemType &e));
+    void display();
 };
+void Stack::display()
+{
+    SElemType *p = top;
+    while (p != base)
+        cout << *--p<<" ";
+}
 void Stack::traverse(Status (*visit)(SElemType &e))
 {
     SElemType *p = top;
     while (p != base)
         visit(*--p);
-    visit(*p);
+    // visit(*p);
 }
 LEN Stack::length()
 {

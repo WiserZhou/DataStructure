@@ -1,197 +1,140 @@
 #include "..\header\unity.h"
-
-
-bool emptyStack(Stack S)
-{
-    if (S.top == S.base)
-        return true;
-    else
-        return false;
-}
-Status initStack(Stack &S)
-{
-    S.base = (ElemType *)malloc(sizeof(ElemType) * STACK_INIT_SIZE);
-    if (!S.base)
-        exit(OVERFLOW);
-    S.top = S.base;
-    S.stackSize = STACK_INIT_SIZE;
-    return OK;
-}
-Status getPop(Stack S, ElemType &e)
-{
-    if (emptyStack(S))
-        return NONE;
-    e = *(S.top - 1);
-    return OK;
-}
-
-Status push(Stack &S, ElemType e)
-{
-    if (S.top - S.base >= S.stackSize)
-    {
-        S.base = (ElemType *)realloc(S.base, sizeof(ElemType) * (STACK_INCREMENT + S.stackSize));
-        if (!S.base)
-            exit(OVERFLOW);
-        S.top = S.base + S.stackSize;   // 栈底位置改变，重新定义栈顶位置
-        S.stackSize += STACK_INCREMENT; // 此时增加的是一个元素的空间大小
-    }
-    *S.top++ = e; // 将top指针向后移动一个距离，始终保持top指针指向的是最后一个栈顶元素的后一位
-    return OK;
-}
-Status pop(Stack &S, ElemType &e)
-{
-    if (emptyStack(S))
-        return NONE;
-    e = *--S.top; // 说明：此处容易使人迷惑，实际上此元素并没真正删除，仍在S.top中，但是如果插入元素，就会被更新，就像是删除了一样
-    return OK;
-}
-
-Status destroyStack(Stack &S)
-{
-    while (!emptyStack(S))
-        free(S.base);
-    S.base = nullptr;
-    S.top = nullptr;
-    S.stackSize = 0;
-    return OK;
-}
-Status clearStack(Stack &S)
-{
-    S.top = S.base;
-    return OK;
-}
-LEN lengthStack(Stack S)
-{
-    return (S.top - S.base);
-}
-
-bool noneStack(Stack S)
-{
-    if (S.base == nullptr)
-        return false;
-    else
-        return true;
-}
-
-Status traverseStack(Stack &S, Status (*visit)(ElemType e))
-{
-    if (noneStack(S))
-        return ERROR;
-    if (emptyStack(S))
-        return NONE;
-    ElemType *p = S.top;
-    while (p > S.base)
-        visit(*--p);
-    return OK;
-}
+#include "..\header\Stack.h"
+#include <string>
+#include <stack>
 // void displayStack(Stack S)
 // {
 //     ElemType *p = S.top;
 //     while (p > S.base)
 //         cout << (char)*--p << " ";
 // }
-// void BinaryTransfer()
+#define BINARY 8
+void BinaryTransfer()
+{
+    Stack S;
+    int N;
+    cout << "input a number which you want to transfer: ";
+    cin >> N;
+    while (N)
+    {
+        S.push(N % BINARY); // 将N对进制取余，得到的就是转换的结果
+        N /= BINARY;
+        // Nx =an×Y"+...+a2×Y^2 +a1xy^1+a0xy^0
+    }
+    // SElemType e;
+    while (!S.isEmpty())
+        cout << S.pop();
+    S.clear();
+}
+
+// int main()
 // {
-//     Stack S;
-//     initStack(S);
-//     int N;
-//     cout << "input a number which you want to transfer: ";
-//     cin >> N;
-//     while (N)
-//     {
-//         push(S, N % BINARY); // 将N对进制取余，得到的就是转换的结果
-//         N /= BINARY;
-//         // Nx =an×Y"+...+a2×Y^2 +a1xy^1+a0xy^0
-//     }
-//     ElemType e;
-//     while (!emptyStack(S))
-//     {
-//         pop(S, e);
-//         cout << e;
-//     }
-//     clearStack(S);
+//     BinaryTransfer();
+//     return 0;
 // }
 
-// Status checkBracket()
+Status checkBracket()
+{
+    Stack S;
+    // initStack(S);
+    SElemType e;
+    string s;
+    getline(cin, s);
+    unsigned i = 0;
+    while (i < s.length())
+    {
+        char ch = s[i++];
+        switch (ch)
+        {
+            // case表达式不可以连续使用逻辑判断符
+        case '(':
+        case '{':
+        case '[':
+            S.push(ch);
+            break;
+        case ')':
+            if (S.isEmpty())
+                return FALSE;
+            e = S.pop();
+            if (e != '(')
+                return FALSE;
+            break;
+        case ']':
+            if (S.isEmpty())
+                return FALSE;
+            e = S.pop();
+            if (e != '[')
+                return FALSE;
+            break;
+        case '}':
+            if (S.isEmpty())
+                return FALSE;
+            e = S.pop();
+            if (e != '{')
+                return FALSE;
+            break;
+        default:
+            break;
+        }
+    }
+    if (S.isEmpty())
+        return TRUE;
+    else
+        return FALSE;
+}
+// int main()
 // {
-//     char ch;
-//     Stack S;
-//     initStack(S);
-//     ElemType e;
-//     while ((ch = getchar()) != '\n')
-//     {
-//         switch (ch)
-//         {
-//             // case表达式不可以连续使用逻辑判断符
-//         case '(':
-//         case '{':
-//         case '[':
-//             push(S, ch);
-//             break;
-//         case ')':
-//             if (emptyStack(S))
-//                 return FALSE;
-//             pop(S, e);
-//             if (e != '(')
-//                 return FALSE;
-//             break;
-//         case ']':
-//             if (emptyStack(S))
-//                 return FALSE;
-//             pop(S, e);
-//             if (e != '[')
-//                 return FALSE;
-//             break;
-//         case '}':
-//             if (emptyStack(S))
-//                 return FALSE;
-//             pop(S, e);
-//             if (e != '{')
-//                 return FALSE;
-//             break;
-//         default:
-//             break;
-//         }
-//     }
-//     if (emptyStack(S))
-//         return TRUE;
-//     else
-//         return FALSE;
+//     cout << checkBracket();
+//     return 0;
 // }
-
-// void LineEdit()
+void LineEdit()
+{
+    Stack S;
+    // SElemType e;
+    // initStack(S);
+    char ch = getchar();
+    while (ch != EOF && ch != '!') // EOF通过ctrl+Z输入
+    {
+        while (ch != EOF && ch != '\n')
+        {
+            switch (ch)
+            {
+            case '#':
+                S.pop();
+                break;
+            case '@':
+                S.clear();
+                break;
+            default:
+                S.push(ch);
+                break;
+            }
+            ch = getchar();
+        }
+        S.display();
+        cout << endl;
+        S.clear();
+        if (ch != EOF)
+            ch = getchar();
+    }
+    S.destroy();
+}
+// int main()
 // {
-//     Stack S;
-//     ElemType e;
-//     initStack(S);
-//     char ch = getchar();
-//     while (ch != EOF && ch != '!') // EOF通过ctrl+Z输入
-//     {
-//         while (ch != EOF && ch != '\n')
-//         {
-//             switch (ch)
-//             {
-//             case '#':
-//                 pop(S, e);
-//                 break;
-//             case '@':
-//                 clearStack(S);
-//                 break;
-//             default:
-//                 push(S, ch);
-//                 break;
-//             }
-//             ch = getchar();
-//         }
-//         displayStack(S);
-//         cout << endl;
-//         clearStack(S);
-//         if (ch != EOF)
-//             ch = getchar();
-//     }
-//     destroyStack(S);
+//     LineEdit();
+//     return 0;
 // }
-
+typedef struct PosType
+{
+    int x;
+    int y;
+} PosType;
+typedef struct
+{
+    int ord;      // 通道块在路径上的序号
+    PosType seat; // 通道块在迷宫中的坐标位置
+    int di;       // 从此通道块走向下一个通道块的方向
+} SElem;
 typedef int MazeType[12][12];
 MazeType maze = {{1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, // 二维数组typedef方法
                  {1, 0, 0, 1, 0, 0, 0, 1, 0, 1},
@@ -214,7 +157,7 @@ void FootPrint(PosType curpos)
 {
     maze[curpos.y][curpos.x] = 1;
 }
-void setSElem(ElemType &e, int cur_step, PosType cur_pos, int di)
+void setSElem(SElem &e, int cur_step, PosType cur_pos, int di)
 {
     e.ord = cur_step;
     e.seat = cur_pos;
@@ -260,9 +203,9 @@ ostream &operator<<(ostream &os, const PosType &p)
 Status mazePath(PosType start, PosType end)
 {
     ofstream outFile("output.txt", ios::app);
-    ElemType e;
-    Stack S;
-    initStack(S);
+    SElem e;
+    stack<SElem> S;
+    // initStack(S);
     PosType cur_pos = start;
     int cur_step = 1;
     do
@@ -272,9 +215,9 @@ Status mazePath(PosType start, PosType end)
         {
             outFile << "yes" << endl;
             FootPrint(cur_pos);
-            setSElem(e, cur_step, cur_pos, 1);  
-            push(S, e);
-            if (equal(cur_pos, end)) 
+            setSElem(e, cur_step, cur_pos, 1);
+            S.push(e);
+            if (equal(cur_pos, end))
                 return TRUE;
             cur_pos = NextPos(cur_pos, 1);
             cur_step++;
@@ -282,23 +225,25 @@ Status mazePath(PosType start, PosType end)
         else
         {
             outFile << "no";
-            if (!emptyStack(S))
+            if (!S.empty())
             {
-                pop(S, e);
-                while (e.di == 4 && !emptyStack(S))
+                e = S.top();
+                S.pop();
+                while (e.di == 4 && !S.empty())
                 {
                     MarkPrint(e.seat);
-                    pop(S, e);
+                    e = S.top();
+                    S.pop();
                 }
                 if (e.di < 4)
                 {
                     e.di++;
-                    push(S, e);
+                    S.push(e);
                     cur_pos = NextPos(e.seat, e.di);
                 }
             }
         }
-    } while (!emptyStack(S));
+    } while (!S.empty());
     outFile.close();
     return FALSE;
 }
