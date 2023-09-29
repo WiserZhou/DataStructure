@@ -1,14 +1,6 @@
 #include "..\header\unity.h"
 
-typedef struct
-{
-    ElemType *base;
-    /**
-     * top指向的是最后一个栈顶元素的后一个位置，其中没有元素，为空。
-     */
-    ElemType *top;
-    int stackSize;
-} Stack;
+
 bool emptyStack(Stack S)
 {
     if (S.top == S.base)
