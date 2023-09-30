@@ -25,6 +25,7 @@ private:
 
 public:
     Stack();
+    ~Stack();
     SElemType getTop();
     void push(SElemType e);
     SElemType pop();
@@ -35,11 +36,15 @@ public:
     void traverse(Status (*visit)(SElemType &e));
     void display();
 };
+Stack::~Stack()
+{
+    destroy();
+}
 void Stack::display()
 {
     SElemType *p = top;
     while (p != base)
-        cout << *--p<<" ";
+        cout << *--p << " ";
 }
 void Stack::traverse(Status (*visit)(SElemType &e))
 {
@@ -54,10 +59,7 @@ LEN Stack::length()
 }
 bool Stack::isEmpty()
 {
-    if (top == base)
-        return true;
-    else
-        return false;
+    return top == base;
 }
 void Stack::clear()
 {
@@ -107,4 +109,72 @@ void Stack::push(SElemType e)
     if (top - base >= stackSize)
         addSpace();
     *top++ = e;
+}
+typedef struct SNode
+{
+    SElemType e;
+    struct SNode *next;
+} SNode, *LinkedNode;
+
+/**
+ * 具体来说，入栈操作就是在链表的表头插入一个节点，然后更新栈顶指针。
+ * 出栈操作就是将栈顶元素弹出，也就是删除链表的表头节点，并返回该节点的值，然后更新栈顶指针。
+ */
+class LinkedStack
+{
+private:
+    SNode *top;
+    SNode *createNode();
+
+public:
+    LinkedStack();
+    void push(SElemType e);
+    SElemType pop();
+    bool isEmpty();
+    ~LinkedStack();
+};
+LinkedStack::~LinkedStack()
+{
+    SNode *p = top->next;
+    while (!top)
+    {
+        free(top);
+        top = p;
+        p = p->next;
+    }
+}
+bool LinkedStack::isEmpty()
+{
+    return top == nullptr;
+}
+LinkedStack::LinkedStack()
+{
+    top = createNode();
+}
+
+SNode *LinkedStack::createNode()
+{
+    SNode *p = (SNode *)malloc(sizeof(SNode));
+    if (!p)
+        exit(OVERFLOW);
+    // p->e = 元素值; // 替换元素值为实际需要赋值的值
+    p->next = nullptr;
+    return p;
+}
+void LinkedStack::push(SElemType e)
+{
+    SNode *p = createNode();
+    p->e = e;
+    p->next = top; // 新来的链接在前面
+    top = p;
+}
+SElemType LinkedStack::pop()
+{
+    if (isEmpty())
+        return NONE;      // 栈为空则退出程序
+    SElemType e = top->e; // 获取栈顶元素的值
+    SNode *p = top;       // 记录当前栈顶元素
+    top = p->next;        // 更新栈顶指针为下一个节点
+    free(p);              // 释放原栈顶节点的内存空间
+    return e;             // 返回弹出的元素值
 }
