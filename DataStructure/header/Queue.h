@@ -12,7 +12,7 @@ typedef struct QNode
     struct QNode *next;
 } QNode, *QueuePtr;
 
-class LinkQueue
+class LinkedQueue
 {
 private:
     QueuePtr front;
@@ -20,17 +20,17 @@ private:
     QueuePtr createNode();
 
 public:
-    LinkQueue();
-    ~LinkQueue();
+    LinkedQueue();
+    ~LinkedQueue();
     void push(QElemType e);
     QElemType pop();
     bool isEmpty();
 };
-bool LinkQueue::isEmpty()
+bool LinkedQueue::isEmpty()
 {
     return front == rear;
 }
-QElemType LinkQueue::pop()
+QElemType LinkedQueue::pop()
 {
     if (isEmpty())
         return NONE;
@@ -42,7 +42,7 @@ QElemType LinkQueue::pop()
     free(p);
 }
 
-void LinkQueue::push(QElemType e)
+void LinkedQueue::push(QElemType e)
 {
     QueuePtr p = createNode();
     p->e = e;
@@ -50,7 +50,7 @@ void LinkQueue::push(QElemType e)
     rear->next = p;
     rear = p;
 }
-LinkQueue::~LinkQueue()
+LinkedQueue::~LinkedQueue()
 {
     while (!front)
     {
@@ -59,16 +59,83 @@ LinkQueue::~LinkQueue()
         front = rear;
     }
 }
-QueuePtr LinkQueue::createNode()
+QueuePtr LinkedQueue::createNode()
 {
     QueuePtr p = (QueuePtr)malloc(sizeof(QNode));
     if (!p)
         exit(OVERFLOW);
     return p;
 }
-LinkQueue::LinkQueue()
+LinkedQueue::LinkedQueue()
 {
     QueuePtr p = createNode();
     rear = front = p;
     front->next = nullptr;
+}
+
+class CircularQueue
+{
+private:
+    QElemType *base;
+    int front;
+    int rear;
+    inline int moveBack(int pos);
+    inline int keepPositive(int x);
+    static const int MAX_Q_SIZE = 100;
+
+public:
+    CircularQueue();
+    ~CircularQueue();
+    inline int length();
+    void push(QElemType e);
+    inline bool isFull();
+    QElemType pop();
+    bool isEmpty();
+};
+CircularQueue::~CircularQueue()
+{
+    free(base);
+    front = rear = 0;
+    
+}
+bool CircularQueue::isEmpty()
+{
+    return front == rear;
+}
+QElemType CircularQueue::pop()
+{
+    if (isEmpty())
+        return NONE;
+    QElemType e = base[front];
+    front = moveBack(front);
+}
+inline int CircularQueue::keepPositive(int x)
+{
+    return (x + MAX_Q_SIZE) % MAX_Q_SIZE;
+}
+inline int CircularQueue::moveBack(int pos)
+{
+    return (pos + 1) % MAX_Q_SIZE;
+}
+inline bool CircularQueue::isFull()
+{
+    return moveBack(rear) == front;
+}
+void CircularQueue::push(QElemType e)
+{
+    if (isFull())
+        return;
+    base[rear] = e;
+    rear = moveBack(rear);
+}
+inline int CircularQueue::length()
+{
+    return keepPositive(rear - front);
+}
+CircularQueue::CircularQueue()
+{
+    base = (QElemType *)malloc(sizeof(QElemType) * MAX_Q_SIZE);
+    if (!base)
+        exit(OVERFLOW);
+    front = rear = 0;
 }
