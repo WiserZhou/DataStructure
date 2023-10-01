@@ -1,74 +1,162 @@
-#include "..\header\unity.h"
-typedef int ElemType;
+#include <stdio.h>
+#include <stdlib.h>
 
-#define MAXSIZE 100
+#define maxSize 6
+
 typedef struct
 {
-    ElemType data;
-    int next;
-} SLinkList[MAXSIZE];
+    int data;
+    int cur; // 游标
+} component;
 
-void initSLinkList(SLinkList L)
+/*************************************************************************
+创建备用链表
+*****************************************************************************/
+void reserveArr(component *array)
 {
     int i;
-    for (i = 0; i < MAXSIZE - 1; i++)
+    for (i = 0; i < maxSize; i++)
     {
-        L[i].next = i + 1;
+        array[i].cur = i + 1; // 将每个数组分量链接到一起
     }
-    L[MAXSIZE - 1].next = 0;
+    array[maxSize - 1].cur = 0; // 链表最后一个节点的游标为0
 }
 
-// 上述代码会将L数组中所有元素的next值初始化为它们的下一个元素的下标，并将最后一个元素的next值设置为0，表示链表尾部。
-
-int insertElem(SLinkList L, ElemType e, int pos)
+/********************************************************
+提取分配空间
+若备用链表为非空，则返回分配的节点下标，否则返回0(当分配最后一个节点时，该节点的游标值为0)
+********************************************************/
+int mallocArr(component *array)
 {
-    int i, j, k;
-    k = MAXSIZE - 1; // 找到空闲节点的下标
-    if (k == 0 || pos < 1)
-        return 0; // 链表已满或插入位置无效
-    for (i = 1; i < pos && k != 0; i++)
+    int i = array[0].cur;
+
+    if (array[0].cur)
     {
-        k = L[k].next; // 查找要插入位置的前驱节点
-    }
-    if (k == 0)
-        return 0;  // 插入位置无效
-    j = L[k].next; // 获取要插入位置的原节点下标
-    L[k].next = k; // 插入新节点
-    L[k].data = e;
-    L[k].next = j;
-    return 1;
-}
-
-// 上述代码会在指定位置（pos）插入新元素（e），如果插入位置无效或链表已满，则返回0，插入成功返回1。
-
-int deleteElem(SLinkList L, int pos)
-{
-    int i, j, k;
-    if (pos < 1 || pos >= MAXSIZE)
-        return 0;    // 删除位置无效
-    k = MAXSIZE - 1; // 找到尾节点下标
-    for (i = 1; i < pos && k != 0; i++)
-    {
-        k = L[k].next; // 查找要删除节点的前驱节点
-    }
-    if (k == 0 || L[k].next == 0)
-        return 0;          // 删除位置无效
-    j = L[k].next;         // 获取要删除节点的下一个节点
-    L[k].next = L[j].next; // 删除节点
-    L[j].next = 0;
-    return 1;
-}
-
-// 上述代码会删除指定位置（pos）的元素，如果删除位置无效，则返回0，删除成功返回1。
-
-int searchElem(SLinkList L, ElemType e)
-{
-    int i = L[MAXSIZE - 1].next;
-    while (i != 0 && L[i].data != e)
-    {
-        i = L[i].next;
+        // array[0].data=0;
+        array[0].cur = array[i].cur;
     }
     return i;
 }
 
-// 上述代码会遍历整个静态链表，查找值为e的元素，如果找到则返回元素在L数组中的下标，否则返回0。
+/***************************************************************************
+初始化静态链表
+****************************************************************************/
+int initArr(component *array)
+{
+    int body, tempBody, i, j;
+    reserveArr(array);
+    body = mallocArr(array);
+    tempBody = body; // 声明一个变量把它当指针使，指向链表的最后一个节点，因为链表为空，所以和头结点重合
+    for (i = 1; i < 4; i++)
+    {
+        j = mallocArr(array);    // 从备用链表中拿出空闲的分量
+        array[tempBody].cur = j; // 将申请的空闲分量链接在链表的最后一个结点后面
+        array[j].data = i;       // 给新申请的分量数据域初始化
+        tempBody = j;            // 将指向链表最后一个结点的指针后移
+    }
+    array[tempBody].cur = 0; // 新的链表最后一个结点的指针设为0
+    return body;
+}
+
+void displayArr(component *array, int body)
+{
+    int tempBody = body; // tempBody准备遍历使用
+    while (array[tempBody].cur)
+    {
+        printf("%d,%d\n", array[tempBody].data, array[tempBody].cur);
+        tempBody = array[tempBody].cur;
+    }
+    printf("%d,%d\n", array[tempBody].data, array[tempBody].cur);
+}
+
+int main()
+{
+    int body;
+    component array[maxSize];
+    body = initArr(array);
+    printf("static link:\n");
+    displayArr(array, body);
+
+    system("pause");
+    return 0;
+}
+
+void Insert(component *array, int body, int add, int a) // body链表头结点在数组中的位置，add插入元素的位置，a插入的元素
+{
+    int tempBody = body;
+    int i, insert;
+    for (i = 1; i < add; i++)
+    {
+        tempBody = array[tempBody].cur;
+    }
+    insert = mallocArr(array);
+    array[insert].data = a;
+    array[insert].cur = array[tempBody].cur;
+    array[tempBody].cur = insert;
+}
+
+// 备用链表回收空间的函数，其中array为存储数据的数组，k表示未使用节点所在数组的下标
+void freeArr(component *array, int k)
+{
+    array[k].cur = array[0].cur;
+    array[0].cur = k;
+}
+// 删除结点函数，a 表示被删除结点中数据域存放的数据
+void deleteArr(component *array, int body, char a)
+{
+    int tempBody = body;
+    // 找到被删除结点的位置
+    while (array[tempBody].data != a)
+    {
+        tempBody = array[tempBody].cur;
+        // 当tempBody为0时，表示链表遍历结束，说明链表中没有存储该数据的结点
+        if (tempBody == 0)
+        {
+            printf("链表中没有此数据");
+            return;
+        }
+    }
+    // 运行到此，证明有该结点
+    int del = tempBody;
+    tempBody = body;
+    // 找到该结点的上一个结点，做删除操作
+    while (array[tempBody].cur != del)
+    {
+        tempBody = array[tempBody].cur;
+    }
+    // 将被删除结点的游标直接给被删除结点的上一个结点
+    array[tempBody].cur = array[del].cur;
+    // 回收被摘除节点的空间
+    freeArr(array, del);
+}
+
+/********************************************************
+在以body作为头结点的链表中查找数据域为elem的结点在数组中的位置
+*****************************************************/
+int selectElem(component *array, int body, char elem)
+{
+    int tempBody = body;
+    while (array[tempBody].cur != 0) // 当游标值为0时，表示链表结束
+    {
+        if (array[tempBody].data == elem)
+        {
+            return tempBody;
+        }
+        tempBody = array[tempBody].cur;
+    }
+    return -1; // 返回-1，表示在链表中没有找到该元素
+}
+
+/********************************************************
+在以body作为头结点的链表中将数据域为oldElem的结点，数据域改为newElem
+**********************************************************/
+void amendElem(component *array, int body, char oldElem, char newElem)
+{
+    int add = selectElem(array, body, oldElem);
+    if (add == -1)
+    {
+        printf("无更改元素");
+        return;
+    }
+    array[add].data = newElem;
+}
