@@ -1,5 +1,7 @@
 #include "..\header\unity.h"
 
+typedef int ElemType;
+
 typedef struct DuLNode
 {
     ElemType data;

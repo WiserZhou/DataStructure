@@ -40,6 +40,7 @@ QElemType LinkedQueue::pop()
     if (p == rear) // 注意删除元素的时候，最后一个rear结尾的指针需要额外处理
         rear = front;
     free(p);
+    return e;
 }
 
 void LinkedQueue::push(QElemType e)
@@ -76,10 +77,11 @@ LinkedQueue::LinkedQueue()
 class CircularQueue
 {
 private:
+    using QElemType = int; // 使用using关键字，可以定义一个类型别名
     QElemType *base;
     int front;
     int rear;
-    inline int moveBack(int pos);
+    inline int moveBack(int pos) const;
     inline int keepPositive(int x);
     static const int MAX_Q_SIZE = 100;
 
@@ -88,16 +90,16 @@ public:
     ~CircularQueue();
     inline int length();
     void push(QElemType e);
-    inline bool isFull();
+    inline bool isFull() const;
     QElemType pop();
-    bool isEmpty();
+    bool isEmpty() const;
 };
 CircularQueue::~CircularQueue()
 {
     free(base);
     front = rear = 0;
 }
-bool CircularQueue::isEmpty()
+bool CircularQueue::isEmpty() const
 {
     return front == rear;
 }
@@ -107,16 +109,17 @@ QElemType CircularQueue::pop()
         return NONE;
     QElemType e = base[front];
     front = moveBack(front);
+    return e;
 }
 inline int CircularQueue::keepPositive(int x)
 {
     return (x + MAX_Q_SIZE) % MAX_Q_SIZE;
 }
-inline int CircularQueue::moveBack(int pos)
+inline int CircularQueue::moveBack(int pos) const
 {
     return (pos + 1) % MAX_Q_SIZE;
 }
-inline bool CircularQueue::isFull()
+inline bool CircularQueue::isFull() const
 {
     return moveBack(rear) == front;
 }
