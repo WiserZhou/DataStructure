@@ -96,7 +96,6 @@ CircularQueue::~CircularQueue()
 {
     free(base);
     front = rear = 0;
-    
 }
 bool CircularQueue::isEmpty()
 {

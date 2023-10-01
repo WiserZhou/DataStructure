@@ -1,7 +1,7 @@
 
 #include "..\header\unity.h"
 
-
+typedef int ElemType;
 
 typedef struct
 {
@@ -21,6 +21,7 @@ Status initSqList(SqList &L)
     L.elem = (ElemType *)malloc(LIST_INIT_SIZE * sizeof(ElemType));
     if (!L.elem)
         exit(OVERFLOW);
+    L.length = 0;
     L.listSize = LIST_INIT_SIZE;
     return OK;
 }
@@ -90,10 +91,7 @@ int locateElem(SqList L, ElemType e, Status (*compare)(ElemType, ElemType))
  */
 Status equal(ElemType a, ElemType b)
 {
-    if (a == b)
-        return true;
-    else
-        return false;
+    return a == b;
 }
 /**
  * get the prior element of someone
@@ -167,9 +165,7 @@ Status deleteElem(SqList &L, int i, ElemType &e)
         ElemType *p = &L.elem[i - 1];
         ElemType *q = L.elem + L.length - 1;
         for (p++; p <= q; p++)
-        {
             *(p - 1) = *p;
-        }
         L.length--;
         return OK;
     }

@@ -1,5 +1,7 @@
 
 #include "..\header\unity.h"
+
+typedef int ElemType;
 /**
  * 结构体，包含data数据和next指针
  */
