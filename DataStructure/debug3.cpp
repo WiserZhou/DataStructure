@@ -20,6 +20,7 @@ int main()
     }
     else
     {
+        std::cout << "flag: " << flag << endl;
         std::cout << "Concatenation succeeded." << std::endl;
         std::cout << "Length: " << int(str3[0]) << std::endl;
         for (int i = 1; i <= str3[0]; i++)
