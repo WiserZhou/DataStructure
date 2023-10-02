@@ -192,7 +192,7 @@ void computeNext(const std::string &T, std::vector<int> &next)
     int i = 0;
     int j = -1;
     next[0] = -1;
-    while (i < m - 1)
+    while (i < m - 1) // 因为第一个位置已经被标记为-1了，所以接下来只需要循环m-1次即可
     {
         if (j == -1 || T[i] == T[j])
         {
@@ -216,7 +216,7 @@ int index_KMP_string(const std::string &S, const std::string &T, int pos)
     computeNext(T, next);
     int i = pos;
     int j = 0;
-    while (i < n && j < m)
+    while (i < n && j < m) // 循环的次数都是长度
     {
         if (j == -1 || S[i] == T[j])
         {
