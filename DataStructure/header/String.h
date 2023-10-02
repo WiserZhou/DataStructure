@@ -36,7 +36,7 @@ bool copy(String &str1, int pos, const String &str2)
 int concat(const String &str1, const String &str2, String &str3, int pos)
 {
     int len1 = (int)str1[0];
-    int len2 = (int)str2[0];
+    // int len2 = (int)str2[0];
     int flag = 0;
     memset(str3, 0, sizeof(str3));
     if (copy(str3, pos, str1))
@@ -181,4 +181,53 @@ int index(String S, String T, int pos)
         return i - T[0]; // 此时i刚好多1，正好减去T[0]就是想要的结果
     else
         return 0;
+}
+
+#include <string>
+#include <vector>
+
+void computeNext(const std::string &T, std::vector<int> &next)
+{
+    int m = T.length();
+    int i = 0;
+    int j = -1;
+    next[0] = -1;
+    while (i < m - 1)
+    {
+        if (j == -1 || T[i] == T[j])
+        {
+            ++i;
+            ++j;
+            next[i] = j;
+        }
+        else
+            j = next[j];
+    }
+}
+
+int index_KMP_string(const std::string &S, const std::string &T, int pos)
+{
+
+    int m = T.length();
+    int n = S.length();
+    if (m == 0)
+        return 0;
+    std::vector<int> next(m);
+    computeNext(T, next);
+    int i = pos;
+    int j = 0;
+    while (i < n && j < m)
+    {
+        if (j == -1 || S[i] == T[j])
+        {
+            ++i;
+            ++j;
+        }
+        else
+            j = next[j];
+    }
+    if (j == m)
+        return i - m;
+    else
+        return -1;
 }
