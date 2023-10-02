@@ -130,7 +130,7 @@ int compareString(HString S, HString T)
     return S.length - T.length;
 }
 
-//清空
+// 清空
 bool clearString(HString &S)
 {
     if (S.ch)
@@ -142,3 +142,43 @@ bool clearString(HString &S)
     return true;
 }
 
+// 串的块链储存，Chunk表示每一个块，LString表示一条链
+#define CHUNKSIZE 80
+typedef struct Chunk
+{
+    char ch[CHUNKSIZE];
+    struct Chunk *next;
+} Chunk;
+
+typedef struct
+{
+    Chunk *head, *tail;
+    int cur_len;
+} LString;
+
+/**
+ * 从S的pos位置开始寻找和T相同的字符串
+ * 如果匹配成功，就返回匹配成功的初始位置，否则，返回0
+ */
+int index(String S, String T, int pos)
+{
+    int i = pos;
+    int j = 1;
+    while (i <= S[0] && j <= T[0]) // 在正常范围内的值都要+1，超出范围的值都不必+1
+    {
+        if (S[i] == T[j])
+        {
+            ++i;
+            ++j;
+        }
+        else
+        {
+            i = i - j + 2; // i-j+1是匹配开始的位置，再+1就是下一个位置
+            j = 1;
+        }
+    }
+    if (j > T[0])
+        return i - T[0]; // 此时i刚好多1，正好减去T[0]就是想要的结果
+    else
+        return 0;
+}
