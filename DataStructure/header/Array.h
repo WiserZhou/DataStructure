@@ -1,5 +1,6 @@
 #include <stdarg.h>
 #include <stdlib.h>
+#include <iostream>
 #define MAX_ARRAY_DIM 8
 typedef int ElemType;
 #define ERROR -1
@@ -16,8 +17,76 @@ private:
 
 public:
     Array(int dim, ...); // 构造函数声明
+    ~Array();
+    int locate(va_list ap);
+    ElemType getValue(...);
+    bool setValue(ElemType e, ...);
 };
+bool Array::setValue(ElemType e, ...)
+{
+    va_list ap;
+    va_start(ap, dim);
+    int offset = locate(ap);
+    if (offset < 0)
+        return false;
+    va_end(ap);
+    *(base + offset) = e;
+    return true;
+}
 
+ElemType Array::getValue(...)
+{
+    va_list ap;
+    va_start(ap, dim);
+    int offset = locate(ap);
+    if (offset < 0)
+        return UNDERFLOW;
+    // if ((result =) <= 0)
+    //     return result
+    va_end(ap);
+    return *(base + offset);
+    // return OK:
+}
+/**
+ * 获取定位位置的元素索引
+ */
+int Array::locate(va_list ap)
+{
+    int off = 0;
+    for (int i = 0; i < dim; i++)
+    {
+        int ind = va_arg(ap, int);
+        if (ind < 0 || ind >= bounds[i])
+            return OVERFLOW;
+        off += constants[i] * ind; // 根据提供的每个维度的定位得到顺序表里的储存位置
+    }
+    return off;
+}
+Array::~Array()
+{
+    if (!base)
+    {
+        std::cout << "base = nullptr" << std::endl;
+        return;
+    }
+    free(base);
+    base = nullptr;
+
+    if (!bounds)
+    {
+        std::cout << "bounds = nullptr" << std::endl;
+    }
+    free(bounds);
+    bounds = nullptr;
+
+    if (!constants)
+    {
+        std::cout << "bounds = nullptr" << std::endl;
+        return;
+    }
+    free(constants);
+    constants = nullptr;
+}
 Array::Array(int dim, ...) // 构造函数的实现
 {
     if (dim < 1 || dim > MAX_ARRAY_DIM) // 数组维度合法性检查
@@ -47,7 +116,5 @@ Array::Array(int dim, ...) // 构造函数的实现
         exit(OVERFLOW);                                             // 内存分配失败，退出程序，返回溢出错误代码
     constants[dim - 1] = 1;                                         // 最后一个维度的映像函数常量为 1
     for (int i = dim - 2; i >= 0; --i)                              // 从倒数第二个维度开始向前计算映像函数常量
-    {
-        constants[i] = bounds[i + 1] * constants[i + 1]; // 根据下一个维度的界限和常量，计算当前维度的常量
-    }
+        constants[i] = bounds[i + 1] * constants[i + 1];            // 根据下一个维度的界限和常量，计算当前维度的常量
 }
