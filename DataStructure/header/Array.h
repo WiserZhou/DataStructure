@@ -7,6 +7,10 @@ typedef int ElemType;
 #define OVERFLOW -2
 #define UNDERFLOW -3
 
+// typedef int array1[4];
+// typedef array1 array2[5];
+// typedef int array3[4][5];
+// typedef定义的多维数组的名称
 class Array
 {
 private:

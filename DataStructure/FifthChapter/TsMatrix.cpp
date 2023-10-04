@@ -1,6 +1,8 @@
 #include "..\header\unity.h"
 
 #define MAX_SIZE 12500
+
+typedef int ElemType;
 typedef struct
 {
     int i, j; // 矩阵元素的位置坐标
@@ -11,8 +13,9 @@ typedef struct
 {
     Triple data[MAX_SIZE + 1];
     int mu, nu, tu; // 矩阵的行数、列数和非零元素的个数
-
 } TS_Matrix;
+
+
 Status TransposeSMatrix(TS_Matrix M, TS_Matrix &T)
 {
     int p, q, col;
@@ -26,7 +29,7 @@ Status TransposeSMatrix(TS_Matrix M, TS_Matrix &T)
         {
             for (p = 1; p <= M.tu; p++) // 每次都对列进行重新搜素
             {
-                if (M.data[p].j == col)
+                if (M.data[p].j == col)   
                 {
                     T.data[q].i = M.data[p].j;
                     T.data[q].j = M.data[p].i;
@@ -38,7 +41,6 @@ Status TransposeSMatrix(TS_Matrix M, TS_Matrix &T)
     }
     return OK;
 }
-int main()
-{
-    TS_Matrix M;
-}
+
+
+
