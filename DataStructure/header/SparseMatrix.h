@@ -129,3 +129,81 @@ Status MultSMatrix(RLS_Matrix M, RLS_Matrix N, RLS_Matrix &Q)
     }
     return OK;
 }
+
+typedef struct OLNode
+{
+    int i, j;
+    ElemType e;
+    struct OLNode *right, *down;
+} OLNode, *OLink;
+// 表示每一个结点的所有属性
+
+typedef struct
+{
+    OLink *r_head, *c_head;
+    int mu, nu, tu;
+} CrossList;
+// 表示一整个十字链表的属性
+
+Status CreateSMatrix_OL(CrossList &M)
+{
+    if (M.r_head)
+        free(M.r_head);
+    if (M.c_head)
+        free(M.c_head);
+    M.mu = M.nu = M.tu = 0; // 初始化M
+
+    int m, n, t;
+    scanf("%d%d%d", &m, &n, &t);
+    M.mu = m;
+    M.nu = n;
+    M.tu = t;
+    if (!(M.r_head = (OLink *)malloc((m + 1) * sizeof(OLink))))
+        exit(OVERFLOW);
+    if (!(M.c_head = (OLink *)malloc((n + 1) * sizeof(OLink))))
+        exit(OVERFLOW);
+
+    // 初始化M的大小
+    M.r_head = M.c_head = NULL;
+    int i, j, e;
+
+    for (scanf("%d%d%d", &i, &j, &e); i != 0; scanf("%d%d%d", &i, &j, &e))
+    {
+        OLNode *p;
+        if (!(p = (OLNode *)malloc(sizeof(OLNode))))
+            exit(OVERFLOW);
+
+        p->i = i;
+        p->j = j;
+        p->e = e;
+
+        if (M.r_head[i] == NULL || M.r_head[i]->j > j) // 如果这一行没有右结点获得输入的列值最大，则将元素接在最右边
+        {
+            p->right = M.r_head[i];
+            M.r_head[i] = p;
+        }
+        else
+        {
+            OLink q;
+            for (q = M.r_head[i]; (q->right) && q->right->j < j; q = q->right) // 否则遍历比较找到合适的列值位置开始插入
+                ;
+            p->right = q->right;
+            q->right = p;
+        }
+        if (M.c_head[j] == NULL || M.c_head[j]->i > i) // 接下来也是一个原理，在行上进行插入
+        {
+            p->down = M.c_head[j];
+            M.c_head[j] = p;
+        }
+        else
+        {
+            OLink q;
+            for (q = M.c_head[j]; (q->down) && q->down->i < i; q = q->down)
+                ;
+            p->down = q->down;
+            q->down = p;
+        }
+    }
+    return OK;
+}
+
