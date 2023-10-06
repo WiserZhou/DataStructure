@@ -1,24 +1,6 @@
 #include "..\header\unity.h"
 
-Status InorderTraverse(BiTree T, Status (*visit)(TelemType e))
-{
-    initStack(S);
-    Push(S, T);
-    while (!StackEmpty(S))
-    {
-        while (GetTop(S, p) && p)
-            Push(S, p->lchild);
-        Pop(S, p);
-        if (!StackEmpty(S))
-        {
-            Pop(S, p);
-            if (!visit(p->data))
-                return ERROR;
-            Push(S, p->rchild);
-        }
-    }
-    return OK;
-}
+
 
 Status PreOrderTraverse(BiTree T, Status (*visit)(TElemType e))
 {
