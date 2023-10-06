@@ -9,42 +9,42 @@ struct TreeNode
     TreeNode *right;
 };
 // 先序遍历的递归算法
-void PreOrderTraversal(TreeNode *root)
+void PreOrderTraversalRecursion(TreeNode *root)
 {
     if (root == nullptr)
     {
         return;
     }
 
-    cout << root->data << " ";      // 访问根节点
-    PreOrderTraversal(root->left);  // 遍历左子树
-    PreOrderTraversal(root->right); // 遍历右子树
+    cout << root->data << " ";               // 访问根节点
+    PreOrderTraversalRecursion(root->left);  // 遍历左子树
+    PreOrderTraversalRecursion(root->right); // 遍历右子树
 }
 
 // 中序遍历的递归算法
-void InOrderTraversal(TreeNode *root)
+void InOrderTraversalRecursion(TreeNode *root)
 {
     if (root == nullptr)
     {
         return;
     }
 
-    InOrderTraversal(root->left);  // 遍历左子树
-    cout << root->data << " ";     // 访问根节点
-    InOrderTraversal(root->right); // 遍历右子树
+    InOrderTraversalRecursion(root->left);  // 遍历左子树
+    cout << root->data << " ";              // 访问根节点
+    InOrderTraversalRecursion(root->right); // 遍历右子树
 }
 
 // 后序遍历的递归算法
-void PostOrderTraversal(TreeNode *root)
+void PostOrderTraversalRecursion(TreeNode *root)
 {
     if (root == nullptr)
     {
         return;
     }
 
-    PostOrderTraversal(root->left);  // 遍历左子树
-    PostOrderTraversal(root->right); // 遍历右子树
-    cout << root->data << " ";       // 访问根节点
+    PostOrderTraversalRecursion(root->left);  // 遍历左子树
+    PostOrderTraversalRecursion(root->right); // 遍历右子树
+    cout << root->data << " ";                // 访问根节点
 }
 // 先序遍历的非递归算法
 void PreOrderTraversal(TreeNode *root)
