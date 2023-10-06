@@ -34,6 +34,27 @@ Status PreOrderTraverseRecursion(BiTree T, Status (*visit)(TElemType e))
                 }
             }
         }
+        return ERROR; // 返回错误以便于回退
+    }
+    else
+        return OK;
+}
+
+Status InOrderTraverseRecursion(BiTree T, Status (*visit)(TElemType e))
+{
+    if (T)
+    {
+
+        if (InOrderTraverseRecursion(T->l_child, visit))
+        {
+            if (visit(T->data))
+            {
+                if (InOrderTraverseRecursion(T->r_child, visit))
+                {
+                    return OK;
+                }
+            }
+        }
         return ERROR;
     }
     else
@@ -50,15 +71,15 @@ Status InOrderTraverse(BiTree T, Status (*visit)(TElemType e))
     while (!S.empty())
     {
         while (S.top()->l_child)
-            S.push(S.top()->l_child);
+            S.push(S.top()->l_child); // 向左走到尽头
 
         if (!S.empty())
         {
             BiTree p = S.top();
             S.pop();
-            if (!visit(p->data))
+            if (!visit(p->data)) // 遍历根节点
                 return ERROR;
-            S.push(p->r_child);
+            S.push(p->r_child); // 右子树进栈
         }
     }
     return OK;
@@ -73,16 +94,34 @@ Status InOrderTraverse2(BiTree T, Status (*visit)(TElemType e))
         if (p)
         {
             S.push(p);
-            p = p->l_child;
+            p = p->l_child; // 根指针进栈，访问他的左子树
         }
         else
         {
             p = S.top();
-            S.pop();
+            S.pop(); // 根指针退栈，访问他的右子树
             if (!visit(p->data))
                 return ERROR;
             p = p->r_child;
         }
+    }
+    return OK;
+}
+
+// 先序递归建立二叉树
+Status CreateBiTreePreOrderRecursion(BiTree &T)
+{
+    char ch;
+    cin >> ch;
+    if (ch == ' ')
+        T = NULL;
+    else
+    {
+        if (!(T = (BiTNode *)malloc(sizeof(BiTNode))))
+            exit(OVERFLOW);
+        T->data = ch;
+        CreateBiTreePreOrderRecursion(T->l_child);
+        CreateBiTreePreOrderRecursion(T->r_child);
     }
     return OK;
 }
