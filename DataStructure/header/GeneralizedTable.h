@@ -21,6 +21,18 @@ typedef struct GLNode
     };
 } *GList;
 
+// 扩展头尾指针的广义表的存储结构
+typedef struct GLNode
+{
+    ELemTag tag;
+    union
+    {
+        AtomType atom;
+        struct GLNode *hp;
+    };
+    struct GLNode *tp;
+} *GList2;
+
 // 递归求解广义表的深度
 int GListDepth(GList L)
 {
@@ -64,4 +76,3 @@ Status CopyGList(GList &T, GList L)
     }
     return OK;
 }
-

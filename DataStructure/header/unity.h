@@ -12,7 +12,8 @@ T maxTri(T a, T b, T c)
 #define LIST_INCREMENT 10
 #define LIST_INIT_SIZE 100
 #define OVERFLOW -2
-#define ERROR 0
+#define ERROR -1
+#define UNDERFLOW -3
 
 #define OK 1
 #define TRUE 1
@@ -22,25 +23,3 @@ T maxTri(T a, T b, T c)
 typedef int Status;
 typedef int Position;
 typedef int LEN;
-
-
-
-// typedef struct PosType
-// {
-//     int x;
-//     int y;
-// } PosType;
-
-// // typedef struct
-// // {
-// //     int ord;
-// //     PosType seat;
-// //     int di;
-// // } SElemType;
-// typedef struct
-// {
-//     int ord;
-//     PosType seat;
-//     int di;
-// } ElemType;
-// typedef int QElemType;
