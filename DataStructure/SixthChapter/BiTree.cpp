@@ -57,7 +57,7 @@ void PreOrderTraversal(TreeNode *root)
     stack<TreeNode *> st; // 创建一个栈
     TreeNode *node = root;
 
-    while (node != nullptr || !st.empty())
+    while (node != nullptr || !st.empty()) // 当前指针指向非空表示此段直接遍历未结束，栈非空表示遍历未终止
     {
         while (node != nullptr)
         {
@@ -116,7 +116,7 @@ void PostOrderTraversal(TreeNode *root)
     TreeNode *node = root;
     TreeNode *lastVisited = nullptr; // 上次访问的节点
 
-    while (node != nullptr || !st.empty())
+    while (node != nullptr || !st.empty()) // 为了全部将所有的左子树全部遍历，防止出现遗漏
     {
         while (node != nullptr)
         {
@@ -126,7 +126,7 @@ void PostOrderTraversal(TreeNode *root)
 
         node = st.top(); // 查看栈顶节点
 
-        if (node->right == nullptr || node->right == lastVisited)
+        if (node->right == nullptr || node->right == lastVisited) // 只有右边没有或者右边已经遍历完成后，再进行遍历中结点
         {
             st.pop();                  // 弹出栈顶节点并访问
             cout << node->data << " "; // 访问根节点
