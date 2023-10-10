@@ -1,127 +1,149 @@
 #include ".\unity.h"
+#include <stack>
 typedef int TElemType;
 
-#define MAX_TREE_SIZE 100
-typedef TElemType SqBiTree[MAX_TREE_SIZE];
-// SqBiTree bt;
-
-typedef struct BiTNode
+typedef struct TreeNode
 {
     TElemType data;
-    struct BiTNode *l_child, *r_child;
-} BiTNode, *BiTree;
+    struct TreeNode *left, *right;
 
-Status PrintElement(TElemType e)
+} BiTree, *BiTreePtr;
+
+void PreOrderRecurTraverse(BiTreePtr T)
 {
-    cout << e << endl;
-    return OK;
+    if (T == nullptr)
+        return;
+    cout << T->data << " ";
+    PreOrderRecurTraverse(T->left);
+    PreOrderRecurTraverse(T->right);
 }
 
-/**
- * 先序遍历二叉树的递归算法
- */
-Status PreOrderTraverseRecursion(BiTree T, Status (*visit)(TElemType e))
+void InOrderRecurTraverse(BiTreePtr T)
 {
-    if (T)
+    if (T == nullptr)
+        return;
+    InOrderRecurTraverse(T->left);
+    cout << T->data << " ";
+    InOrderRecurTraverse(T->right);
+}
+
+void PostOrderRecurTraverse(BiTreePtr T)
+{
+    if (T == nullptr)
+        return;
+    PostOrderRecurTraverse(T->left);
+    PostOrderRecurTraverse(T->right);
+    cout << T->data << " ";
+}
+
+void PreOrderTraverse(BiTreePtr T)
+{
+    if (T == nullptr)
+        return;
+    stack<BiTreePtr> S;
+    BiTreePtr node = T;
+    while (node != nullptr || !S.empty())
     {
-        if (visit(T->data))
+        while (node != nullptr)
         {
-            if (PreOrderTraverseRecursion(T->l_child, visit))
-            {
-                if (PreOrderTraverseRecursion(T->r_child, visit))
-                {
-                    return OK;
-                }
-            }
+            cout << node->data << " ";
+            S.push(node);
+            node = node->left;
         }
-        return ERROR; // 返回错误以便于回退
-    }
-    else
-        return OK;
-}
-
-Status InOrderTraverseRecursion(BiTree T, Status (*visit)(TElemType e))
-{
-    if (T)
-    {
-
-        if (InOrderTraverseRecursion(T->l_child, visit))
-        {
-            if (visit(T->data))
-            {
-                if (InOrderTraverseRecursion(T->r_child, visit))
-                {
-                    return OK;
-                }
-            }
-        }
-        return ERROR;
-    }
-    else
-        return OK;
-}
-
-#include <stack>
-// 中序遍历的非递归算法
-Status InOrderTraverse(BiTree T, Status (*visit)(TElemType e))
-{
-    stack<BiTree> S;
-    S.push(T); // 将结点压入栈
-
-    while (!S.empty())
-    {
-        while (S.top()->l_child)
-            S.push(S.top()->l_child); // 向左走到尽头
-
         if (!S.empty())
         {
-            BiTree p = S.top();
+            node = S.top();
             S.pop();
-            if (!visit(p->data)) // 遍历根节点
-                return ERROR;
-            S.push(p->r_child); // 右子树进栈
+            node = node->right;
         }
     }
-    return OK;
 }
 
-Status InOrderTraverse2(BiTree T, Status (*visit)(TElemType e))
+void InOrderTraverse(BiTreePtr T)
 {
-    stack<BiTree> S;
-    BiTree p = T;
-    while (p || !S.empty())
+    if (T == nullptr)
+        return;
+    stack<BiTreePtr> S;
+    BiTreePtr node = T;
+    while (node != nullptr || !S.empty())
     {
-        if (p)
+        while (node != nullptr)
         {
-            S.push(p);
-            p = p->l_child; // 根指针进栈，访问他的左子树
+            S.push(node);
+            node = node->left;
+        }
+        if (!S.empty())
+        {
+            node = S.top();
+            S.pop();
+            cout << node->data << " ";
+            node = node->right;
+        }
+    }
+}
+
+void PostOrderTraverse(BiTreePtr T)
+{
+    if (T == nullptr)
+        return;
+    stack<BiTreePtr> S;
+    BiTreePtr node = T;
+    BiTreePtr lastNode = nullptr;
+    while (node != nullptr || !S.empty())
+    {
+        while (node != nullptr)
+        {
+            S.push(node);
+            node = node->left;
+        }
+        node = S.top();
+
+        if (node->right == nullptr || node->right == lastNode)
+        {
+
+            S.pop();
+            cout << node->data << " ";
+            lastNode = node;
+            node = nullptr;
         }
         else
-        {
-            p = S.top();
-            S.pop(); // 根指针退栈，访问他的右子树
-            if (!visit(p->data))
-                return ERROR;
-            p = p->r_child;
-        }
+            node = node->right;
     }
-    return OK;
 }
 
-// 先序递归建立二叉树
-Status CreateBiTreePreOrderRecursion(BiTree &T)
+void createTreePre(BiTreePtr &T)
 {
     char ch;
     cin >> ch;
-    if (ch == ' ')
-        T = NULL;
-    else
+    if (ch != '\n')
     {
-        if (!(T = (BiTNode *)malloc(sizeof(BiTNode))))
-            exit(OVERFLOW);
+        T = (BiTreePtr)malloc(sizeof(BiTree));
         T->data = ch;
-        CreateBiTreePreOrderRecursion(T->l_child);
-        CreateBiTreePreOrderRecursion(T->r_child);
+        createTreePre(T->left);
+        createTreePre(T->right);
     }
-    return OK;
+    else
+        T = nullptr;
+}
+
+int depth(BiTreePtr T)
+{
+    if (T)
+    {
+        int depth1 = 1 + depth(T->left);
+        int depth2 = 1 + depth(T->right);
+        return depth1 > depth2 ? depth1 : depth2;
+    }
+    else
+        return 0;
+}
+
+int numLeaf(BiTreePtr T)
+{
+    if (!T)
+        return 0;
+    if (!T->left && !T->right)
+        return 1;
+    else
+        return numLeaf(T->left) + numLeaf(T->right);
 }
