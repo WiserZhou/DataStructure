@@ -1,8 +1,7 @@
-
 #include <iostream>
 #include <stack>
 using namespace std;
-#define END '\n'
+#define END '#'
 typedef struct Node
 {
     char ch;
@@ -107,9 +106,9 @@ int main()
     cout << "\n";
     ReOrder(T);
     cout << "\n";
-    // cout << numLeaf(T) << "\n";
-    // cout << depth(T) << "\n";
-    // InOrderNoRecursion(T);
+    cout << numLeaf(T) << "\n";
+    cout << depth(T) << "\n";
+    InOrderNoRecursion(T);
     cout << "\n";
     return 0;
 }
