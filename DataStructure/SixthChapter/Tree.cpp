@@ -2,14 +2,14 @@
 #include <stack>
 using namespace std;
 #define END '#'
-typedef struct Node
+typedef struct TNode
 {
     char ch;
-    struct Node *l_child;
-    struct Node *r_child;
+    struct TNode *left;
+    struct TNode *right;
 } *Tree, TNode;
 
-void CreateTree(Tree &T)
+void CreateTreePre(Tree &T)
 {
     char ch;
     cin >> ch;
@@ -17,8 +17,8 @@ void CreateTree(Tree &T)
     {
         T = (Tree)malloc(sizeof(TNode));
         T->ch = ch;
-        CreateTree(T->l_child);
-        CreateTree(T->r_child);
+        CreateTreePre(T->left);
+        CreateTreePre(T->right);
     }
     else
         T = nullptr;
@@ -29,8 +29,8 @@ void PreOrder(Tree T)
     if (T)
     {
         cout << T->ch;
-        PreOrder(T->l_child);
-        PreOrder(T->r_child);
+        PreOrder(T->left);
+        PreOrder(T->right);
     }
     // cout << "\n";
 }
@@ -38,17 +38,17 @@ void InOrder(Tree T)
 {
     if (T)
     {
-        InOrder(T->l_child);
+        InOrder(T->left);
         cout << T->ch;
-        InOrder(T->r_child);
+        InOrder(T->right);
     }
 }
 void ReOrder(Tree T)
 {
     if (T)
     {
-        ReOrder(T->l_child);
-        ReOrder(T->r_child);
+        ReOrder(T->left);
+        ReOrder(T->right);
         cout << T->ch;
     }
 }
@@ -61,14 +61,14 @@ void InOrderNoRecursion(Tree T)
         if (p)
         {
             S.push(p);
-            p = p->l_child; // 根指针进栈，访问他的左子树
+            p = p->left; // 根指针进栈，访问他的左子树
         }
         else
         {
             p = S.top();
             S.pop(); // 根指针退栈，访问他的右子树
             cout << p->ch;
-            p = p->r_child;
+            p = p->right;
         }
     }
     // return OK;
@@ -78,8 +78,8 @@ int depth(Tree T)
 {
     if (T)
     {
-        int depth1 = 1 + depth(T->l_child);
-        int depth2 = 1 + depth(T->r_child);
+        int depth1 = 1 + depth(T->left);
+        int depth2 = 1 + depth(T->right);
         return depth1 > depth2 ? depth1 : depth2;
     }
     else
@@ -90,16 +90,16 @@ int numLeaf(Tree T)
 {
     if (!T)
         return 0;
-    if (!T->l_child && !T->r_child)
+    if (!T->left && !T->right)
         return 1;
     else
-        return numLeaf(T->l_child) + numLeaf(T->r_child);
+        return numLeaf(T->left) + numLeaf(T->right);
 }
 
 int main()
 {
     Tree T;
-    CreateTree(T);
+    CreateTreePre(T);
     PreOrder(T);
     cout << "\n";
     InOrder(T);
