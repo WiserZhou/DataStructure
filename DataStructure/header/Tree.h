@@ -8,6 +8,7 @@ typedef struct BiTNode
 {
     TElemType data;
     struct BiTNode *left, *right;
+    BiTNode(TElemType v) : data(v), left(nullptr), right(nullptr) {}
 
 } BiTNode, *BiTree;
 /**
@@ -283,10 +284,13 @@ void InThreading(BiThrTree p)
             pre->right = p;
         }
         pre = p;
-        
+
         InThreading(p->right);
     }
 }
+/**
+ * 中序线索化二叉树
+ */
 void InOrderThreading(BiThrTree &ThrT, BiThrTree T)
 {
     if (!(ThrT = (BiThrTree)malloc(sizeof(BiThrNode))))
@@ -294,16 +298,19 @@ void InOrderThreading(BiThrTree &ThrT, BiThrTree T)
 
     ThrT->LTag = Link;
     ThrT->RTag = Thread;
-    ThrT->right = ThrT;
+    ThrT->right = ThrT; // 使线索树的左右指针都指向头结点
+
     if (!T)
         ThrT->left = ThrT;
     else
     {
-        ThrT->left = T;
-        pre = ThrT;
-        InThreading(T);
+        ThrT->left = T; // 左子树指向根结点
+        pre = ThrT;     // 前驱指向头结点
+
+        InThreading(T); // 对树进行线索化
+
         pre->right = ThrT;
         pre->RTag = Thread;
-        ThrT->right = pre;
+        ThrT->right = pre; // 将尾结点和头结点连接起来
     }
 }
