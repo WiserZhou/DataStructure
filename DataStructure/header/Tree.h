@@ -183,7 +183,7 @@ BiTNode *CopyBiTree(BiTNode *T)
         newLeftPtr = CopyBiTree(T->left); // 复制左子树
     else
         newLeftPtr = NULL;
-        
+
     if (T->right)
         newRightPtr = CopyBiTree(T->right); // 复制右子树
     else
@@ -226,3 +226,84 @@ typedef struct BPTree
     int num_node; // 结点数目
     int root;     // 根结点的位置
 } BPTree;
+
+/**
+ * Link表示指针，Thread表示线索
+ */
+enum PointerTag
+{
+    Link,
+    Thread
+};
+/**
+ * 线索二叉链表的结构
+ */
+typedef struct BiThrNode
+{
+    TElemType data;
+    struct BiThrNode *left, *right;
+    PointerTag LTag, RTag; // 左右标志
+} BiThrNode, *BiThrTree;
+/**
+ * 中序遍历二叉线索树
+ */
+void InOrderTraverseThr(BiThrTree T)
+{
+    BiThrTree p = T->left; // 线索树的根指针指向头结点
+    while (p != T)         // 最后一个结点的后继就是根结点
+    {
+        while (p->LTag == Link) // 迭代到最左边的结点,开始遍历
+            p = p->left;
+        cout << p->data << " ";
+        while (p->RTag == Thread && p->right != T) // 当右结点链接后继的时候，直接指向后继
+        {
+            p = p->right;
+            cout << p->data << " ";
+        }
+        p = p->right; // 当右子树不是指向后继的时候，重新开始遍历
+    }
+}
+
+BiThrTree pre;
+void InThreading(BiThrTree p)
+{
+    if (p)
+    {
+        // BiThrTree pre;
+        InThreading(p->left);
+
+        if (!p->left)
+        {
+            p->LTag = Thread;
+            p->left = pre;
+        }
+        if (!pre->right)
+        {
+            pre->RTag = Thread;
+            pre->right = p;
+        }
+        pre = p;
+        
+        InThreading(p->right);
+    }
+}
+void InOrderThreading(BiThrTree &ThrT, BiThrTree T)
+{
+    if (!(ThrT = (BiThrTree)malloc(sizeof(BiThrNode))))
+        exit(OVERFLOW);
+
+    ThrT->LTag = Link;
+    ThrT->RTag = Thread;
+    ThrT->right = ThrT;
+    if (!T)
+        ThrT->left = ThrT;
+    else
+    {
+        ThrT->left = T;
+        pre = ThrT;
+        InThreading(T);
+        pre->right = ThrT;
+        pre->RTag = Thread;
+        ThrT->right = pre;
+    }
+}

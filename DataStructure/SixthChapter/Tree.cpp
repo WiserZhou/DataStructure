@@ -7,6 +7,7 @@ typedef struct TNode
     char ch;
     struct TNode *left;
     struct TNode *right;
+    // TNode() : ch(), left(nullptr), right(nullptr){};
 } *Tree, TNode;
 
 void CreateTreePre(Tree &T)
@@ -23,7 +24,28 @@ void CreateTreePre(Tree &T)
     else
         T = nullptr;
 }
+void CreateTreeIn(Tree &T)
+{
+    string s;
+    getline(cin, s);
+    // char ch;
+    // cin >> ch;
+    int i = 0;
 
+    if (s[i] == '(')
+    {
+        i++;
+        Tree node1 = (Tree)malloc(sizeof(TNode));
+        node1->ch = s[i++];
+        Tree node2 = (Tree)malloc(sizeof(TNode));
+        node2->ch = s[i++];
+        node2->left = node1;
+        Tree node3 = (Tree)malloc(sizeof(TNode));
+        node3->ch = s[i++];
+        node2->right = node3;
+        i++;
+    }
+}
 void PreOrder(Tree T)
 {
     if (T)
