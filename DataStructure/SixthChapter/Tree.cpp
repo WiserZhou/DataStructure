@@ -108,20 +108,27 @@ void ThreadTree(STree &Thr, Tree T)
 }
 void InOrder(STree Thr)
 {
+    int num = 1;
     STree p = Thr->left;
 
     while (p != Thr)
     {
         while (p->LTag == Link)
             p = p->left;
+        if (p->RTag + p->LTag == 1)
+            num++;
         cout << p->ch;
-        while (p->RTag == Thread && p != Thr)
+        while (p->RTag == Thread && p->right != Thr)
         {
             p = p->right;
+            if (p->RTag + p->LTag == 1)
+                num++;
             cout << p->ch;
         }
         p = p->right;
     }
+    cout << "\n"
+         << num;
 }
 int Num(Tree T)
 {
@@ -136,6 +143,10 @@ int Num(Tree T)
         return Num(T->left) + Num(T->right);
     }
 }
+// int NumOfThread(STree Thr)
+// {
+
+// }
 int main()
 {
     Tree T;
@@ -143,7 +154,8 @@ int main()
     STree Thr;
     ThreadTree(Thr, T);
     InOrder(Thr);
-    cout << "\n";
-    cout << 1 + Num(T);
+
+    // cout << "\n";
+    // cout << 1 + Num(T);
     return 0;
 }
