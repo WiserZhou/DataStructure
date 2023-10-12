@@ -142,6 +142,8 @@ void createTreePre(BiTree &T)
     else
         T = nullptr;
 }
+
+
 /**
  * 求解二叉树的深度
  */

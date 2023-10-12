@@ -34,7 +34,7 @@ TreeNode *buildTreeFromPrefix(string s)
         else
         {
             TreeNode *node = new TreeNode(s[i]);
-            node->left = nodes.top();
+            node->left = nodes.top(); // 压入的时候是倒序，所以左子树在上面
             nodes.pop();
             node->right = nodes.top();
             nodes.pop();
@@ -43,7 +43,20 @@ TreeNode *buildTreeFromPrefix(string s)
     }
     return nodes.top();
 }
+// 递归创建二叉树的函数，不包含括号
+TreeNode *buildTree(string s, int start, int end)
+{
+    if (start > end)
+        return nullptr;
 
+    int mid = start + (end - start) / 2;
+    TreeNode *root = new TreeNode(s[mid]);
+
+    root->left = buildTree(s, start, mid - 1);
+    root->right = buildTree(s, mid + 1, end);
+
+    return root;
+}
 // 根据中缀表达式建立树的函数
 TreeNode *buildTreeFromInfix(string s)
 {
@@ -54,8 +67,8 @@ TreeNode *buildTreeFromInfix(string s)
         if (s[i] == ' ')
             continue; // 忽略空格字符
 
-        if (isdigit(s[i]))
-        { // 数字，直接入栈
+        if (isalpha(s[i]))
+        { // 字母，直接入栈
             nodes.push(new TreeNode(s[i]));
         }
         else if (s[i] == '(')
@@ -125,7 +138,7 @@ TreeNode *buildTreeFromPostfix(string s)
     stack<TreeNode *> nodes;
     for (int i = 0; i < s.size(); i++)
     {
-        if (isdigit(s[i]))
+        if (isalpha(s[i]))
         {
             nodes.push(new TreeNode(s[i]));
         }
@@ -141,41 +154,60 @@ TreeNode *buildTreeFromPostfix(string s)
     }
     return nodes.top();
 }
-
-// 中序遍历函数
-void inorder(TreeNode *root)
+void PreOrder(TreeNode *T)
 {
-    if (!root)
-        return;
-    if (root->left)
+    if (T)
     {
-        cout << "(";
-        inorder(root->left);
+        cout << T->val;
+        PreOrder(T->left);
+        PreOrder(T->right);
     }
-    cout << root->val;
-    if (root->right)
+    // cout << "\n";
+}
+void InOrder(TreeNode *T)
+{
+    if (T)
     {
-        inorder(root->right);
-        cout << ")";
+        InOrder(T->left);
+        cout << T->val;
+        InOrder(T->right);
     }
 }
+void ReOrder(TreeNode *T)
+{
+    if (T)
+    {
+        ReOrder(T->left);
+        ReOrder(T->right);
+        cout << T->val;
+    }
+}
+// 中序遍历函数
 
 int main()
 {
-    string prefix = "*+123";
-    TreeNode *root1 = buildTreeFromPrefix(prefix);
-    inorder(root1);
-    cout << endl;
+    // string prefix = "*+123";
+    // TreeNode *root1 = buildTreeFromPrefix(prefix);
+    // inorder(root1);
+    // cout << endl;
 
-    string infix = "(1+2)*3";
+    // string infix = "(1+2)*3";
+    string infix;
+    getline(cin, infix);
     TreeNode *root2 = buildTreeFromInfix(infix);
-    inorder(root2);
+
+    // inorder(root2);
+    PreOrder(root2);
+    cout << "\n";
+    InOrder(root2);
+    cout << "\n";
+    ReOrder(root2);
     cout << endl;
 
-    string postfix = "12+3*";
-    TreeNode *root3 = buildTreeFromPostfix(postfix);
-    inorder(root3);
-    cout << endl;
+    // string postfix = "12+3*";
+    // TreeNode *root3 = buildTreeFromPostfix(postfix);
+    // inorder(root3);
+    // cout << endl;
 
     return 0;
 }
