@@ -71,25 +71,25 @@ void DFS_A(vector<vector<int>> matrix, char start)
             break;
         cout << getAlpha(index);
         visited[index] = true;
-
+        bool flag = false;
         for (int pointer = VexVector.size() - 1; pointer >= 0; pointer--)
         {
-            bool flag = false;
+
             if (!visited[pointer] && matrix[index][pointer] == 1)
             {
                 // cout << getAlpha(pointer);
                 flag = true;
                 vexGraph.push(pointer);
             }
-            // cout << "}}}}";
-            if (flag == false)
+        }
+        for (int pointer = 0; pointer < VexVector.size() && !flag; pointer++)
+        {
+
+            if (!visited[pointer])
             {
-                if (!visited[pointer] && ((matrix[index][pointer] == 1) || (matrix[pointer][index] == 1)))
-                {
-                    // cout << getAlpha(pointer);
-                    flag = true;
-                    vexGraph.push(pointer);
-                }
+                // cout << getAlpha(pointer);
+                flag = true;
+                vexGraph.push(pointer);
             }
         }
     }
