@@ -53,7 +53,6 @@ int main()
     }
     sort(nodes.begin(), nodes.end(), cmp); // 按照频率升序排序
 
-
     // 构造最优二叉树
     while (nodes.size() > 1)
     { // 只要还有结点就合并
@@ -75,6 +74,7 @@ int main()
     getHuffmanCode(nodes.front(), "", huffmanCode);
 
     // 输出结果
+    int minCodeLength = 0;
     for (auto p : charFreq)
     {
         char ch = p.first;
@@ -83,24 +83,15 @@ int main()
         for (auto hc : huffmanCode)
         {
             if (hc.first == ch)
+            {
                 cout << hc.second;
+                minCodeLength += freq * hc.second.size();
+            }
         }
         cout << endl;
     }
-
-    // 计算最优码长
-    int minCodeLength = 0;
-    for (auto p : charFreq)
-    {
-        char ch = p.first;
-        int freq = p.second;
-        for (auto hc : huffmanCode)
-        {
-            if (hc.first == ch)
-                minCodeLength += freq * hc.second.size();
-        }
-    }
     cout << minCodeLength << endl;
+    // 计算最优码长
 
     // 释放内存
     for (Node *node : nodes)
