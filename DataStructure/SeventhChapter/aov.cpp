@@ -13,7 +13,7 @@ void TopologicalSort(int n)
     vector<int> result; // 用于存储拓扑排序的结果
 
     // 将所有入度为0的节点压入栈中
-    for (int i = 0; i < n; ++i)
+    for (int i = 1; i <= n; ++i)
     {
         if (in_degree[i] == 0)
             S.push(i);
@@ -36,7 +36,7 @@ void TopologicalSort(int n)
     }
 
     // 输出拓扑排序的结果
-    for (int i = 0; i < result.size() - 1; ++i)
+    for (int i = 0; i < result.size(); ++i)
     {
         cout << result[i] << " ";
     }
