@@ -16,14 +16,16 @@ void In(TNode *p)
         return;
 
     In(p->ch);
-    cout << p->data;
+    if (p->data != '/')
+        cout << p->data;
     In(p->bro);
 }
 void pre(TNode *p)
 {
     if (p == nullptr)
         return;
-    cout << p->data;
+    if (p->data != '/')
+        cout << p->data;
     pre(p->ch);
     pre(p->bro);
 }
@@ -52,7 +54,8 @@ void layer(TNode *p)
         return;
     queue<TNode *> q;
     q.push(p);
-    cout << p->data;
+    if (p->data != '/')
+        cout << p->data;
     while (!q.empty())
     {
         TNode *s = q.front();
@@ -62,7 +65,8 @@ void layer(TNode *p)
         if (s->ch != nullptr)
         {
             s = s->ch;
-            cout << s->data;
+            if (s->data != '/')
+                cout << s->data;
             q.push(s);
 
             while (s->bro != nullptr)
@@ -70,7 +74,8 @@ void layer(TNode *p)
                 // if (s->data == 'b' && s->bro != nullptr)
                 //     cout << "****";
                 s = s->bro;
-                cout << s->data;
+                if (s->data != '/')
+                    cout << s->data;
                 // cout << " brother:->" << s->data;
                 q.push(s);
             }
@@ -116,6 +121,7 @@ void showPath(TNode *T, string str)
     }
     else
     {
+        str.erase(0, 1);
         cout << str << "\n";
         return;
     }
@@ -126,8 +132,10 @@ int main()
     string s;
     cin >> s;
     q.push(new TNode(s[2]));
+
     TNode *T = q.front();
     cin >> s;
+
     while (!q.empty() && s[2] != '#')
     {
         TNode *character = q.front();
@@ -144,6 +152,7 @@ int main()
             q.pop();
         }
     }
+
     pre(T);
     cout << "\n";
     // In(T);
@@ -152,7 +161,7 @@ int main()
     cout << "\n";
     layer(T);
     cout << '\n';
-    cout << depth(T);
+    cout << depth(T) - 1;
     cout << "\n";
     cout << NumOfLeaf(T) << "\n";
     string str;
