@@ -4,8 +4,8 @@
 
 using namespace std;
 
-vector<int> G[100];
-int in_degree[100];
+vector<int> G[100]; // 每一个G数组的元素都是一个vector数组
+int in_degree[100]; // 对应着每一个点的入度
 
 void TopologicalSort(int n)
 {
@@ -25,18 +25,18 @@ void TopologicalSort(int n)
         S.pop();
         result.push_back(u); // 将节点u加入结果中
 
-        // 遍历节点u的所有出边(v, u)
+        // 遍历节点u的所有出边(u, v)
         for (int i = 0; i < G[u].size(); ++i)
         {
-            int v = G[u][i];
-            in_degree[v]--; // 将节点v的入度减1
+            int v = G[u][i]; // 获取u点出点的所有点
+            in_degree[v]--;  // 将节点v的入度减1
             if (in_degree[v] == 0)
                 S.push(v); // 如果节点v的入度变为0，则将其压入栈中
         }
     }
 
     // 输出拓扑排序的结果
-    for (int i = 0; i < result.size(); ++i)
+    for (int i = 0; i < result.size() - 1; ++i)
     {
         cout << result[i] << " ";
     }
@@ -44,15 +44,15 @@ void TopologicalSort(int n)
 
 int main()
 {
-    int n = 6;                                                                                                                // 总节点数
+    int n = 10;                                                                                                               // 总节点数
     vector<pair<int, int>> edges = {{9, 6}, {6, 7}, {9, 8}, {8, 1}, {1, 10}, {6, 5}, {4, 5}, {4, 2}, {4, 3}, {5, 2}, {5, 3}}; // 边集合
 
     // 初始化邻接表和入度数组
     for (int i = 0; i < edges.size(); ++i)
     {
-        int u = edges[i].first, v = edges[i].second;
-        G[u].push_back(v);
-        in_degree[v]++;
+        int u = edges[i].first, v = edges[i].second; // u为入点，v为出点
+        G[u].push_back(v);                           // 给u点增加出点
+        in_degree[v]++;                              // 增加v的入度
     }
 
     TopologicalSort(n);
