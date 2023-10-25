@@ -39,7 +39,7 @@ int main()
     {
         if (isalpha(c))
         {                   // 只考虑字母字符
-            c = tolower(c); // 统一转换为小写字母
+            // c = tolower(c); // 统一转换为小写字母
             ++charFreq[c];
         }
     }
