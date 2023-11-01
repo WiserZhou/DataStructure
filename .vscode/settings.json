@@ -127,5 +127,6 @@
     "thread": "cpp",
     "typeindex": "cpp"
   },
-  "C_Cpp_Runner.msvcSecureNoWarnings": false
+  "C_Cpp_Runner.msvcSecureNoWarnings": false,
+  "commentTranslate.hover.enabled": true
 }

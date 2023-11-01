@@ -13,6 +13,17 @@ typedef struct BiTNode
     struct BiTNode *lchild, *rchild;
 } BiTNode, *BiTree;
 
+// 二叉排序树中序有序排列
+void inOrder(BiTree T)
+{
+    if (T)
+    {
+        inOrder(T->lchild);
+        // cout<<T->data;
+        inOrder(T->rchild);
+    }
+}
+
 // 在二叉排序树中的查找算法
 BiTree SearchBST(BiTree T, KeyType k)
 {
@@ -51,12 +62,12 @@ Status SearchBST(BiTree T, KeyType key, BiTree f, BiTree &p)
         return SearchBST(T->rchild, key, T, p); // 去右子树找
 }
 
-// typedef int ElemType;
 Status InsertBST(BiTree &T, TElemType e)
 {
-    BiTree p, s;
+    BiTree p, s; // p用来记录搜索的最后一个非空结点,s用来创建新的结点
     if (!SearchBST(T, e.key, nullptr, p))
-    { // 确定插入位置
+    {
+        // 确定插入位置
         s = (BiTree)malloc(sizeof(BiTNode));
         s->data = e;
         s->lchild = s->rchild = nullptr;
@@ -72,3 +83,55 @@ Status InsertBST(BiTree &T, TElemType e)
     else
         return FALSE; // T中已有e，不需要插入
 } // Insert BST
+
+Status Delete(BiTree &p)
+{
+    BiTree q, s;
+    
+    if (!p->rchild) // p无右子树,则p为叶子或只有左子树
+    {
+        q = p;
+        p = p->lchild;
+        free(q);
+    }
+
+    else if (!p->lchild) // p只有右子树
+    {
+        q = p;
+        p = p->rchild;
+        free(q);
+    }
+
+    else
+    {                  // p的左右子树都不为空的情况
+        q = p;         // q是s的父亲
+        s = p->lchild; // s指向p的左子树,
+        while (s->rchild)
+        {
+            q = s;
+            s = s->rchild;
+        }                  // 找最大
+        p->data = s->data; // 把结点s的数据赋给p的数据
+        if (q != p)
+            q->rchild = s->lchild; // 执行了while
+        else
+            q->lchild = s->lchild; // while未被执行
+        free(s);
+    }
+    return TRUE;
+} // Delete
+
+Status DeleteBST(BiTree &T, KeyType key)
+{
+    if (!T)
+        return FALSE; // 空树，无法删除
+    else
+    {
+        if (EQ(key, T->data.key))      // 找到
+            return Delete(T);          // 删除T
+        else if (LT(key, T->data.key)) // 去左子树删
+            return DeleteBST(T->lchild, key);
+        else // 去右子树删
+            return DeleteBST(T->rchild, key);
+    }
+} // DeleteBST

@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/86186/Desktop/Codefile/DataStructure/EighthChapter/staticFind",
-      "program": "c:/Users/86186/Desktop/Codefile/DataStructure/EighthChapter/staticFind/build/Debug/outDebug",
+      "cwd": "c:/Users/86186/Desktop/Codefile/DataStructure/EighthChapter",
+      "program": "c:/Users/86186/Desktop/Codefile/DataStructure/EighthChapter/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
