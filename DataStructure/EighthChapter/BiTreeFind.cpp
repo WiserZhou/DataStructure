@@ -60,6 +60,7 @@ Status InsertBST(BiTree &T, TElemType e)
         s = (BiTree)malloc(sizeof(BiTNode));
         s->data = e;
         s->lchild = s->rchild = nullptr;
+
         if (!p)
             T = s; // p为空，则 s 为新的根结点
         else if (LT(e.key, p->data.key))
