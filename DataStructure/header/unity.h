@@ -32,3 +32,7 @@ int precedence(char op)
         return 2;
     return 0;
 }
+
+#define EQ(a, b) ((a) == (b))
+#define LT(a, b) ((a) < (b))
+#define LQ(a, b) ((a) <= (b))

@@ -78,6 +78,7 @@ typedef struct
 
 int SEARCH(SSTable ST, INtable IX, KeyType key)
 {
+    // 根据索引表进行查找，先比较和索引表里最大元素的大小，然后确定块的位置，在这个块里进行查找
     int i = 0, s, e; // s和e分别记录在查找表中的开始位置和结束位置
 
     while ((key > IX.index[i].key) && (i < IX.block))
