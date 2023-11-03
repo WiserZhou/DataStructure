@@ -4,7 +4,7 @@ typedef int KeyType;
 typedef struct
 {
     KeyType key; // 关键字
-    // …
+    // 其他属性
 } TElemType;
 
 typedef struct BiTNode
@@ -19,7 +19,7 @@ void inOrder(BiTree T)
     if (T)
     {
         inOrder(T->lchild);
-        // cout<<T->data;
+        printf("%d ", T->data.key);
         inOrder(T->rchild);
     }
 }
@@ -87,7 +87,7 @@ Status InsertBST(BiTree &T, TElemType e)
 Status Delete(BiTree &p)
 {
     BiTree q, s;
-    
+
     if (!p->rchild) // p无右子树,则p为叶子或只有左子树
     {
         q = p;
@@ -102,8 +102,8 @@ Status Delete(BiTree &p)
         free(q);
     }
 
-    else
-    {                  // p的左右子树都不为空的情况
+    else // p的左右子树都不为空的情况
+    {
         q = p;         // q是s的父亲
         s = p->lchild; // s指向p的左子树,
         while (s->rchild)
@@ -113,9 +113,9 @@ Status Delete(BiTree &p)
         }                  // 找最大
         p->data = s->data; // 把结点s的数据赋给p的数据
         if (q != p)
-            q->rchild = s->lchild; // 执行了while
+            q->rchild = s->lchild; // 执行了while，此时q指向最大元素的父亲，他的右边重新指向最大元素的左子树
         else
-            q->lchild = s->lchild; // while未被执行
+            q->lchild = s->lchild; // while未被执行，此时q就是要删除的结点，他的左孩子没有右结点，直接将孩子的左孩子接到他的左边即可
         free(s);
     }
     return TRUE;
