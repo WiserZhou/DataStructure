@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/86186/Desktop/Codefile/DataStructure/NighthChapter",
-      "program": "c:/Users/86186/Desktop/Codefile/DataStructure/NighthChapter/build/Debug/outDebug",
+      "cwd": "c:/Users/86186/Desktop/Codefile/DataStructure/TenthChapter",
+      "program": "c:/Users/86186/Desktop/Codefile/DataStructure/TenthChapter/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

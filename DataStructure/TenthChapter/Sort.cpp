@@ -20,7 +20,7 @@ void InsertionSort(SqList &L)
     int i, j;
     for (i = 2; i <= L.length; ++i) // 从2号位置开始
         if (L.r[i].key < L.r[i - 1].key)
-        {
+        { 
             L.r[0] = L.r[i]; // 复制为监视哨
             for (j = i - 1; L.r[0].key < L.r[j].key; --j)
                 L.r[j + 1] = L.r[j]; // 记录后移
