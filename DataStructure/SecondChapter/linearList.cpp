@@ -5,9 +5,9 @@ typedef int ElemType;
 
 typedef struct
 {
-    ElemType *elem;
-    int length;
-    int listSize;
+    ElemType *elem; // 使用动态数组
+    int length;     // 顺序表长度
+    int listSize;   // 存储容量
 } SqList;
 
 /**
@@ -16,6 +16,7 @@ typedef struct
 
 Status initSqList(SqList &L)
 {
+    // 算法时间复杂度O(1)
     if (L.listSize != 0)
         destroySqList(L);
     L.elem = (ElemType *)malloc(LIST_INIT_SIZE * sizeof(ElemType));
@@ -45,7 +46,7 @@ Status clearSqList(SqList &L)
 /**
  * judge whether the sequential list is empty or not
  */
-bool SqListEmpty(SqList L)
+bool ListEmpty(SqList L)
 {
     if (L.length == 0)
         return true;
@@ -55,7 +56,7 @@ bool SqListEmpty(SqList L)
 /**
  * get the length of the sequential list
  */
-int SqListLength(SqList L)
+int ListLength(SqList L)
 {
     return L.length;
 }
@@ -131,9 +132,9 @@ Status nextElem(SqList L, ElemType cur_e, ElemType &next_e)
  */
 Status insertElem(SqList &L, int i, ElemType e)
 {
-    if (i < 1 || i > L.length + 1)
+    if (i < 1 || i > L.length + 1) // 插入位置不合法
         return ERROR;
-    if (L.length >= L.listSize)
+    if (L.length >= L.listSize) // 扩建空间
     {
         ElemType *newList = (ElemType *)realloc(L.elem, L.listSize + sizeof(ElemType) * LIST_INCREMENT);
         if (!newList)
@@ -144,10 +145,11 @@ Status insertElem(SqList &L, int i, ElemType e)
             L.listSize += LIST_INCREMENT;
         }
     }
-    ElemType *p = &L.elem[i - 1];
-    ElemType *q = L.elem + L.length - 1;
+
+    ElemType *p = &L.elem[i - 1];        // 表示要赋值的位置
+    ElemType *q = L.elem + L.length - 1; // 表示最后一个元素，用来后移
     for (; q >= p; q--)
-        *(q + 1) = *q;
+        *(q + 1) = *q; // 将前面的元素统统后移
     *p = e;
     L.length++;
     return OK;

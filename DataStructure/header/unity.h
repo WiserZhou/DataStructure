@@ -9,8 +9,10 @@ T maxTri(T a, T b, T c)
 {
     return a > b ? (a > c ? a : c) : (b > c ? b : c);
 }
+
 #define LIST_INCREMENT 10
 #define LIST_INIT_SIZE 100
+
 #define OVERFLOW -2
 #define ERROR 0
 #define UNDERFLOW -3
