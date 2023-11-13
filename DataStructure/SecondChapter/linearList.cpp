@@ -132,6 +132,7 @@ Status nextElem(SqList L, ElemType cur_e, ElemType &next_e)
  */
 Status insertElem(SqList &L, int i, ElemType e)
 {
+    // 元素后移造成的复杂度为O（n）
     if (i < 1 || i > L.length + 1) // 插入位置不合法
         return ERROR;
     if (L.length >= L.listSize) // 扩建空间
@@ -159,15 +160,18 @@ Status insertElem(SqList &L, int i, ElemType e)
  */
 Status deleteElem(SqList &L, int i, ElemType &e)
 {
+    //同样也是O（n）
     if (i < 1 || i > L.length)
         return ERROR;
     else
     {
-        e = L.elem[i - 1];
+        e = L.elem[i - 1]; // 获取删除的元素值
+
         ElemType *p = &L.elem[i - 1];
         ElemType *q = L.elem + L.length - 1;
         for (p++; p <= q; p++)
-            *(p - 1) = *p;
+            *(p - 1) = *p; // 将所有元素统统左移，覆盖元素
+
         L.length--;
         return OK;
     }

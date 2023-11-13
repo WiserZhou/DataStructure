@@ -36,12 +36,16 @@ Status ListEmpty(LinkList L)
  */
 Status getElem(LinkList L, int i, ElemType &e)
 {
+    // 时间复杂度O(n)
     LinkList p = L->next;
     int j = 1;
+
     while (p && j++ < i)
         p = p->next;
+
     if (!p || j > i)
         return ERROR;
+
     e = p->data;
     return OK;
 }
@@ -52,10 +56,12 @@ Status insertElem(LinkList &L, int i, ElemType e)
 {
     LinkList p = L;
     int j = 0;
+
     while (p && j++ < i - 1) // 将指针移动到i-1的位置，方便后面的插入
         p = p->next;
-    if (!p || j > i - 1)
+    if (!p || j > i - 1) // 如果p为null或者j超出位置
         return ERROR;
+
     LinkList s = (LinkList)malloc(sizeof(LNode));
     s->data = e;
     s->next = p->next;
@@ -70,7 +76,7 @@ Status clearList(LinkList &L)
     while (L->next)
     {
         LinkList p = L->next;
-        L->next = p->next;
+        L->next = p->next; // 跳过中间部分的结点
         free(p);
         p = nullptr;
     } // 神奇方法，一直利用->next来释放对象，同时保持后面的结点仍然连接在头结点上
@@ -83,7 +89,7 @@ Status deleteElem(LinkList &L, int i, ElemType &e)
 {
     LinkList p = L;
     int j = 0;
-    while (p->next && j++ < i - 1)
+    while (p->next && j++ < i - 1) // 我要找的是i-1，但是我要操作的是i，所以必须保证i位置的元素值不能为空，这一点有点特殊
         p = p->next;
     if (!(p->next) || (j > i - 1))
         return ERROR;
@@ -114,7 +120,7 @@ Status insertEnd(LinkList &L)
     if (!p)
         exit(OVERFLOW);
     LinkList q = L;
-    while (!(q->next))
+    while (q->next)
         q = q->next;
     scanf("%d", &p->data);
     q->next = p;
