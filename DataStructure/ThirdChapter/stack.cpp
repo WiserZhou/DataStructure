@@ -37,7 +37,7 @@ Status Push(SqStack &S, SElemType e)
 
 Status Pop(SqStack &S, SElemType &e)
 {
-    if (S.top == S.base)
+    if (S.top == S.base) // 任何时候都要考虑判空
         return ERROR;
     else
     {
@@ -147,7 +147,7 @@ typedef struct
 
 void InitStack(STACK &S)
 {
-    //在
+    // 在
     S.top[0] = -1;
     S.top[1] = m;
 }
@@ -190,5 +190,3 @@ int POP(STACK &S, SElemType &x, int i)
             S.top[0]++;
         }
 }
-
-
