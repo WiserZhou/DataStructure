@@ -25,6 +25,7 @@ T maxTri(T a, T b, T c)
 typedef int Status;
 typedef int Position;
 typedef int LEN;
+typedef int SElemType;
 
 int precedence(char op)
 {
