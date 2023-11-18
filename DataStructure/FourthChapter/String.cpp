@@ -59,6 +59,7 @@ int Index(SString S, SString T, int pos)
 int Index_KMP(SString S, SString T, int pos)
 {
     int next[T[0]]{};
+
     get_next(T, next);
 
     int i = pos, j = 1;
@@ -67,10 +68,6 @@ int Index_KMP(SString S, SString T, int pos)
         {
             i++;
             j++;
-        }
-        else if (j == 1) // 分出来的j==1的情况，此时第一个位置的字符就不相同，巧妙的使用next数组置为0，也可以让i后移
-        {
-            i++;
         }
         else
             j = next[j]; // i不变,j后退
@@ -102,5 +99,5 @@ void get_next(SString T, int next[])
 }
 
 
-//abcdabcdcd
-//011112345
+
+
