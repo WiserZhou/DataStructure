@@ -100,3 +100,7 @@ void get_next(SString T, int next[])
             k = next[k]; /*T[j]≠T[k]时，k跳转到next[k]*/
     }
 }
+
+
+//abcdabcdcd
+//011112345
