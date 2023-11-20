@@ -204,47 +204,29 @@ void InOrderGo(BiTree T, void (*visit)(TElemType &e), stack<BiTNode *> *S)
     }
 }
 
-void visit(TElemType e)
+#include <queue>
+/**
+ * 层次遍历二叉树，使用队列实现
+ */
+void LevelOrderTraverse(TreeNode *root, void (*visit)(TElemType e))
 {
-    cout << e << endl;
-}
-int main()
-{
-    // 创建一个二叉树
-    TreeNode *root = new TreeNode();
-    root->data = 1;
+    queue<TreeNode *> Q;
 
-    TreeNode *node2 = new TreeNode();
-    node2->data = 2;
+    if (root)
+        Q.push(root);
 
-    TreeNode *node3 = new TreeNode();
-    node3->data = 3;
+    while (!Q.empty())
+    {
+        TreeNode *current = Q.front();
+        Q.pop();
 
-    TreeNode *node4 = new TreeNode();
-    node4->data = 4;
+        // 访问当前结点（你的 visit 函数）
+        visit(current->data);
 
-    TreeNode *node5 = new TreeNode();
-    node5->data = 5;
+        if (current->lchild)
+            Q.push(current->lchild);
 
-    root->lchild = node2;
-    root->rchild = node3;
-    node2->lchild = node4;
-    node2->rchild = node5;
-
-    // 先序遍历
-    cout << "PreOrder traversal: ";
-    PreOrderTraversal(root, visit);
-    cout << endl;
-
-    // 中序遍历
-    cout << "InOrder traversal: ";
-    InOrderTraversal(root, visit);
-    cout << endl;
-
-    // 后序遍历
-    cout << "PostOrder traversal: ";
-    PostOrderTraversal(root, visit);
-    cout << endl;
-
-    return 0;
+        if (current->rchild)
+            Q.push(current->rchild);
+    }
 }

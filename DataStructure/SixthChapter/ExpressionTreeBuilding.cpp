@@ -11,38 +11,35 @@ struct TreeNode
     TreeNode(char v) : val(v), left(nullptr), right(nullptr) {}
 };
 
-// 比较运算符优先级
-int priority(char op)
-{
-    if (op == '+' || op == '-')
-        return 1;
-    if (op == '*' || op == '/')
-        return 2;
-    return 0;
-}
-
 // 根据先缀表达式和栈逆序建立树的函数
-TreeNode *buildTreeFromPrefix(string s)
+TreeNode *buildTreeFromPrefixReverse(string s)
 {
     stack<TreeNode *> nodes;
-    for (int i = s.size() - 1; i >= 0; i--) // 将先缀表达式逆序扫描，压入栈后的顺序就是正序
+    for (int i = s.size() - 1; i >= 0; i--)
     {
         if (isdigit(s[i]))
         {
-            nodes.push(new TreeNode(s[i])); // 如果是数字，就将其压入栈
+            nodes.push(new TreeNode(s[i]));
         }
         else
         {
             TreeNode *node = new TreeNode(s[i]);
-            node->left = nodes.top(); // 压入的时候是倒序，所以左子树在上面
+
+            TreeNode *left = nodes.top(); // 保存左子树
             nodes.pop();
-            node->right = nodes.top();
+
+            TreeNode *right = nodes.top(); // 保存右子树
             nodes.pop();
-            nodes.push(node); // 如果是运算符，就弹出栈顶的两个结点，并且将其连接在运算符结点的两侧
+
+            node->left = left;
+            node->right = right;
+
+            nodes.push(node);
         }
     }
     return nodes.top();
 }
+
 // 根据先缀表达式正序建立二叉树
 bool isInAlphabetSet(char ch)
 {
@@ -54,60 +51,156 @@ bool isInAlphabetSet(char ch)
     // 返回值为字符是否属于字母集
 }
 
-TreeNode *buildTreeFromPrefix()
+TreeNode *buildTreeFromPrefixRecursive(string s, int &index)
 {
-    char ch;
-    cin >> ch; // 从输入中读取一个字符
-
-    if (isInAlphabetSet(ch))
+    if (index < 0)
     {
-        // 如果是字母集中的字符，建立叶子结点
-        TreeNode *leaf = new TreeNode(ch);
+        return nullptr; // Invalid index, return null
+    }
+
+    char currentChar = s[index];
+    index--;
+
+    if (isInAlphabetSet(currentChar))
+    {
+        // If it is a character in the alphabet set, create a leaf node
+        TreeNode *leaf = new TreeNode(currentChar);
         return leaf;
     }
     else
     {
-        // 如果是运算符，则建立根结点，并递归建立左右子树
-        TreeNode *root = new TreeNode(ch);
-        root->left = buildTreeFromPrefix();  // 递归建立左子树
-        root->right = buildTreeFromPrefix(); // 递归建立右子树
-        return root;
+        // If it is an operator, create a root node and recursively build left and right subtrees
+        TreeNode *node = new TreeNode(currentChar);
+        node->left = buildTreeFromPrefixRecursive(s, index);  // Recursively build the left subtree
+        node->right = buildTreeFromPrefixRecursive(s, index); // Recursively build the right subtree
+        return node;
     }
 }
 
-// 根据中缀表达式建立树的函数
+TreeNode *buildTreeFromPrefix(string s)
+{
+    int index = 0; // Start from the beginning of the string
+    return buildTreeFromPrefixRecursive(s, index);
+}
+
+TreeNode *buildTreeFromPostfixRecursive(string s, int &index)
+{
+    if (index >= s.size())
+    {
+        return nullptr; // Invalid index, return null
+    }
+
+    char currentChar = s[index];
+    index++;
+
+    if (isInAlphabetSet(currentChar))
+    {
+        // If it is a character in the alphabet set, create a leaf node
+        TreeNode *leaf = new TreeNode(currentChar);
+        return leaf;
+    }
+    else
+    {
+        // If it is an operator, create a root node and recursively build left and right subtrees
+        TreeNode *node = new TreeNode(currentChar);
+        node->left = buildTreeFromPostfixRecursive(s, index);  // Recursively build the left subtree
+        node->right = buildTreeFromPostfixRecursive(s, index); // Recursively build the right subtree
+        return node;
+    }
+}
+
+TreeNode *buildTreeFromPostfix(string s)
+{
+    int index = 0; // Start from the beginning of the string
+    return buildTreeFromPostfixRecursive(s, index);
+}
+
+TreeNode *buildTreeFromInfixRecursive(string s, int &index)
+{
+    if (index < 0 || index >= s.size())
+    {
+        return nullptr; // Invalid index, return null
+    }
+
+    char currentChar = s[index];
+    index--;
+
+    if (isInAlphabetSet(currentChar))
+    {
+        // If it is a character in the alphabet set, create a leaf node
+        TreeNode *leaf = new TreeNode(currentChar);
+        return leaf;
+    }
+    else if (currentChar == ')')
+    {
+        // Skip ')' and recursively build the subtree within parentheses
+        TreeNode *subtree = buildTreeFromInfixRecursive(s, index);
+        // Skip '('
+        index--;
+        return subtree;
+    }
+    else
+    {
+        // If it is an operator, create a root node and recursively build right and left subtrees
+        TreeNode *node = new TreeNode(currentChar);
+        node->right = buildTreeFromInfixRecursive(s, index); // Recursively build the right subtree
+        node->left = buildTreeFromInfixRecursive(s, index);  // Recursively build the left subtree
+        return node;
+    }
+}
+
 TreeNode *buildTreeFromInfix(string s)
+{
+    int index = s.size() - 1; // Start from the end of the string
+    return buildTreeFromInfixRecursive(s, index);
+}
+
+// 根据中缀表达式建立树的函数
+int priority(char op)
+{
+    if (op == '+' || op == '-')
+        return 1;
+    if (op == '*' || op == '/')
+        return 2;
+    return 0;
+}
+void processOperator(stack<char> &ops, stack<TreeNode *> &nodes)
+{
+    char op = ops.top();
+    ops.pop();
+    TreeNode *right = nodes.top();
+    nodes.pop();
+    TreeNode *left = nodes.top();
+    nodes.pop();
+
+    TreeNode *node = new TreeNode(op);
+    node->left = left;
+    node->right = right;
+    nodes.push(node);
+}
+TreeNode *buildTreeFromInfixByUser(string s)
 {
     stack<char> ops;
     stack<TreeNode *> nodes;
+
     for (int i = 0; i < s.size(); i++)
     {
         if (s[i] == ' ')
-            continue; // 忽略空格字符
+            continue;
 
         if (isalpha(s[i]))
-        { // 字母，直接入栈
+        {
             nodes.push(new TreeNode(s[i]));
         }
         else if (s[i] == '(')
-        { // 左括号，直接入栈
+        {
             ops.push(s[i]);
         }
         else if (s[i] == ')')
-        { // 右括号，弹出运算符号和结点建立子树
+        {
             while (ops.top() != '(')
             {
-                char op = ops.top();
-                ops.pop();
-                TreeNode *right = nodes.top();
-                nodes.pop();
-                TreeNode *left = nodes.top();
-                nodes.pop();
-
-                TreeNode *node = new TreeNode(op);
-                node->left = left;
-                node->right = right;
-                nodes.push(node);
+                processOperator(ops, nodes);
             }
             ops.pop(); // 弹出左括号
         }
@@ -115,61 +208,17 @@ TreeNode *buildTreeFromInfix(string s)
         { // 运算符号
             while (!ops.empty() && priority(s[i]) <= priority(ops.top()))
             {
-                char op = ops.top();
-                ops.pop();
-                TreeNode *right = nodes.top();
-                nodes.pop();
-                TreeNode *left = nodes.top();
-                nodes.pop();
-
-                TreeNode *node = new TreeNode(op);
-                node->left = left;
-                node->right = right;
-                nodes.push(node);
+                processOperator(ops, nodes);
             }
             ops.push(s[i]); // 当前运算符号入栈
         }
     }
 
-    // 处理栈中剩余的运算符号和结点
     while (!ops.empty())
     {
-        char op = ops.top();
-        ops.pop();
-        TreeNode *right = nodes.top();
-        nodes.pop();
-        TreeNode *left = nodes.top();
-        nodes.pop();
-
-        TreeNode *node = new TreeNode(op);
-        node->left = left;
-        node->right = right;
-        nodes.push(node);
+        processOperator(ops, nodes);
     }
 
-    return nodes.top();
-}
-
-// 根据后缀表达式建立树的函数
-TreeNode *buildTreeFromPostfix(string s)
-{
-    stack<TreeNode *> nodes;
-    for (int i = 0; i < s.size(); i++)
-    {
-        if (isalpha(s[i]))
-        {
-            nodes.push(new TreeNode(s[i]));
-        }
-        else
-        {
-            TreeNode *node = new TreeNode(s[i]);
-            node->right = nodes.top();
-            nodes.pop();
-            node->left = nodes.top();
-            nodes.pop();
-            nodes.push(node);
-        }
-    }
     return nodes.top();
 }
 
@@ -186,4 +235,52 @@ TreeNode *buildTree(string s, int start, int end)
     root->right = buildTree(s, mid + 1, end);
 
     return root;
+}
+
+// #include "TreeStructure.h"
+/**
+ * 根据先缀表达式和中缀表达式建树
+ */
+typedef TreeNode *BiTree;
+
+int Search(char arr[], char key, int start, int end)
+{
+    for (int i = start; i <= end; i++)
+    {
+        if (arr[i] == key)
+        {
+            return i;
+        }
+    }
+    return -1; // Key not found
+}
+
+// 表示当前先序遍历序列的起始索引
+// 表示当前中序遍历序列的起始索引
+// 表示当前子树的节点数量
+void CrtBT(BiTree &T, char pre[], char ino[], int ps, int is, int n)
+{
+    // 已知pre[ps..ps+n-1]为二叉树的先序序列，
+    // ino[is..is+n-1]为二叉树的中序序列，本算
+    // 法由此两个序列构造二叉链表
+    if (n == 0)
+        T = nullptr;
+    else
+    {
+        int k = Search(ino, pre[ps], is, is + n - 1); // k是在中缀表达式中寻找当前位置的先缀表达式字符的位置
+        if (k == -1)
+            T = nullptr;
+        else
+        {
+            T = new TreeNode(pre[ps]);
+            if (k == is) // 如果k的位置就是中缀表达式开始的位置，那么说明他的左边也就是左子树是空的
+                T->left = nullptr;
+            else
+                CrtBT(T->left, pre, ino, ps + 1, is, k - is); // 现在左边的结点的个数是中缀表达式左边的个数，也就是先缀表达式直接往后数，中缀表达式左边的
+            if (k == is + n - 1)                              // 如果k的位置就是中缀表达式的最后一个位置，说明他的右边没有结点，也就是右子树是空的
+                T->right = nullptr;
+            else
+                CrtBT(T->right, pre, ino, ps + 1 + (k - is), k + 1, n - (k - is) - 1); // k-is是左子树的结点的个数，先缀表达式从ps+k-is+1开始，中缀表达式从k+1开始，个数就是总个数减去左边的个数，再减去中间的节点
+        }
+    }
 }
