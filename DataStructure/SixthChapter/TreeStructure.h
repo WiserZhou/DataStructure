@@ -16,6 +16,8 @@ typedef struct BiTNode
 { // 结点结构
     TElemType data;
     struct BiTNode *lchild, *rchild;
+    BiTNode(TElemType data, struct BiTNode *lchild, struct BiTNode *rchild) : data(data), lchild(lchild), rchild(rchild) {}
+    BiTNode(TElemType data) : data(data), lchild(nullptr), rchild(nullptr) {}
     // 左右孩子指针
 } TreeNode, *BiTree;
 

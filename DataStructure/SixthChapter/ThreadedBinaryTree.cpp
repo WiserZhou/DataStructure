@@ -57,18 +57,20 @@ BiThrTree transfer(BiTree T)
             p->RTag = Thread;
             p->rchild = nullptr;
         }
-
         return p;
     }
     else
         return nullptr;
 }
-
+/**
+ * 中序线索化
+ */
 void Threading(BiThrTree &Thr)
 {
     if (Thr)
     {
         Threading(Thr->lchild);
+
         if (Thr->lchild == nullptr && Thr->LTag == Thread)
         {
             Thr->lchild = pre;
@@ -78,52 +80,70 @@ void Threading(BiThrTree &Thr)
             pre->rchild = Thr;
         }
         pre = Thr;
+
         Threading(Thr->rchild);
     }
 }
 void ThreadTree(BiThrTree &Thr, BiTree T)
 {
     BiThrTree q = transfer(T);
-    Thr = (BiThrTree)malloc(sizeof(BiThrNode));
+
+    if (!(Thr = (BiThrTree)malloc(sizeof(BiThrNode))))
+        exit(1); // 创建头结点
+
     Thr->LTag = Link;
     // Thr->lchild = nullptr;
     Thr->RTag = Thread;
-    Thr->rchild = Thr;
+    Thr->rchild = Thr; // 右指针回指
+
     if (!T)
         Thr->lchild = Thr;
     else
     {
         Thr->lchild = q;
-        pre = Thr;
+        pre = Thr; // 最开始的pre指向头结点
+
         Threading(q);
-        pre->RTag = Thread;
+
+        pre->RTag = Thread; // 最后的pre指向最后一个有值的结点，他的后继自然是头结点
         pre->rchild = Thr;
+
+        Thr->rchild = pre; // 将线索链表的尾节点的右指针指向头节点，以形成一个环。这样可以方便地遍历整个线性结构。
     }
 }
+
 void InOrder(BiThrTree Thr)
 {
-    int num = 1;
-    BiThrTree p = Thr->lchild;
+    int num = 1;               // Initialize a counter for nodes with threads
+    BiThrTree p = Thr->lchild; // Start with the left child of the root
 
-    while (p != Thr)
+    while (p != Thr) // Loop until we reach the end of the threaded binary tree
     {
         while (p->LTag == Link)
-            p = p->lchild;
+            p = p->lchild; // Move to the leftmost node
+
         if (p->RTag + p->LTag == 1)
-            num++;
-        cout << p->data;
+            num++; // If the node has either a left or right thread, increment the counter
+
+        cout << p->data; // Output the data of the current node
+
         while (p->RTag == Thread && p->rchild != Thr)
         {
-            p = p->rchild;
+            p = p->rchild; // Move to the next node using the right thread
+
             if (p->RTag + p->LTag == 1)
-                num++;
-            cout << p->data;
+                num++; // If the node has either a left or right thread, increment the counter
+
+            cout << p->data; // Output the data of the current node
         }
-        p = p->rchild;
+
+        p = p->rchild; // Move to the right child to continue the in-order traversal
     }
+
     cout << "\n"
-         << num;
+         << num; // Output the total count of nodes with threads
 }
+
 int Num(BiTree T)
 {
     if (T->lchild == nullptr && T->rchild == nullptr)

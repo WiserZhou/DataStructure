@@ -1,16 +1,18 @@
 #include <iostream>
 #define MAX_TREE_SIZE 100 // 树的最大节点数量
-
+typedef int ElemType;
+/**
+ * 双亲链表表示法
+ */
 typedef struct
 {
     char data;  // 节点数据
     int parent; // 双亲节点的索引
 } PTNode;
-
 typedef struct
 {
     PTNode nodes[MAX_TREE_SIZE]; // 节点数组
-    int n;                       // 当前节点数目
+    int r, n;                    // 根结点的位置和当前节点数目
 } PTree;
 
 // 初始化树对象

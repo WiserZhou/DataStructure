@@ -230,3 +230,46 @@ void LevelOrderTraverse(TreeNode *root, void (*visit)(TElemType e))
             Q.push(current->rchild);
     }
 }
+
+/**
+ * 输出二叉树上从根到所有叶子结点的路径
+ */
+void AllPath(TreeNode *T, std::stack<int> &S)
+{
+    if (T)
+    {
+        // 将当前节点的数据压入栈
+        S.push(T->data);
+
+        // 如果是叶子结点，打印栈的内容
+        if (!T->lchild && !T->rchild)
+            PrintPath(S);
+        else
+        {
+            // 递归处理左子树和右子树
+            AllPath(T->lchild, S);
+            AllPath(T->rchild, S);
+        }
+
+        // 无论是叶子结点还是非叶子结点，结束后都要弹出栈顶元素
+        S.pop();
+    }
+}
+
+void PrintPath(std::stack<int> S)
+{
+    // 将栈中的元素放入临时容器（vector）中
+    std::vector<int> tempVector;
+    while (!S.empty())
+    {
+        tempVector.push_back(S.top());
+        S.pop();
+    }
+
+    // 逆序输出元素，以恢复栈的原始顺序
+    for (auto it = tempVector.rbegin(); it != tempVector.rend(); ++it)
+    {
+        std::cout << *it << " ";
+    }
+    std::cout << std::endl;
+}
