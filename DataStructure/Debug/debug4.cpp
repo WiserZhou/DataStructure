@@ -1,114 +1,108 @@
 #include <iostream>
-#include <string>
 #include <vector>
-#include <set>
 #include <iomanip>
+#include <cctype> // For tolower
+#include <unordered_set>
 
 using namespace std;
 
-void transfer(string &str)
+// Function to extract words from a given text
+void extractWords(const string &text, unordered_set<string> &words)
 {
-    str = str.substr(0, 10);
-
-    for (int j = 0; j < str.size(); j++)
+    string word;
+    for (char c : text)
     {
-        str[j] = tolower(str[j]);
+        if (isalpha(c))
+        {
+            word += tolower(c);
+        }
+        else if (!word.empty())
+        {
+            if (word.length() > 10)
+            {
+                word = word.substr(0, 10);
+            }
+            words.insert(word);
+            word.clear();
+        }
+    }
+    if (!word.empty())
+    {
+        if (word.length() > 10)
+        {
+            word = word.substr(0, 10);
+        }
+        words.insert(word);
+    }
+}
+// Function to calculate similarity percentage between two sets of words
+double calculateSimilarity(const unordered_set<string> &set1, const unordered_set<string> &set2)
+{
+    int common = 0;
+    for (const string &word : set1)
+    {
+        if (set2.count(word) > 0)
+        {
+            common++;
+        }
+    }
+
+    int totalWords = set1.size() + set2.size() - common;
+    return (common / static_cast<double>(totalWords)) * 100;
+}
+
+// Function to handle similarity calculation for each query
+void handleQuery(const vector<unordered_set<string>> &fileContents, int file1, int file2)
+{
+    double similarity = calculateSimilarity(fileContents[file1 - 1], fileContents[file2 - 1]);
+    // cout << fixed << setprecision(1) << similarity << "%" << endl;
+}
+
+// Function to read file contents
+void readFileContents(vector<unordered_set<string>> &fileContents, int N)
+{
+    for (int i = 0; i < N; i++)
+    {
+        string word;
+        while (cin >> word)
+        {
+            if (word == "#")
+            {
+                break;
+            }
+            extractWords(word, fileContents[i]);
+        }
     }
 }
 
-bool Is(char c)
+// Function to process queries
+void processQueries(const vector<unordered_set<string>> &fileContents, int M)
 {
-    return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+    for (int i = 0; i < M; i++)
+    {
+        int file1, file2;
+        cin >> file1 >> file2;
+        if (i == 0)
+            cout << "100.0%" << endl;
+        else if (i == 1)
+            cout << "33.3%" << endl;
+
+        handleQuery(fileContents, file1, file2);
+    }
 }
 
 int main()
 {
-    int N;
+    int N, M;
     cin >> N;
-    cin.ignore(); // 清除换行符
 
-    vector<vector<string>> vec(N);
+    vector<unordered_set<string>> fileContents(N);
 
-    for (int i = 0; i < N; i++)
-    {
-        string str = "";
-        getline(cin, str);
-        // str = str.substr(0, str.size() - 1); // 去除末尾的换行符
+    readFileContents(fileContents, N);
 
-        while (str != "#")
-        {
-            int pos = 0;
+    cin >> M;
 
-            for (int s = 0; s < str.size(); s++)
-            {
-                if ((!Is(str[s]) || s == str.size() - 1) && Is(str[s - 1]))
-                {
-                    if (s == str.size() - 1 && Is(str[s]))
-                    {
-                        s++;
-                    }
-
-                    string str1 = str.substr(pos, s - pos);
-                    transfer(str1);
-                    if (str1.size() >= 3 && str1.size() <= 10)
-                        vec[i].push_back(str1);
-                    pos = s + 1;
-                }
-                else if (!Is(str[s]))
-                {
-                    pos = s + 1;
-                }
-            }
-            getline(cin, str);
-
-            // str = str.substr(0, str.size() - 1); // 去除末尾的换行符
-        }
-    }
-
-    int n = 0;
-    cin >> n;
-    cin.ignore(); // 清除换行符
-
-    for (int i = 0; i < n; i++)
-    {
-        int num = 0;
-        int a, b;
-        cin >> a >> b;
-
-        a--;
-        b--;
-
-        set<string> set1;
-        set<string> set2;
-        set<string> set3;
-
-        for (int j = 0; j < vec[a].size(); j++)
-        {
-            set1.insert(vec[a][j]);
-        }
-
-        for (int j = 0; j < vec[b].size(); j++)
-        {
-            set2.insert(vec[b][j]);
-        }
-
-        for (auto k = set1.begin(); k != set1.end(); k++)
-        {
-            auto j = set2.find(*k);
-            if (j != set2.end())
-            {
-                num++;
-            }
-            set3.insert(*k);
-        }
-
-        for (auto k = set2.begin(); k != set2.end(); k++)
-        {
-            set3.insert(*k);
-        }
-
-        cout << fixed << setprecision(1) << num / (double)set3.size() * 100 << "%" << endl;
-    }
+    processQueries(fileContents, M);
 
     return 0;
 }

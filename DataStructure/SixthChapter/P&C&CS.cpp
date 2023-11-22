@@ -114,7 +114,7 @@ void CreateTree(CSTree &T)
         {
             s = Q.front();
 
-            while (s->data != fa)
+            while (s->data != fa) // 获得与输入的二元组匹配的父结点
             {
                 Q.pop();
                 s = Q.front();
@@ -122,12 +122,12 @@ void CreateTree(CSTree &T)
 
             if (!(s->firstChild))
             {
-                s->firstChild = p;
-                r = p;
+                s->firstChild = p; // 对于s，表示当前正在遍历的结点，让新结点p直接作为他的左孩子
+                r = p;             // r用来表示正在进行连接的结点的位置
             }
             else
             {
-                r->nextSibling = p;
+                r->nextSibling = p; // 让新结点p连接到当前正在进行连接操作的结点r上
                 r = p;
             }
         }
