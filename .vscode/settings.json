@@ -129,5 +129,8 @@
   },
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
   "commentTranslate.hover.enabled": true,
-  "C_Cpp.errorSquiggles": "disabled"
+  "C_Cpp.errorSquiggles": "disabled",
+  "cSpell.words": [
+    "Kruskal"
+  ]
 }

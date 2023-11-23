@@ -8,8 +8,6 @@
 //          for each neighbor in neighbors(node):
 //              DFS(neighbor)
 
-
-
 // 邻接表图的DFS
 // 如果用邻接表表示图，沿每个链可以找到某个
 // 顶点 v 的所有邻接顶点 w。由于总共有 2e 个边结点，
@@ -41,10 +39,14 @@ void DFS(MGraph G, int v, bool *visited)
 // 覆盖非连通图情况的DFS
 void DFSTraverse(MGraph G)
 {
-    bool visited[G.vexNum];
-    for (int v = 1; v <=G.vexNum; ++v)
+    int i = 1; // 连通分量计数器
+    bool visited[G.vexNum + 1];
+    for (int v = 1; v <= G.vexNum; ++v)
         visited[v] = false; // 访问标志数组初始化
     for (int v = 1; v <= G.vexNum; ++v)
         if (!visited[v])
-            DFS(G, v, visited); // 对尚未访问的顶点调用DFS
+        {
+            std::cout << "第" << i++ << "个连通分量" << endl;
+            DFS(G, v, visited); // 从v开始深度优先搜索
+        }
 }
