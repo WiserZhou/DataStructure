@@ -7,14 +7,6 @@ typedef char InfoType;
 #define INFINITY INT32_MAX
 #define MAX_VERTEX_NUM 100 // vex 顶点
 
-typedef enum
-{
-    DG,  // 有向图 directed graph
-    DN,  // 有向网 directed network
-    UDG, // 无向图 undirected graph
-    UDN  // 无向网 undirected network
-} GraphKind;
-
 typedef struct ArcCell // 弧形单元格
 {
     VRType adj;                                       // 顶点关系类型，对于无权图，用1或者0表示相邻否，对带权图，则为权值类型,adjoin邻接，adj名词
@@ -61,7 +53,7 @@ void CreatGraph(MGraph &G)
 int FirstAdjVex(MGraph G, int v)
 {
 
-    for (int j = 0; j < G.vexNum; j++)
+    for (int j = 1; j <= G.vexNum; j++)
         if (G.arc[v][j].adj != INFINITY)
             return j;
     return 0;
@@ -69,8 +61,13 @@ int FirstAdjVex(MGraph G, int v)
 
 int NextAdjVex(MGraph G, int v, int w)
 {
-    for (int j = w + 1; j < G.vexNum; j++)
+    for (int j = w + 1; j <= G.vexNum; j++)
         if (G.arc[v][j].adj != INFINITY)
             return j;
     return 0;
+}
+
+void Visit(int v, MGraph G)
+{
+    cout << G.vex[v] << endl;
 }

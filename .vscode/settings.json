@@ -128,5 +128,6 @@
     "typeindex": "cpp"
   },
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
-  "commentTranslate.hover.enabled": true
+  "commentTranslate.hover.enabled": true,
+  "C_Cpp.errorSquiggles": "disabled"
 }

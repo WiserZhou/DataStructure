@@ -6,13 +6,6 @@ typedef int VRType; // vex Relationship type
 typedef char InfoType;
 #define INFINITY INT32_MAX
 #define MAX_VERTEX_NUM 100 // vex 顶点
-typedef enum
-{
-    DG,  // 有向图 directed graph
-    DN,  // 有向网 directed network
-    UDG, // 无向图 undirected graph
-    UDN  // 无向网 undirected network
-} GraphKind;
 
 // 边表的存储类型：
 typedef struct ArcNode
@@ -50,7 +43,7 @@ void CreatAdjList(ALGraph &G)
         G.vertices[i].firstArc = nullptr;
     }
 
-    for (int k = 0; k < G.arcNum; k++)
+    for (int k = 1; k <= G.arcNum; k++)
     {
         int i, j, w;
         std::cin >> i >> j >> w;
@@ -91,5 +84,7 @@ int NextAdjVex(ALGraph G, int v, int w)
         return 0;
 }
 
-
-
+void Visit(int v, ALGraph G)
+{
+    cout << G.vertices[v].vex << endl;
+}

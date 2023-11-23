@@ -1,3 +1,6 @@
+#pragma once
+
+// 头文件内容
 
 #include <iostream>
 #include <vector>
@@ -39,3 +42,11 @@ int precedence(char op)
 #define EQ(a, b) ((a) == (b))
 #define LT(a, b) ((a) < (b))
 #define LQ(a, b) ((a) <= (b))
+
+typedef enum
+{
+    DG,  // 有向图 directed graph
+    DN,  // 有向网 directed network
+    UDG, // 无向图 undirected graph
+    UDN  // 无向网 undirected network
+} GraphKind;
