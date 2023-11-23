@@ -1,78 +1,50 @@
-#include <iostream>
-#include <vector>
-#include <stack>
+#include "MGraph.h"
+#include "ALGraph.h"
 
-using namespace std;
-
-void dfs(vector<vector<int>> &graph, int startNode)
+void Visit(int v, MGraph G)
 {
-    vector<bool> visited(graph.size(), false); // 记录节点是否被访问过
-    stack<int> s;                              // 用栈模拟递归过程
-    s.push(startNode);                         // 将起始节点放入栈中
-    visited[startNode] = true;                 // 标记起始节点已访问
-
-    while (!s.empty())
-    {
-        int curNode = s.top(); // 获取栈顶节点
-        s.pop();
-
-        // 处理当前节点
-        cout << curNode << " ";
-
-        // 遍历与当前节点相邻的节点，将未访问的节点入栈
-        for (int neighbor : graph[curNode]) // 从尾部开始遍历
-        {
-            if (!visited[neighbor])
-            {
-                s.push(neighbor);
-                visited[neighbor] = true;
-            }
-        }
-    }
+    cout << G.vex[v] << endl;
 }
-
-void dfsRecursive(vector<vector<int>> &graph, vector<bool> &visited, int curNode)
+void Visit(int v, ALGraph G)
 {
-    // 处理当前节点
-    cout << curNode << " ";
-    visited[curNode] = true;
-
-    // 遍历与当前节点相邻的节点
-    for (int neighbor : graph[curNode])
-    {
-        if (!visited[neighbor])
-        {
-            dfsRecursive(graph, visited, neighbor);
-        }
-    }
+    cout << G.vertices[v].vex << endl;
 }
+// 邻接表图的DFS
+// 如果用邻接表表示图，沿每个链可以找到某个
+// 顶点 v 的所有邻接顶点 w。由于总共有 2e 个边结点，
+// 所以扫描边的时间为O(e)。而且对所有顶点递归访问
+// 1次，所以遍历图的时间复杂性为O(n+e)。
+void DFS(ALGraph G, int v, bool *visited)
+{ // 从顶点v出发，深度优先搜索遍历连通图 G
+    visited[v] = true;
+    Visit(v, G); // 访问v
+    for (int w = FirstAdjVex(G, v); w != 0; w = NextAdjVex(G, v, w))
+        if (!visited[w])        // 对v的尚未访问的邻接顶点w
+            DFS(G, w, visited); // 递归调用DFS
+} // DFS
 
-void dfs(vector<vector<int>> &graph, int startNode)
+
+// 邻接矩阵的情况
+// 如果用邻接矩阵表示图，则查找每一个顶点的
+// 所有的边，所需时间为O(n)，则遍历图中所有的顶
+// 点所需的时间为O(n2)。
+
+void DFS(MGraph G, int v, bool *visited)
+{ // 从顶点v出发，深度优先搜索遍历连通图 G
+    visited[v] = true;
+    Visit(v, G);
+    for (int w = 0; w < G.vexNum; w++)
+        if (G.arc[v][w].adj != INFINITY && !visited[w]) // 对v的尚未访问的邻接顶点w
+            DFS(G, w, visited);                         // 递归调用DFS
+} // DFS
+
+// 覆盖非连通图情况的DFS
+void DFSTraverse(MGraph G)
 {
-    // 创建visited数组，用于记录节点是否被访问过
-    vector<bool> visited(graph.size(), false);
-
-    // 调用递归函数进行深度优先遍历
-    dfsRecursive(graph, visited, startNode);
+    bool visited[G.vexNum];
+    for (int v = 0; v < G.vexNum; ++v)
+        visited[v] = false; // 访问标志数组初始化
+    for (int v = 0; v < G.vexNum; ++v)
+        if (!visited[v])
+            DFS(G, v, visited); // 对尚未访问的顶点调用DFS
 }
-
-int main()
-{
-    vector<vector<int>> graph{
-        {1, 5},    // 0号节点的邻居节点有1和2
-        {0, 2},    // 1号节点的邻居节点有0、2和3
-        {1, 3, 7}, // 2号节点的邻居节点有0、1和3
-        {2, 4, 7}, // 3号节点的邻居节点有1和2
-        {3, 5},
-        {0, 4},
-        {7, 8},
-        {3, 4, 6, 8},
-        {6, 7}};
-
-    dfs(graph, 0); // 从0号节点开始进行深度优先遍历
-    cout << endl;
-
-    return 0;
-}
-
-// 使用邻接矩阵表示图的时间复杂度是n^2，但是使用邻接表表示图的复杂度是n+e
