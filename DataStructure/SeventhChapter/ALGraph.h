@@ -88,3 +88,17 @@ void Visit(int v, ALGraph G)
 {
     cout << G.vertices[v].vex << endl;
 }
+
+void FindInDegree(ALGraph G, int inDegree[])
+{
+    for (int i = 1; i <= G.vexNum; i++)
+    {
+        ArcNode *p = G.vertices[i].firstArc;
+
+        while (p)
+        {
+            inDegree[p->adjVex]++; // 遍历所有出边表，在每一个结点的inDegree上+1
+            p = p->nextArc;
+        }
+    }
+}

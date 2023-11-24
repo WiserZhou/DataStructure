@@ -5,19 +5,7 @@
 // 排序中，若AOV网无回路，则每个顶点入、出栈各一次，每个边表结点被检查一次，执行时间为O(n+e)；
 // 拓扑排序算法的时间复杂度为O(n+e)。
 // 如果采用邻接矩阵存储结构，则时间复杂行为O(n^2)。
-void FindInDegree(ALGraph G, int inDegree[])
-{
-    for (int i = 1; i <= G.vexNum; i++)
-    {
-        ArcNode *p = G.vertices[i].firstArc;
 
-        while (p)
-        {
-            inDegree[p->adjVex]++; // 遍历所有出边表，在每一个结点的inDegree上+1
-            p = p->nextArc;
-        }
-    }
-}
 
 Status TopologicalSort(ALGraph G)
 {
