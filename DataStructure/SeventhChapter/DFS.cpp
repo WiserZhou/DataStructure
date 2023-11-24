@@ -1,5 +1,6 @@
 #include "MGraph.h"
 #include "ALGraph.h"
+#include <stack>
 // 伪代码
 //  procedure DFS(node):
 //      if node is not visited:
@@ -49,4 +50,29 @@ void DFSTraverse(MGraph G)
             std::cout << "第" << i++ << "个连通分量" << endl;
             DFS(G, v, visited); // 从v开始深度优先搜索
         }
+}
+// 非递归方式DFS
+void DFS(MGraph G, int v, bool *visited)
+{
+    std::stack<int> S;
+
+    S.push(v);
+    visited[v] = true;
+
+    while (!S.empty())
+    {
+        int currentVertex = S.top();
+        S.pop();
+
+        Visit(currentVertex, G);
+
+        for (int w = G.vexNum; w >= 1; --w)
+        {
+            if (G.arc[currentVertex][w].adj != INFINITY && !visited[w])
+            {
+                S.push(w);
+                visited[w] = true;
+            }
+        }
+    }
 }

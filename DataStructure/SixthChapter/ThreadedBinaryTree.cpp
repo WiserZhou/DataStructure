@@ -84,6 +84,10 @@ void Threading(BiThrTree &Thr)
         Threading(Thr->rchild);
     }
 }
+// 头结点的左指针： 在线索树中，头结点的左指针指向树的根节点。
+// 头结点的右指针： 头结点的右指针指向中序遍历下的"最后一个"结点。这里的"最后一个"结点是指中序遍历下的最右
+// 侧的结点，也可以说是最右侧的叶子结点。这个右指针的作用是为了在中序遍历中，
+// 遍历到最后一个结点时，能够通过头结点的右指针回到头结点，形成一个循环。
 void ThreadTree(BiThrTree &Thr, BiTree T)
 {
     BiThrTree q = transfer(T);
