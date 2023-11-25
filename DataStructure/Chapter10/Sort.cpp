@@ -1,12 +1,12 @@
-typedef int InfoType;
+typedef char InfoType;
 
 #define MAXSIZE 1000 // 待排顺序表最大长度
 typedef int KeyType; // 关键字类型为整数类型
 typedef struct
 {
-    KeyType key;        // 关键字项
-    InfoType otherInfo; // 其它数据项
-} RcdType;              // 记录类型
+    KeyType key;    // 关键字项
+    InfoType *info; // 其它数据项
+} RcdType;          // 记录类型 Record Type
 
 typedef struct
 {
@@ -14,6 +14,7 @@ typedef struct
     int length;             // 顺序表长度
 } SqList;                   // 顺序表类型
 
+// 直接插入排序算法
 void InsertionSort(SqList &L)
 {
     // 对顺序表 L 作直接插入排序。
@@ -27,10 +28,11 @@ void InsertionSort(SqList &L)
             for (j = i - 2; L.r[0].key < L.r[j].key; --j) // 将所有比监视哨的值大的都后移，给他挪位置
                 L.r[j + 1] = L.r[j];                      // 将所有的元素都获取到前面的元素值，从而完成后移
             L.r[j + 1] = L.r[0];                          // 将此元素获取到监视哨的元素值
-        }                                                 // if <
-    }                                                     // for 2:L.length
+        }
+    }
 } // InsertSort
 
+// 折半插入排序算法
 void BiInsertionSort(SqList &L)
 {
     int i, j;
@@ -41,7 +43,7 @@ void BiInsertionSort(SqList &L)
 
         int low = 1;
         int high = i - 1;
-        while (low <= high)
+        while (low <= high) // 两者相等的位置就是要插入的位置
         {
             int m = (low + high) / 2; // 折半
             if (L.r[0].key < L.r[m].key)
@@ -50,13 +52,15 @@ void BiInsertionSort(SqList &L)
                 low = m + 1; // 插入点在高半区
         }
 
-        for (j = i - 1; j >= high + 1; --j)
-            L.r[j + 1] = L.r[j]; // 记录后移
+        for (j = i - 1; j >= high + 1; --j) // high+1 到i-1就是当前位置比L.r[i].key大的元素s
+            L.r[j + 1] = L.r[j];            // 记录后移
 
         L.r[high + 1] = L.r[0]; // 插入
     }                           // for
                                 // BInsertSort
 }
+// 当找到插入点时，low 和 high 的最终状态为 low > high，并
+// 且 high 指向的是插入点的前一个位置。此时，high + 1 就是插入点的位置。
 #include "../header/unity.h"
 
 void ShellInsert(SqList &L, int dk)
