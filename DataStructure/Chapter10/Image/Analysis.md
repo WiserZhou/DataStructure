@@ -1,10 +1,11 @@
 # 直接插入算法
-![Alt text](Image/InsertionSortAnalaysis.png)
-![Alt text](Image/InsertionSortAnalaysis2.png)
-![!\[Alt text\](image.png)](Image/image.png)
+
+![Alt text](InsertionSortAnalaysis.png)
+![Alt text](InsertionSortAnalaysis2.png)
+![!\[Alt text\](image.png)](image.png)
 折半插入排序算法的时间复杂度主要由两部分组成：比较次数和移动次数。以下是对折半插入排序的时间复杂度进行详细的计算：
 
-### 比较次数的计算：
+### 比较次数的计算
 
 1. **外层循环：**
    - 外层循环执行 \(n-1\) 次，其中 \(n\) 是序列的长度。
@@ -16,13 +17,13 @@
    - 在最坏情况下（逆序序列），对于每个 \(i\)，比较次数为 \(O(\log_2 i)\)。
    - 所以总的比较次数为 \(\sum_{i=2}^{n} O(\log_2 i)\)。
 
-### 移动次数的计算：
+### 移动次数的计算
 
 1. **元素移动：**
    - 在最坏情况下，每次都需要将大约 \(O(i)\) 个元素后移。
    - 所以总的移动次数为 \(\sum_{i=2}^{n} O(i)\)。
 
-### 时间复杂度计算：
+### 时间复杂度计算
 
 在计算时间复杂度时，我们通常考虑增长最快的项，因此：
 
@@ -30,3 +31,12 @@
 2. 对于移动次数，可以近似为 \(\sum_{i=2}^{n} O(i) = O(n^2)\)。
 
 综合考虑，折半插入排序的时间复杂度为主要由比较次数主导，因此它的时间复杂度为 \(O(\log_2 n!)\) 或者更精确地说是 \(O(n \log_2 n)\)。在实践中，折半插入排序的性能通常优于直接插入排序，尤其是在对大规模数据排序时。
+
+![Alt text](image1.png)
+
+![!\[Alt text\](image.png)](image2.png)
+
+![!\[Alt text\](image.png)](image3.png)
+![Alt text](image4.png)
+**3倍的移动次数是因为Swap函数使用的临时变量的原因**
+![Alt text](image-1.png)
