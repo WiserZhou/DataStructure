@@ -7,23 +7,17 @@ typedef struct
     // 其他属性
 } TElemType;
 
+// 二叉排序树(Binary Sort Tree)或者是一棵空树；
+//  或者是具有下列性质的二叉树：
+//  若根节点有左子树，则左子树上所有结点关键字的值均小于根结点关键字的值；
+//  若根节点有右子树，则右子树上所有结点关键字的值均大于根结点的关键字的值；
+//  根节点的左、右子树也分别为二叉排序树。
+
 typedef struct BiTNode
 {
     TElemType data;
     struct BiTNode *lchild, *rchild;
 } BiTNode, *BiTree;
-
-// 二叉排序树中序有序排列
-void inOrder(BiTree T)
-{
-    if (T)
-    {
-        inOrder(T->lchild);
-        printf("%d ", T->data.key);
-        inOrder(T->rchild);
-    }
-}
-
 // 在二叉排序树中的查找算法
 BiTree SearchBST(BiTree T, KeyType k)
 {
@@ -38,6 +32,21 @@ BiTree SearchBST(BiTree T, KeyType k)
             p = p->rchild;
     }
     return nullptr;
+}
+
+// (1) 二叉排序树的平均查找长度最差情况与顺序表相同(关键字有序时),为O(n);
+// (2) 最好情况与折半查找相同,是O（log2n）数量级的;
+// (3) 二叉排序树的平均查找长度仍然是O(log2n)。
+
+// 若按照中序遍历，那么将从小到大排序
+void InOrder(BiTree T)
+{
+    if (T)
+    {
+        InOrder(T->lchild);
+        printf("%d ", T->data.key);
+        InOrder(T->rchild);
+    }
 }
 
 #include "../header/unity.h"
@@ -84,6 +93,13 @@ Status InsertBST(BiTree &T, TElemType e)
     else
         return FALSE; // T中已有e，不需要插入
 } // Insert BST
+
+// (1)二叉排序树的插入算法的时间复杂性与查找算法的相同;
+// (2)最好情况是O(log2n);
+//  最坏情况是O(n);
+//  平均情况是O(log2n)。
+// 问题：如何生成二叉排序树?
+// 答案：从空树开始循环调用插入算法。
 
 Status Delete(BiTree &p)
 {
@@ -136,3 +152,6 @@ Status DeleteBST(BiTree &T, KeyType key)
             return DeleteBST(T->rchild, key);
     }
 } // DeleteBST
+
+// (1)二叉排序树的删除算法的时间复杂性与查找算法的时间复杂性相同;
+// (2)最好情况是O（log2n）;最坏情况是O(n);平均情况是O(log2n)。
