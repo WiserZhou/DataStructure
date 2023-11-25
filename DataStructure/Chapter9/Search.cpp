@@ -68,6 +68,31 @@ int Search_Bin(SSTable ST, KeyType key)
 // 查找的平均查找长度的计算
 // https: // blog.csdn.net/zhupengqq/article/details/51837908
 
+int Search_Bin_Recursion(int low, int high, LIST F, int K)
+{
+    int mid;
+
+    if (low <= high)
+    {
+        mid = (low + high) / 2;
+
+        if (K == F[mid].key)
+        {
+            return mid; // 找到关键字 K，返回索引 mid
+        }
+        else if (K < F[mid].key)
+        {
+            return Search_Bin_Recursion(low, mid - 1, F, K); // 在左半边继续查找
+        }
+        else
+        {
+            return Search_Bin_Recursion(mid + 1, high, F, K); // 在右半边继续查找
+        }
+    }
+
+    return -1; // 没有找到关键字 K，返回 -1
+}
+
 // 索引查找表
 #define MAX_BLOCK 100
 
