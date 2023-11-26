@@ -12,6 +12,7 @@ typedef struct
     QueuePtr rear;  // 队尾指针
 } LinkQueue;
 
+// 链队列有头结点
 Status InitQueue(LinkQueue &Q)
 {
     // 构造一个空队列Q，此时队头和队尾指针都指向头结点
@@ -40,9 +41,9 @@ Status EnQueue(LinkQueue &Q, QElemType e)
 
 Status DeQueue(LinkQueue &Q, QElemType &e)
 {
-    if (Q.front == Q.rear)//如果是空的，就没有可以删除的
+    if (Q.front == Q.rear) // 如果是空的，就没有可以删除的
         return ERROR;
-        
+
     QueuePtr p = Q.front->next;
     e = p->data;
 

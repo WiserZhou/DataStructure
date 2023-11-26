@@ -50,7 +50,6 @@ void HeapAdjust(HeapType &H, int s, int m) // 将R[s..m]调整成堆
     RcdType rc = H.r[s];            // 暂存r[s]到rc
     for (j = 2 * s; j <= m; j *= 2) // j的初值为r[s]的左孩子,循环一次后j翻倍即指向其左孩子
     {
-
         if (j < m && H.r[j].key < H.r[j + 1].key) // 横比r[s]的两个孩子，如果右孩子大于左孩子,j指向右孩子。最终j指向r[s]的最大孩子
             ++j;
         if (rc.key >= H.r[j].key) // 纵比,如果rc最大，结束循环

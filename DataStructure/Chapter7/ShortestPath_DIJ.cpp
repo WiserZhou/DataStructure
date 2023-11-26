@@ -57,8 +57,8 @@ void ShortestPath_DIJ(MGraph G, int v0, int *P, int *D)
     } // end of for
 } // ShortestPath_DIJ
 
-Dijkstra算法的时间复杂性主要体现在求每个顶点的最短路径时，需要修改距离值和求最小值，时间复杂性O(n^2)
-Dijkstra算法的空间复杂性主要体现在两个辅助数组，空间复杂性是O(n)。
+// Dijkstra算法的时间复杂性主要体现在求每个顶点的最短路径时，需要修改距离值和求最小值，时间复杂性O(n^2)
+// Dijkstra算法的空间复杂性主要体现在两个辅助数组，空间复杂性是O(n)。
 
 
 伪代码：

@@ -56,6 +56,7 @@ int Minimum(MGraph G)
 }
 // 时间复杂性主要体现在两层循环上，复杂性是O（n^2）
 // 空间复杂性主要体现在一个辅助数组，复杂性是O（n）
+// *closeEdge数组存放着每一个结点距离已经遍历过的结点的最短路径和相应的结点
 void MiniSpanTree_Prim(MGraph G, VertexType u)
 {
     int k = LocateVex(G, u); // 获取顶点u在图G中的编号

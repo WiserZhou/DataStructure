@@ -1,5 +1,8 @@
 #include "../header/unity.h"
 
+/**
+ * 链栈的构造中指针指向栈顶也就是链表的头部，在对链表的头部进行插入和删除相当于栈的栈顶
+ */
 typedef struct SNode
 {
     SElemType data;     // 数据域

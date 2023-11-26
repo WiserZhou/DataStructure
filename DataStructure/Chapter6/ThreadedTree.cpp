@@ -64,12 +64,13 @@ BiThrTree transfer(BiTree T)
 }
 /**
  * 中序线索化
+ * *对于前序和后序，就如同遍历一样将中间赋值的代码调换位置即可
  */
-void Threading(BiThrTree &Thr)
+void InThreading(BiThrTree &Thr)
 {
     if (Thr)
     {
-        Threading(Thr->lchild);
+        InThreading(Thr->lchild);
 
         if (Thr->lchild == nullptr && Thr->LTag == Thread)
         {
@@ -81,7 +82,7 @@ void Threading(BiThrTree &Thr)
         }
         pre = Thr;
 
-        Threading(Thr->rchild);
+        InThreading(Thr->rchild);
     }
 }
 // 头结点的左指针： 在线索树中，头结点的左指针指向树的根节点。
@@ -107,7 +108,7 @@ void ThreadTree(BiThrTree &Thr, BiTree T)
         Thr->lchild = q;
         pre = Thr; // 最开始的pre指向头结点
 
-        Threading(q);
+        InThreading(q);
 
         pre->RTag = Thread; // 最后的pre指向最后一个有值的结点，他的后继自然是头结点
         pre->rchild = Thr;
@@ -116,59 +117,21 @@ void ThreadTree(BiThrTree &Thr, BiTree T)
     }
 }
 
-void InOrder(BiThrTree Thr)
+// 中序遍历线索树
+void InOrderThreading(BiThrTree Thr)
 {
-    int num = 1;               // Initialize a counter for nodes with threads
-    BiThrTree p = Thr->lchild; // Start with the left child of the root
-
-    while (p != Thr) // Loop until we reach the end of the threaded binary tree
+    BiThrTree p = Thr->lchild; // 从根节点的左孩子开始遍历
+    while (p != Thr)           // 循环直到达到线索二叉树的末尾
     {
         while (p->LTag == Link)
-            p = p->lchild; // Move to the leftmost node
-
-        if (p->RTag + p->LTag == 1)
-            num++; // If the node has either a left or right thread, increment the counter
-
-        cout << p->data; // Output the data of the current node
-
+            p = p->lchild; // 移动到最左边的节点
+        cout << p->data;   // 输出当前节点的数据
         while (p->RTag == Thread && p->rchild != Thr)
         {
-            p = p->rchild; // Move to the next node using the right thread
-
-            if (p->RTag + p->LTag == 1)
-                num++; // If the node has either a left or right thread, increment the counter
-
-            cout << p->data; // Output the data of the current node
+            p = p->rchild;   // 使用右线索移动到下一个节点
+            cout << p->data; // 输出当前节点的数据
         }
-
-        p = p->rchild; // Move to the right child to continue the in-order traversal
+        p = p->rchild; // 移动到右孩子，以继续中序遍历
     }
-
-    cout << "\n"
-         << num; // Output the total count of nodes with threads
-}
-
-int Num(BiTree T)
-{
-    if (T->lchild == nullptr && T->rchild == nullptr)
-        return 0;
-    else if (T->lchild == nullptr && T->rchild != nullptr)
-        return 1 + Num(T->rchild);
-    else if (T->lchild != nullptr && T->rchild == nullptr)
-        return 1 + Num(T->lchild);
-    else
-    {
-        return Num(T->lchild) + Num(T->rchild);
-    }
-}
-
-int main()
-{
-    BiTree T;
-    createTreePre(T);
-    BiThrTree Thr;
-    ThreadTree(Thr, T);
-    InOrder(Thr);
-
-    return 0;
+    cout << "\n"; // 输出具有线索的节点总数
 }
