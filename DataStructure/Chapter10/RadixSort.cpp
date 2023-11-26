@@ -1,24 +1,75 @@
+#include <iostream>
+#include <queue>
+#include <cmath>
 
+// 结点定义
+struct records
+{
+    int key; // 关键字
+    // 其他数据成员
+};
 
-// #include "../header/Queue.h"
-void radixsort(int figure, QUEUE &A)
-{ // 关键字链表用队列存储
-    QUEUE Q[10];
-    records data;
-    int pass, r, i; // pass用于位数循环,r取位数
-    for (pass = 1; pass <= firure; pass++)
+// 基数排序
+void radixsort(int figure, std::queue<records> &A)
+{
+    std::queue<records> Q[10];
+
+    for (int pass = 1; pass <= figure; pass++)
     {
-        for (i = 0; i <= 9; i++)
-            MAKENULL(Q[i])
-        while (!EMPTY(A))
+        // 将A中的所有元素都放到Q中
+        while (!A.empty())
         {
-            data = FRONT(A);                           // 获取A中的需要处理的数据给data
-            DEQUEUE(A);                                // data从A中出队
-            r = ((data.key / pow(10, pass - 1)) % 10); // 计算第pass位的值给r
-            ENQUEUE(data, Q[r]);                       // 把data插入队列Q[r]
+            records data = A.front();
+            A.pop();
+
+            int r = ((data.key / static_cast<int>(std::pow(10, pass - 1))) % 10); // 获取第pass位的值
+            Q[r].push(data);
         }
-        for (i = 1; i <= 9; i++)
-            CONCATENATE(Q[0], Q[i]); // 收集
-        A = Q[0];                    // 收集的结果赋给A
+
+        // 将Q中的元素依次放入A中
+        for (int i = 1; i <= 9; i++)
+        {
+            while (!Q[i].empty())
+            {
+                A.push(Q[i].front());       
+                Q[i].pop();
+            }
+        }
     }
+}
+
+// 收集算法
+void Concatenate(std::queue<records> &Q0, std::queue<records> &Q1)
+{
+    if (!Q1.empty())
+    {
+        while (!Q1.empty())
+        {
+            Q0.push(Q1.front());
+            Q1.pop();
+        }
+    }
+}
+
+int main()
+{
+    // 示例用法
+    std::queue<records> myQueue;
+    // 添加一些数据到队列中
+    myQueue.push({732});
+    myQueue.push({541});
+    myQueue.push({126});
+    myQueue.push({389});
+
+    // 调用基数排序
+    radixsort(3, myQueue);
+
+    // 输出排序后的结果
+    while (!myQueue.empty())
+    {
+        std::cout << myQueue.front().key << " ";
+        myQueue.pop();
+    }
+
+    return 0;
 }

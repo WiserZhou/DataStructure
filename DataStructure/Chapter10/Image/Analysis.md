@@ -73,8 +73,11 @@
 因此，在整个调整堆顶的过程中，最多需要进行 \( \log n \) 次比较，因为堆的高度是 \( \log n \)。这也是为什么说每次调整堆顶的过程需要进行 \( \log n \) 次关键字比较的原因。这种自顶向下的比较和交换的方式保证了调整的效率，使得堆排序的时间复杂度为 \( O(n \log n) \)。
 
 ![Alt text](image-5.png)
->https://blog.csdn.net/qq_43628835/article/details/121894423?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-121894423-blog-133251725.235%5Ev38%5Epc_relevant_sort&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-121894423-blog-133251725.235%5Ev38%5Epc_relevant_sort&utm_relevant_index=2
+><https://blog.csdn.net/qq_43628835/article/details/121894423?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-121894423-blog-133251725.235%5Ev38%5Epc_relevant_sort&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-1-121894423-blog-133251725.235%5Ev38%5Epc_relevant_sort&utm_relevant_index=2>
 
 ![Alt text](image-6.png)
 ![Alt text](image-7.png)
 ![Alt text](image-8.png)
+![Alt text](image-9.png)
+![Alt text](image-10.png)
+**rd是关键字的个数**
