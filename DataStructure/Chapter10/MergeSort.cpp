@@ -45,9 +45,10 @@ void Merge(RcdType SR[], RcdType TR[], int left, int middle, int right)
             TR[index_merged++] = SR[index2++];
 
     // 将已经排序好的再次赋值回去
-    index_merged = 0;
+    index_merged = left;
     while (left <= right)
         SR[left++] = TR[index_merged++];
+
 } // Merge
 
 /**
@@ -59,11 +60,8 @@ void Merge(RcdType SR[], RcdType TR[], int left, int middle, int right)
 void M_sort(RcdType SR[], RcdType *TR, int s, int t)
 {
     // 将SR[s..t] 归并排序为 TR[s..t]
-    if (s == t)
-        TR[s] = SR[s]; // 如果长度为1，直接赋值，递归结束
-    else
+    if (s < t)
     {
-
         int m = (s + t) / 2;      // 将SR[s..t]平分为SR[s..m]和SR[m+1..t]
         M_sort(SR, TR, s, m);     // 递归地将SR[s..m]归并为有序的TR[s..m]
         M_sort(SR, TR, m + 1, t); // 递归地SR[m+1..t]归并为有序的TR[m+1..t]
@@ -74,13 +72,23 @@ void M_sort(RcdType SR[], RcdType *TR, int s, int t)
 void MergeSort(SqList &L)
 {                                            // 再封装,对表 L 进行2-路归并排序
     RcdType *TR = new RcdType[L.length + 1]; // 创建临时数组TR用于存储中间结果
-    M_sort(L.r, TR, 1, L.length); // 调用递归的归并排序算法
-    delete[] TR;                  // 释放临时数组的内存
+    M_sort(L.r, TR, 1, L.length);            // 调用递归的归并排序算法
+    delete[] TR;                             // 释放临时数组的内存
 } // MergeSort
 
-void M_sort(RcdType A[], RcdType B[], int n, int l)
+/**
+ * 非递归的2-路归并排序
+ * 设有序子表长为l ，则1到l是有序的，l+1到2l也有序;
+ * 设i是某子表的起点,则i到i+ l -1有序,同时i+ l 到i+2l -1也有序。
+ *
+ * 如果存在i+2l-1小于等于n的情况，说明前面有满足两个序列的条件，那么就while归并
+ * 如果没有了，那么继续判断是否有满足一个序列的条件，如果有的话，将这个序列与剩下的序列继续归并
+ * 如果连一个序列的条件都不满足，那么一定是有序的，直接赋值即可
+ */
+
+void M_sort_non_recursive(RcdType A[], RcdType B[], int n, int l)
 {
-    int i = 1, t;
+    int i = 1;
     while (i + 2 * l - 1 <= n)
     {
         Merge(A, B, i, i + l - 1, i + 2 * l - 1);
@@ -89,44 +97,24 @@ void M_sort(RcdType A[], RcdType B[], int n, int l)
     if (i + l - 1 < n)
         Merge(A, B, i, i + l - 1, n);
     else
-        for (t = i; t <= n; t++)
+        for (int t = i; t <= n; t++)
             B[t] = A[t];
 }
 
-void MergeSort(RcdType A[], int n)
+/**
+ *
+ */
+void MergeSort_non_recursive(RcdType A[], int n)
 {
     // 再封装,对表 L进行非递归的2-路归并排序
     int l = 1;
     RcdType B[MAXSIZE];
     while (l < n)
     {
-        M_sort(A, B, n, l);
-        l = 2 * l;
-        if (l >= n)
-            break;
-        M_sort(B, A, n, l);
+        M_sort_non_recursive(A, B, n, l);
         l = 2 * l;
     }
 }
-// #include "../header/Queue.h"
-void radixsort(int figure, QUEUE &A)
-{ // 关键字链表用队列存储
-    QUEUE Q[10];
-    records data;
-    int pass, r, i; // pass用于位数循环,r取位数
-    for (pass = 1; pass <= firure; pass++)
-    {
-        for (i = 0; i <= 9; i++)
-            MAKENULL(Q[i])
-        while (!EMPTY(A))
-        {
-            data = FRONT(A);                           // 获取A中的需要处理的数据给data
-            DEQUEUE(A);                                // data从A中出队
-            r = ((data.key / pow(10, pass - 1)) % 10); // 计算第pass位的值给r
-            ENQUEUE(data, Q[r]);                       // 把data插入队列Q[r]
-        }
-        for (i = 1; i <= 9; i++)
-            CONCATENATE(Q[0], Q[i]); // 收集
-        A = Q[0];                    // 收集的结果赋给A
-    }
-}
+
+
+
