@@ -25,6 +25,8 @@ typedef struct
     ElemType e; // 该非零元的值
 } Triple;       // 三元组类型
 //  三元组顺序表的实现
+
+//! 稀疏矩阵类型也是三元组表
 typedef struct
 {
     Triple data[MAXSIZE + 1]; // data[0]未用
@@ -82,7 +84,7 @@ typedef struct GLNode
     };
 } *GList;
 
-//扩展头尾指针的广义表结构
+// 扩展头尾指针的广义表结构
 typedef struct GLNode
 {
     ElemTag tag;
