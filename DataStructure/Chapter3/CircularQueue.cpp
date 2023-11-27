@@ -4,7 +4,7 @@ typedef struct
 {
     QElemType *base; // 动态分配存储空间
     int front;       // 头指针，若队列不空，指向队列头元素
-    int rear;        // 尾指针，若队列不空，指向队列尾元素 的下一个位置
+    int rear;        // 尾指针，若队列不空，指向队列尾元素的下一个位置
 } SqQueue;
 #include "../header/unity.h"
 
