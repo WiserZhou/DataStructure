@@ -2,6 +2,7 @@
 #include <iostream>
 #include "../header/unity.h"
 #include <stack>
+#include <queue>
 
 void CountLeaf(BiTree T, int &count)
 {
@@ -16,19 +17,45 @@ void CountLeaf(BiTree T, int &count)
 
 int Depth(BiTree T)
 { // 返回二叉树的深度
-    int depth;
+
     if (!T)
-        depth = 0;
+        return 0;
     else
     {
         int depthLeft = Depth(T->lchild);
         int depthRight = Depth(T->rchild);
-        depth = 1 + (depthLeft > depthRight ? depthLeft : depthRight);
+        return 1 + (depthLeft > depthRight ? depthLeft : depthRight);
     }
-    return depth;
 }
 
+// 判断二叉树是否完全二叉树，是则返回1，否则返回0
+int IsCompleteBinaryTree(BiTNode *T)
+{
+    if (!T)
+        return 1; // 空树是完全二叉树
+    queue<BiTNode *> Q;
+    bool flag = false;
+    Q.push(T);
 
+    while (!Q.empty())
+    {
+        BiTNode *p = Q.front();
+        Q.pop();
+
+        if (!p) // 当p是nullptr的时候，如果队列非空，那么他就不是完全二叉树，否则就跳出循环
+        {
+            if (!Q.empty())
+                return 0;
+        }
+        else
+        {
+            Q.push(p->lchild);
+            Q.push(p->rchild);
+        }
+    }
+
+    return 1;
+}
 /**
  * 使用字符串的形式创建一个二叉树
  * 以空格表示无结点

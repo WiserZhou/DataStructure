@@ -29,7 +29,7 @@
 
 void BFSTraverse(MGraph G)
 {
-    vector<bool> visited(G.vexNum + 2, false); // 初始化访问标志
+    vector<bool> visited(G.vexNum + 1, false); // 初始化访问标志
     queue<int> Q;
 
     for (int v = 1; v <= G.vexNum; ++v)

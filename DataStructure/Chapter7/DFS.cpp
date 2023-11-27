@@ -51,7 +51,7 @@ void DFSTraverse(MGraph G)
             DFS(G, v, visited); // 从v开始深度优先搜索
         }
 }
-// 非递归方式DFS
+// !非递归方式DFS，将其中的stack换成queue就是BFS
 void DFS(MGraph G, int v, bool *visited)
 {
     std::stack<int> S;
@@ -75,4 +75,48 @@ void DFS(MGraph G, int v, bool *visited)
             }
         }
     }
+}
+
+//* 以下是基于深度优先搜索查看是否G中有start到end的长度为k的路径
+// 深度优先搜索
+bool DFS(ALGraph &G, int v, int k, int target)
+{
+    visited[v] = true;
+
+    if (k == 0 && v == target)
+    {
+        return true; // 找到一条长度为k的路径
+    }
+
+    for (ArcNode *arc = G.vertices[v].firstArc; arc != nullptr; arc = arc->nextArc)
+    {
+        int adjVex = arc->adjVex;
+        if (!visited[adjVex])
+        {
+            if (DFS(G, adjVex, k - 1, target))
+            {
+                return true;
+            }
+        }
+    }
+
+    visited[v] = false; // 回溯，标记为未访问
+    return false;
+}
+
+// 判断是否存在长度为k的路径
+bool hasSimplePathK(ALGraph &G, int start, int end, int k)
+{
+    if (k <= 0)
+    {
+        return false; // k必须是正整数
+    }
+
+    // 初始化visited数组
+    for (int i = 0; i < G.vexNum; ++i)
+    {
+        visited[i] = false;
+    }
+
+    return DFS(G, start, k, end);
 }
