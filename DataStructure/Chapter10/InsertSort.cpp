@@ -43,6 +43,7 @@ void BiInsertionSort(SqList &L)
 
         int low = 1;
         int high = i - 1;
+
         while (low <= high) // 两者相等的位置就是要插入的位置
         {
             int m = (low + high) / 2; // 折半
@@ -67,6 +68,7 @@ void ShellInsert(SqList &L, int dk)
 { // 增量为dk时的希尔
     int i, j;
     for (i = dk + 1; i <= L.length; ++i) // 从第一个元素的后一个1+dk开始
+    {
         if (LT(L.r[i].key, L.r[i - dk].key))
         {
             L.r[0] = L.r[i];                                               // 暂存在R[0]
@@ -74,6 +76,7 @@ void ShellInsert(SqList &L, int dk)
                 L.r[j + dk] = L.r[j];                                      // 记录后移，查找插入位置
             L.r[j + dk] = L.r[0];                                          // 插入
         }
+    }
 }
 
 int delta[5] = {10, 7, 5, 3, 1}; // delta的选取很重要，最后一个值必须为1

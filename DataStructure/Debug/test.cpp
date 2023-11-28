@@ -1,27 +1,47 @@
 #include <iostream>
+#include <vector>
 
-using namespace std;
+void shellSort(std::vector<char> &arr)
+{
+    int n = arr.size();
+    int gap = 4; // 初始步长设定为数组长度的一半
+
+    while (gap > 0)
+    {
+        for (int i = gap; i < n; ++i)
+        {
+            char temp = arr[i];
+            int j = i;
+            while (j >= gap && arr[j - gap] > temp)
+            {
+                arr[j] = arr[j - gap];
+                j -= gap;
+            }
+            arr[j] = temp;
+        }
+        std::cout << "排序后的数组: ";
+        for (char ch : arr)
+        {
+            std::cout << ch << " ";
+        }
+        std::cout << std::endl;
+        return;
+        gap /= 2; // 缩小步长
+    }
+}
 
 int main()
 {
+    std::vector<char> arr = {'Q', 'H', 'C', 'Y', 'P', 'A', 'M', 'S', 'R', 'D', 'F', 'X'};
 
-    int a[11] = {5, 13, 19, 21, 37, 56, 64, 75, 80, 88, 92};
-    int left = 0;
-    int right = 10;
-    int c;
-    cin >> c;
-    while (left <= right)
+    std::cout << "原始数组: ";
+    for (char ch : arr)
     {
-        int mid = (left + right) / 2;
-        if (c > a[mid])
-            left = mid + 1;
-        else if (c < a[mid])
-            right = mid - 1;
-        else
-        {
-            cout << "find";
-            return 0;
-        }
+        std::cout << ch << " ";
     }
+    std::cout << std::endl;
+
+    shellSort(arr);
+
     return 0;
 }

@@ -38,9 +38,8 @@ void BubbleSort(ElemType R[], int n)
                 Swap(R[j], R[j + 1]);
                 lastExchangeIndex = j; // 记下发生交换的记录的位置
             }                          // if
-
-        i = lastExchangeIndex; // i取本趟发生过交换的,循环中的 i 表示上一趟发生交换的最后一个位置，确保下一趟只需考虑未排序部分。
-    }                          // while// 最后一个记录的位置
+        i = lastExchangeIndex;         // i取本趟发生过交换的,循环中的 i 表示上一趟发生交换的最后一个位置，确保下一趟只需考虑未排序部分。
+    }                                  // while// 最后一个记录的位置
 } // BubbleSort///表明i之后的记录是有序
 
 // 快速排序
@@ -66,12 +65,11 @@ int Partition(SqList &L, int low, int high)
 
 // 快速排序
 void QSort(SqList &L, int low, int high)
-{                       // 快排递归算法
-    int pivot_location; // pivot 枢轴
+{ 
     if (low < high)
     {
-        pivot_location = Partition(L, low, high); // 将L.r[low..high]一分为二
-        QSort(L, low, pivot_location - 1);        // 对低子表递归快排
-        QSort(L, pivot_location + 1, high);       // 对高子表递归快排
+        int pivot_location = Partition(L, low, high); // 将L.r[low..high]一分为二
+        QSort(L, low, pivot_location - 1);            // 对低子表递归快排
+        QSort(L, pivot_location + 1, high);           // 对高子表递归快排
     }
 } // QSort
