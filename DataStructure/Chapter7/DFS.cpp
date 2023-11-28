@@ -88,7 +88,7 @@ bool DFS(ALGraph &G, int v, int k, int target)
         return true; // 找到一条长度为k的路径
     }
 
-    for (ArcNode *arc = G.vertices[v].firstArc; arc != nullptr; arc = arc->nextArc)
+    for (ArcNode *arc = G.vertices[v].firstArc; arc; arc = arc->nextArc)
     {
         int adjVex = arc->adjVex;
         if (!visited[adjVex])

@@ -25,7 +25,7 @@ int Hash(KeyType K)
 {
     return K;
 }
-void collision(int &p, int &c)
+void collision(int &p)
 {
     p = (p + 1) % MAX_SIZE;
 }
@@ -40,7 +40,8 @@ Status SearchHash(HashTable H, KeyType K, int &p, int &c)
     while (H.elem[p].key != NULL_KEY && !EQ(K, H.elem[p].key))
     {
         // 求得下一探查地址 p
-        collision(p, ++c);
+        collision(p);
+        ++c;
     }
 
     if (EQ(K, H.elem[p].key))
