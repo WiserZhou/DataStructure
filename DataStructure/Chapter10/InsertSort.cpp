@@ -23,11 +23,11 @@ void InsertionSort(SqList &L)
     {
         if (L.r[i].key < L.r[i - 1].key) // 如果第2号比第1号小，那么将它放在监视哨上
         {
-            L.r[0] = L.r[i];                              // 复制为监视哨
-            L.r[i] = L.r[i - 1];                          // 此时已经满足了if条件，直接赋值即可，可减少一次多余的比较
-            for (j = i - 2; L.r[0].key < L.r[j].key; --j) // 将所有比监视哨的值大的都后移，给他挪位置
-                L.r[j + 1] = L.r[j];                      // 将所有的元素都获取到前面的元素值，从而完成后移
-            L.r[j + 1] = L.r[0];                          // 将此元素获取到监视哨的元素值
+            L.r[0] = L.r[i];                                       // 复制为监视哨
+            L.r[i] = L.r[i - 1];                                   // 此时已经满足了if条件，直接赋值即可，可减少一次多余的比较
+            for (j = i - 2; L.r[0].key < L.r[j].key && j > 0; --j) // 将所有比监视哨的值大的都后移，给他挪位置
+                L.r[j + 1] = L.r[j];                               // 将所有的元素都获取到前面的元素值，从而完成后移
+            L.r[j + 1] = L.r[0];                                   // 将此元素获取到监视哨的元素值
         }
     }
 } // InsertSort
@@ -39,26 +39,29 @@ void BiInsertionSort(SqList &L)
     for (i = 2; i <= L.length; ++i)
     {
         if (LT(L.r[i].key, L.r[i - 1].key))
+        {
             L.r[0] = L.r[i]; // 将 L.r[i] 暂存到 L.r[0]
 
-        int low = 1;
-        int high = i - 1;
+            int low = 1;
+            int high = i - 1;
 
-        while (low <= high) // 两者相等的位置就是要插入的位置
-        {
-            int m = (low + high) / 2; // 折半
-            if (LT(L.r[0].key, L.r[m].key))
-                high = m - 1; // 插入点在低半区
-            else
-                low = m + 1; // 插入点在高半区
+            while (low <= high) // 两者相等的位置就是要插入的位置
+            {
+                int m = (low + high) / 2; // 折半
+                if (LT(L.r[0].key, L.r[m].key))
+                    high = m - 1; // 插入点在低半区
+                else
+                    low = m + 1; // 插入点在高半区
+            }
+
+            for (j = i - 1; j >= high + 1; --j) // high+1 到i-1就是当前位置比L.r[i].key大的元素s
+                L.r[j + 1] = L.r[j];            // 记录后移
+
+            L.r[high + 1] = L.r[0]; // 插入
         }
 
-        for (j = i - 1; j >= high + 1; --j) // high+1 到i-1就是当前位置比L.r[i].key大的元素s
-            L.r[j + 1] = L.r[j];            // 记录后移
-
-        L.r[high + 1] = L.r[0]; // 插入
-    }                           // for
-                                // BInsertSort
+    } // for
+      // BInsertSort
 }
 // 当找到插入点时，low 和 high 的最终状态为 low > high，并
 // 且 high 指向的是插入点的前一个位置。此时，high + 1 就是插入点的位置。
@@ -87,3 +90,5 @@ void ShellSort(SqList &L, int delta[], int t)
     for (k = 0; k < t; ++k)
         ShellInsert(L, delta[k]); // 一趟增量为delta[k]的插入排序
 }
+
+

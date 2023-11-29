@@ -35,14 +35,12 @@ void Merge(RcdType SR[], RcdType TR[], int left, int middle, int right)
     }
 
     // 处理剩余的元素，如果第一个子序列还有剩余
-    if (index1 <= middle)
-        while (index_merged <= right && index1 <= middle)
-            TR[index_merged++] = SR[index1++];
+    while (index1 <= middle)
+        TR[index_merged++] = SR[index1++];
 
     // 如果第二个子序列还有剩余
-    if (index2 <= right)
-        while (index_merged <= right && index2 <= right)
-            TR[index_merged++] = SR[index2++];
+    while (index2 <= right)
+        TR[index_merged++] = SR[index2++];
 
     // 将已经排序好的再次赋值回去
     index_merged = left;
