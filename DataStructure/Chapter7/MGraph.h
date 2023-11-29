@@ -1,5 +1,4 @@
 #include "..\header\unity.h"
-#include <iostream>
 
 typedef char VertexType;
 typedef int VRType; // vex Relationship type

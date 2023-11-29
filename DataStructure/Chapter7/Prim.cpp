@@ -1,25 +1,5 @@
 
 #include "MGraph.h"
-// 伪代码：
-//  *Prim(G, start):
-//  *    初始化一个空的最小生成树 MST
-//  *    将start顶点标记为已访问
-//   *   初始化一个最小堆 minHeap，用于存储所有从已访问的顶点出发到未访问顶点的边
-
-//   *  while (MST 中的顶点数量 < G 的总顶点数量):
-//    *     将所有从已访问顶点到未访问顶点的边加入 minHeap
-
-//     *    if (minHeap 为空):
-//      *       break  // 所有顶点都被访问过，退出循环
-
-//       *  从 minHeap 中取出权重最小的边 (u, v)
-
-//        * if (v 未访问):
-//         *    将顶点 v 加入 MST
-//          *   将边 (u, v) 加入 MST
-//           *  标记顶点 v 为已访问
-
-//     返回 MST
 struct close
 {
     VertexType adjVex;

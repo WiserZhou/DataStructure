@@ -50,7 +50,6 @@ void Merge(RcdType SR[], RcdType TR[], int left, int middle, int right)
         SR[left++] = TR[index_merged++];
 
 } // Merge
-
 /**
  * 递归的2-路归并排序算法
  * 参数 SR 是原始数组
@@ -85,7 +84,6 @@ void MergeSort(SqList &L)
  * 如果没有了，那么继续判断是否有满足一个序列的条件，如果有的话，将这个序列与剩下的序列继续归并
  * 如果连一个序列的条件都不满足，那么一定是有序的，直接赋值即可
  */
-
 void M_sort_non_recursive(RcdType A[], RcdType B[], int n, int l)
 {
     int i = 1;
@@ -100,7 +98,6 @@ void M_sort_non_recursive(RcdType A[], RcdType B[], int n, int l)
         for (int t = i; t <= n; t++)
             B[t] = A[t];
 }
-
 /**
  *
  */
@@ -116,5 +113,69 @@ void MergeSort_non_recursive(RcdType A[], int n)
     }
 }
 
+// k路归并
+void K_sort_non_recursive(RcdType A[], RcdType B[], int n, int k)
+{
+    int i = 1;
+    while (i + k * n - 1 <= n)
+    {
+        KMerge(A, B, i, i + (k - 1) * n, k);
+        i = i + k * n;
+    }
+    if (i + (k - 1) * n - 1 < n)
+        KMerge(A, B, i, i + (k - 1) * n - 1, n, k);
+    else
+        for (int t = i; t <= n; t++)
+            B[t] = A[t];
+}
 
+void KMergeSort_non_recursive(RcdType A[], int n, int k)
+{
+    int l = 1;
+    RcdType B[MAXSIZE];
+    while (l < n)
+    {
+        K_sort_non_recursive(A, B, n, k);
+        l = k * l;
+    }
+}
 
+void KMerge(RcdType SR[], RcdType TR[], int left, int right, int k)
+{
+    int *index_array = (int *)malloc((k + 1) * sizeof(int));
+    int index_merged = left;
+
+    // 初始化每个有序子序列的起始位置
+    for (int i = 0; i < k; i++)
+        index_array[i] = left + i * (right - left + 1) / k;
+
+    while (index_merged <= right)
+    {
+        int min_index = -1;
+        RcdType min_value;
+
+        // 在 k 个子序列中找到最小的元素
+        for (int i = 0; i < k; i++)
+        {
+            if (index_array[i] <= left + (i + 1) * (right - left + 1) / k - 1)
+            {
+                if (min_index == -1 || LQ(SR[index_array[i]].key, min_value.key))
+                {
+                    min_index = i;
+                    min_value = SR[index_array[i]];
+                }
+            }
+        }
+
+        // 将最小的元素放入新序列
+        TR[index_merged++] = min_value;
+        index_array[min_index]++;
+    }
+
+    free(index_array);
+
+    // 将已经排序好的再次赋值回去
+    index_merged = left;
+    for (int i = left; i <= right; i++)
+        SR[i] = TR[index_merged++];
+}

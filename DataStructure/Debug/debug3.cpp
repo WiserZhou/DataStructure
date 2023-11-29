@@ -1,48 +1,54 @@
 #include <iostream>
-#include <vector>
-#include <iomanip>
 using namespace std;
-
-void search(vector<vector<int>> matrix, int depth, int &num, vector<int> &visit, int index)
+typedef struct MGraph
 {
-    if (depth >= 6)
-        return;
-    for (int i = 0; i < matrix.size(); i++)
+    int arc[7][7];
+    char vertex[7];
+    int vexNum, arcNum;
+} MGraph;
+typedef struct closeEdge
+{
+    char vertex;
+    int lowCost;
+} Array;
+void Prim(MGraph G, char c)
+{
+    Array array[7];
+
+    int k;
+    for (int i = 1; i <= G.vexNum; i++)
     {
-        if (visit[i] == 0 && matrix[index][i] == 1)
+        if (c == G.vertex[i])
         {
-            num++;
-            visit[i] = 1;
-            search(matrix, depth + 1, num, visit, i);
+            k = i;
+            break;
         }
     }
-}
-
-int main()
-{
-    int N, M;
-    cin >> N >> M;
-
-    vector<vector<int>> matrix(N, vector<int>(N, 0));
-
-    for (int i = 0; i < M; i++)
+    for (int i = 1; i <= G.vexNum; i++)
     {
-        int x, y;
-        cin >> x >> y;
-
-        matrix[x - 1][y - 1] = 1;
-        matrix[y - 1][x - 1] = 1;
+        array[i] = {c, G.arc[k][i]};
     }
-    // cout << "OK";
-    for (int i = 0; i < N; i++)
+    array[k].lowCost = 0;
+    for (int i = 1; i < G.vexNum; i++)
     {
-        vector<int> visit(N, 0);
-
-        visit[i] = 1;
-        int num = 1;
-        search(matrix, 0, num, visit, i);
-        // cout << num << endl;
-        cout << fixed << setprecision(2) << i + 1 << ": " << num / (double)N * 100 << "%" << endl;
+        int min = INT32_MAX;
+        int l;
+        for (int i = 1; i <= G.vexNum; i++)
+        {
+            if (min > array[i].lowCost && array[i].lowCost != 0)
+            {
+                min = array[i].lowCost;
+                l = i;
+            }
+        }
+        cout << array[l].vertex << "----" << G.vertex[l] << endl;
+        array[l].lowCost = 0;
+        for (int i = 1; i <= G.vexNum; i++)
+        {
+            if (array[i].lowCost > G.arc[l][i] && G.arc[l][i] != INT32_MAX)
+            {
+                array[i] = {G.vertex[l], G.arc[l][i]};
+            }
+        }
     }
-    return 0;
 }
