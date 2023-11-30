@@ -24,9 +24,9 @@ typedef struct
     int i, j;   // 该非零元的行下标和列下标
     ElemType e; // 该非零元的值
 } Triple;       // 三元组类型
-//  三元组顺序表的实现
+// 三元组顺序表的实现
 
-//! 稀疏矩阵类型也是三元组表
+//! 稀疏矩阵类型也是三元组表，不仅仅有数组，还有个数
 typedef struct
 {
     Triple data[MAXSIZE + 1]; // data[0]未用

@@ -115,9 +115,7 @@ void InOrderTraversal(TreeNode *root, void (*visit)(TElemType e))
 void PostOrderTraversal(TreeNode *root, void (*visit)(TElemType e))
 {
     if (root == nullptr)
-    {
         return;
-    }
 
     stack<TreeNode *> st; // 创建一个栈
     TreeNode *node = root;
@@ -141,9 +139,7 @@ void PostOrderTraversal(TreeNode *root, void (*visit)(TElemType e))
             node = nullptr; // 回退到上一级节点
         }
         else
-        {
             node = node->rchild; // 移动到右子树
-        }
     }
 }
 void PreOrderTraversal(BiTree T, void (*visit)(TElemType e))
@@ -189,18 +185,14 @@ void InOrderGo(BiTree T, void (*visit)(TElemType &e), stack<BiTNode *> *S)
     {
         visit(t->data);
         if (t->rchild)
-        {
             t = GoFarLeft(t->rchild, S);
-        }
         else if (!S->empty())
         {
             t = S->top();
             S->pop();
         }
         else
-        {
             t = NULL; // 栈空表明遍历结束
-        }
     }
 }
 

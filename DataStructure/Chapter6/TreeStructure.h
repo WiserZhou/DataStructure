@@ -41,7 +41,6 @@ typedef struct BPTNode
     int *parent; // 指向双亲的指针
     char LRTag;  // 左、右孩子标志域
 } BPTNode;
-
 /**
  * 双亲链表的树结构
  */

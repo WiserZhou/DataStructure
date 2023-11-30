@@ -2,12 +2,7 @@
 #include "..\header\Stack.h"
 #include <string>
 #include <stack>
-// void displayStack(Stack S)
-// {
-//     ElemType *p = S.top;
-//     while (p > S.base)
-//         cout << (char)*--p << " ";
-// }
+
 #define BINARY 8
 void BinaryTransfer()
 {
@@ -26,12 +21,6 @@ void BinaryTransfer()
         cout << S.pop();
     S.clear();
 }
-
-// int main()
-// {
-//     BinaryTransfer();
-//     return 0;
-// }
 
 Status checkBracket()
 {
@@ -82,16 +71,10 @@ Status checkBracket()
     else
         return FALSE;
 }
-// int main()
-// {
-//     cout << checkBracket();
-//     return 0;
-// }
+
 void LineEdit()
 {
     Stack S;
-    // SElemType e;
-    // initStack(S);
     char ch = getchar();
     while (ch != EOF && ch != '!') // EOF通过ctrl+Z输入
     {
@@ -119,11 +102,6 @@ void LineEdit()
     }
     S.destroy();
 }
-// int main()
-// {
-//     LineEdit();
-//     return 0;
-// }
 typedef struct PosType
 {
     int x;

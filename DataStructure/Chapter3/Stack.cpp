@@ -37,15 +37,13 @@ Status Push(SqStack &S, SElemType e)
 
 Status Pop(SqStack &S, SElemType &e)
 {
-    if (S.top == S.base) // 任何时候都要考虑判空
-        return ERROR;
+    if (S.top == S.base)
+        return NONE;
     else
-    {
-        e = *(S.top - 1);
-        S.top--;
-    }
+        e = *(--S.top);
     return OK;
 }
+
 bool StackEmpty(SqStack S)
 {
     if (S.top == S.base)
