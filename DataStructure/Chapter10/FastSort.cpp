@@ -19,12 +19,7 @@ typedef struct ElemType
     InfoType *info;
 } ElemType;
 
-void Swap(ElemType &a, ElemType &b)
-{
-    ElemType temp = a;
-    a = b;
-    b = temp;
-}
+
 // 冒泡排序
 void BubbleSort(ElemType R[], int n)
 {              // R有效元素位置从1开始，共n个
@@ -35,7 +30,7 @@ void BubbleSort(ElemType R[], int n)
         for (int j = 1; j < i; j++) // i位置已经比较过了，所以j不需要等于i
             if (R[j + 1].key < R[j].key)
             {
-                Swap(R[j], R[j + 1]);
+                swap(R[j], R[j + 1]);
                 lastExchangeIndex = j; // 记下发生交换的记录的位置
             }                          // if
         i = lastExchangeIndex;         // i取本趟发生过交换的,循环中的 i 表示上一趟发生交换的最后一个位置，确保下一趟只需考虑未排序部分。

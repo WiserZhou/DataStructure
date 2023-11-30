@@ -22,7 +22,7 @@ void radixsort(int figure, std::queue<records> &A)
             records data = A.front();
             A.pop();
 
-            int r = ((data.key / static_cast<int>(std::pow(10, pass - 1))) % 10); // 获取第pass位的值
+            int r = (data.key / static_cast<int>(std::pow(10, pass - 1))) % 10; // 获取第pass位的值
             Q[r].push(data);
         }
 
