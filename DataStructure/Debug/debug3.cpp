@@ -18,3 +18,19 @@ typedef struct
     int length;     // 表的长度
 } SSTable;
 
+// 索引查找表
+#define MAX_BLOCK 100
+
+typedef struct
+{
+    KeyType key; // 本块最大值
+    int addr;    // 本块开始地址
+} IndexType;
+typedef struct
+{
+    IndexType index[MAX_BLOCK]; // 表示索引表的块表
+    int block;                  // 表示索引表的块数
+} INtable;
+
+
+int SearchIndex()

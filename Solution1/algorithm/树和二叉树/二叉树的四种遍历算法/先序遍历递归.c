@@ -2,7 +2,7 @@
 
 // 二叉树的先序遍历采用的是递归的思想，因此可以递归实现
 #include <stdio.h>
-#include<stdlib.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define TElemType int
@@ -43,10 +43,10 @@ void CreateBiTree(BiTree *T)
 }
 
 // 模拟操作结点元素的函数，输出结点本身的数值
-void displayElem(BiTNode *elem)
-{
-    printf("%d ", elem->data);
-}
+// void displayElem(BiTNode *elem)
+// {
+//     printf("%d ", elem->data);
+// }
 
 //  递归是通过函数调用栈实现的，每次递归调用会将当前函数的状态（包括参数、局部变量、返回地址等）压入调用栈中，然后进入下一层递归
 // 先序遍历，用递归实现的
@@ -54,7 +54,8 @@ void PreOrderTraverse(BiTree T)
 {
     if (T) // 节点不为空时
     {
-        displayElem(T);              // 调用操作结点数据的函数方法
+        // displayElem(T);              // 调用操作结点数据的函数方法
+        printf("%d ", T->data);
         PreOrderTraverse(T->lchild); // 访问该结点的左孩子
         PreOrderTraverse(T->rchild); // 访问该结点的右孩子
     }

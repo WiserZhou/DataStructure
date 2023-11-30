@@ -41,9 +41,7 @@ void CreateBiTree(BiTree *T)
 void pop()
 {
     if (top == -1)
-    {
-        return;
-    }
+        return; // 说明此时栈是空的
     top--;
 }
 // 模拟操作结点元素的函数，输出结点本身的数值
@@ -55,7 +53,7 @@ void displayElem(BiTNode *elem)
 typedef struct SNode
 {
     BiTree p;
-    int tag;
+    int tag; // 标志位，用来判断是否遍历的他的右孩子
 } SNode;
 // 后序遍历使用的进栈函数
 void postpush(SNode *a, SNode sdata)

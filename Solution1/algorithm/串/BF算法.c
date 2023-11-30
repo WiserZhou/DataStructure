@@ -31,7 +31,7 @@ int mate(char *B, char *A)
 }
 int main()
 {
-    int number = mate("ababcabcacbab", "abcac");
+    int number = mate("ababc abcacbab", "abcac");
     printf("%d", number);
     return 0;
 }

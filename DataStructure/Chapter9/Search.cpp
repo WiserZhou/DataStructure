@@ -11,6 +11,7 @@ typedef struct
 #define EQ(a, b) ((a) == (b)) // equal
 #define LT(a, b) ((a) < (b))  // less than
 #define LQ(a, b) ((a) <= (b)) // less than or equal
+#define NE(a, b) ((a) != (b)) // not equal
 
 typedef struct
 {
@@ -25,7 +26,7 @@ int Search_Seq(SSTable ST, KeyType key)
     // 若找到，则函数值为该元素在表中的位置，否则为0。
     ST.elem[0].key = key; // 设置哨兵
     int i;
-    for (i = ST.length; ST.elem[i].key != key; --i)
+    for (i = ST.length; NE(ST.elem[i].key, key); --i)
         ;
     // 从后往前找
     return i; // 找不到时，i为0
@@ -34,8 +35,8 @@ int Search_Seq(SSTable ST, KeyType key)
 // 折半查找
 int Search_Bin(SSTable ST, KeyType key)
 {
-    int low = 0;
-    int high = ST.length - 1; // 置区间初值
+    int low = 1;
+    int high = ST.length ; // 置区间初值
 
     while (low <= high)
     {

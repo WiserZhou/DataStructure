@@ -9,11 +9,11 @@
 #define VertexType int    // 图中顶点的数据类型
 typedef enum
 {
-    DG,       // 有向图
-    DN,       // 无向图
-    UDG,      // 有向网
-    UDN       // 无向网
-} GraphKind; // 枚举图的 4 种类型 
+    DG,      // 有向图
+    DN,      // 无向图
+    UDG,     // 有向网
+    UDN      // 无向网
+} GraphKind; // 枚举图的 4 种类型
 typedef struct
 {
     VRType adj;     // 对于无权图，用 1 或 0 表示是否相邻；对于带权图，直接为权值。
@@ -62,14 +62,14 @@ void CreateDG(MGraph *G)
         for (int j = 0; j < G->vexnum; j++)
         {
             G->arcs[i][j].adj = 0;
-            G->arcs[i][j].info = NULL;
+            G->arcs[i][j].info = NULL; // 要是图中的各个顶点没有其他的关系的话，这个指针就一直是指向NULL的
         }
     }
-    // 在二维数组中添加弧的数据
+    // 在二维数组中添加弧的数据,           就是在初始化矩阵之后就需要实现把相关的信息存入到二维数组中去了
     for (int i = 0; i < G->arcnum; i++)
     {
         int v1, v2;
-        // 输入弧头和弧尾
+        // 输入弧头和弧尾，表示要在这两个顶点之间加上一条边
         scanf("%d,%d", &v1, &v2);
         // 确定顶点位置
         int n = LocateVex(G, v1);
@@ -77,21 +77,24 @@ void CreateDG(MGraph *G)
         // 排除错误数据
         if (m == -1 || n == -1)
         {
-            printf("no this vertex\n");
+            printf("no this vertex\n"); // 表示的是这个顶点不存在于当前图中
             return;
         }
         // 将正确的弧的数据加入二维数组
-        G->arcs[n][m].adj = 1;
+        G->arcs[n][m].adj = 1; // 把相应的元素值设置成1，表示的是n与m之间是存在一条边的
+        // 由于有向图边是有方向的，故没有对称赋值的操作
     }
 }
 // 构造无向图
 void CreateDN(MGraph *G)
 {
     scanf("%d,%d", &(G->vexnum), &(G->arcnum));
+    // 还是依次输入节点本身的数据
     for (int i = 0; i < G->vexnum; i++)
     {
         scanf("%d", &(G->vexs[i]));
     }
+    // 初始化二维矩阵
     for (int i = 0; i < G->vexnum; i++)
     {
         for (int j = 0; j < G->vexnum; j++)
@@ -100,7 +103,7 @@ void CreateDN(MGraph *G)
             G->arcs[i][j].info = NULL;
         }
     }
-    for (int i = 0; i < G->arcnum; i++)
+    for (int i = 0; i < G->arcnum; i++) // 图的边数应该是只能和你输入的边数是一样的
     {
         int v1, v2;
         scanf("%d,%d", &v1, &v2);
@@ -112,7 +115,7 @@ void CreateDN(MGraph *G)
             return;
         }
         G->arcs[n][m].adj = 1;
-        G->arcs[m][n].adj = 1; // 无向图的二阶矩阵沿主对角线对称
+        G->arcs[m][n].adj = 1; // 无向图的二阶矩阵沿主对角线对称，这是与有向图不一样的地方
     }
 }
 // 构造有向网，和有向图不同的是二阶矩阵中存储的是权值。就是带权图
@@ -133,7 +136,7 @@ void CreateUDG(MGraph *G)
     }
     for (int i = 0; i < G->arcnum; i++)
     {
-        int v1, v2, w;
+        int v1, v2, w; // 这个w是前面没有的，主要是表示的是该条边上面的权值，到时候这条边的adj就是记录成w
         scanf("%d,%d,%d", &v1, &v2, &w);
         int n = LocateVex(G, v1);
         int m = LocateVex(G, v2);

@@ -25,7 +25,7 @@ TSMatrix transposeMatrix(TSMatrix M, TSMatrix T)
     if (T.num)
     {              // 如果非零元素个数不为零
         int q = 0; // T矩阵的非零元素的索引
-        for (int col = 1; col <= M.m; col++)
+        for (int col = 1; col <= M.n; col++)
         { // 遍历原矩阵的列
             for (int p = 0; p < M.num; p++)
             { // 遍历原矩阵的非零元素

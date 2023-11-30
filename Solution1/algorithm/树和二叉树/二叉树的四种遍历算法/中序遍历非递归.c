@@ -1,7 +1,7 @@
 
 
 #include <stdio.h>
-#include<stdlib.h>
+#include <stdlib.h>
 #include <string.h>
 #define TElemType int
 int top = -1; // top变量时刻表示栈顶元素所在位置
@@ -131,4 +131,26 @@ int main()
     printf("\n中序遍历算法2: \n");
     InOrderTraverse2(Tree);
     return 0;
+}
+
+Status InorderTraverse(BiTree T, Status (*Visit)(TElemType e))
+{
+    InitStack(S);
+    push(S, T);
+    while (!StackEmpty(S))
+    {
+        while (GetTop(S, p) && p)
+            Push(S, p->lchild); // 向左走到尽头
+// 通过 GetTop 函数获取栈顶元素 p，如果 p 不为空，则将 p 的左子树沿着左儿子节点一路压入栈中，直到左子树为空或者到达左子树的最左端
+        Pop(S, p);              // 空指针退栈
+        if (!StackEmpty(S))     // 访问结点，向右一步
+// 如果栈不为空，则访问 p 节点，即调用 Visit 函数，并将 p 的右子树压入栈中
+        {
+            Pop(S, p);  // 把当前的节点弹出来
+            if (!Visit(p->data))
+                return ERROR;
+            push(S, p->rchild);
+        }
+    }
+    return OK;
 }

@@ -1,4 +1,5 @@
 // https://blog.csdn.net/Attract1206/article/details/106728651
+// https://c.biancheng.net/algorithm/kruskal.html
 #include <stdio.h>
 #include <stdlib.h>
 #define VertexMax 20 // 最大顶点数为20

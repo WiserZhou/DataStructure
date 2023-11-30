@@ -13,7 +13,7 @@ typedef struct BiTNode
 
 void CreateBiTree(BiTree *T)
 {
-    *T = (BiTNode *)malloc(sizeof(BiTNode));
+    *T = (BiTNode *)malloc(sizeof(BiTNode)); // 创建结点的时候需要申请相应的空间
     (*T)->data = 1;
     (*T)->lchild = (BiTNode *)malloc(sizeof(BiTNode));
     (*T)->rchild = (BiTNode *)malloc(sizeof(BiTNode));
@@ -36,12 +36,12 @@ void CreateBiTree(BiTree *T)
     (*T)->lchild->lchild->lchild = NULL;
     (*T)->lchild->lchild->rchild = NULL;
 }
-// 入队函数
+// 入队函数，参数 a 是指向 BiTree 数组的指针
 void EnQueue(BiTree *a, BiTree node)
 {
     a[rear++] = node;
 }
-// 出队函数
+// 出队函数，参数 a 是指向 BiTNode 指针数组的指针
 BiTNode *DeQueue(BiTNode **a)
 {
     return a[front++];
@@ -70,11 +70,11 @@ int main()
         // 将队头结点的左右孩子依次入队
         if (p->lchild != NULL)
         {
-            EnQueue(a, p->lchild);
+            EnQueue(a, p->lchild); // 当前结点的左孩子入队列
         }
         if (p->rchild != NULL)
         {
-            EnQueue(a, p->rchild);
+            EnQueue(a, p->rchild); // 当前结点的右孩子入队列
         }
     }
     return 0;
