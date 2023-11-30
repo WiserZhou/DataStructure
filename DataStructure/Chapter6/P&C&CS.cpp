@@ -19,7 +19,7 @@ typedef struct
  */
 typedef struct CTNode
 {
-    int child;
+    int child; // 存储的是索引
     struct CTNode *next;
 } *ChildPtr;
 typedef struct

@@ -1,36 +1,87 @@
+#include <iostream>
+#include <cctype>
 
-
-typedef int KeyType;
-
-typedef struct
+class TreeNode
 {
-    KeyType key; // 关键字
-    //...... 其他信息
-} ElemType;
+public:
+    char data;
+    TreeNode *left;
+    TreeNode *right;
 
-#define EQ(a, b) ((a) == (b)) // equal
-#define LT(a, b) ((a) < (b))  // less than
-#define LQ(a, b) ((a) <= (b)) // less than or equal
+    TreeNode(char value) : data(value), left(nullptr), right(nullptr) {}
+};
 
-typedef struct
+class ExpressionTreeBuilder
 {
-    ElemType *elem; // 数据元素存储空间基址，建表时按实际长度分配
-    int length;     // 表的长度
-} SSTable;
+public:
+    TreeNode *buildExpressionTree(const std::string &expression, int &index)
+    {
+        if (index < 0)
+            return nullptr;
 
-// 索引查找表
-#define MAX_BLOCK 100
+        char currentChar = expression[index--];
 
-typedef struct
+        if (currentChar == '(')
+        {
+            TreeNode *subExpressionRoot = buildExpressionTree(expression, index);
+            index--; // Skip the ')'
+            return subExpressionRoot;
+        }
+        else if (isdigit(currentChar) || isalpha(currentChar))
+        {
+            return new TreeNode(currentChar);
+        }
+        else
+        {
+            TreeNode *newNode = new TreeNode(currentChar);
+            newNode->right = buildExpressionTree(expression, index);
+            newNode->left = buildExpressionTree(expression, index);
+            return newNode;
+        }
+    }
+    void inorderTraversal(TreeNode *root)
+    {
+        if (root != nullptr)
+        {
+            inorderTraversal(root->left);
+            std::cout << root->data << " ";
+            inorderTraversal(root->right);
+        }
+    }
+
+    void postorderTraversal(TreeNode *root)
+    {
+        if (root != nullptr)
+        {
+            postorderTraversal(root->left);
+            postorderTraversal(root->right);
+            std::cout << root->data << " ";
+        }
+    }
+
+    ~ExpressionTreeBuilder()
+    {
+        // Implement destruction of the tree nodes
+    }
+};
+
+int main()
 {
-    KeyType key; // 本块最大值
-    int addr;    // 本块开始地址
-} IndexType;
-typedef struct
-{
-    IndexType index[MAX_BLOCK]; // 表示索引表的块表
-    int block;                  // 表示索引表的块数
-} INtable;
+    std::string expression = "A+(B*C)-(D/E)";
+    int index = expression.length() - 1;
 
+    ExpressionTreeBuilder treeBuilder;
+    TreeNode *root = treeBuilder.buildExpressionTree(expression, index);
 
-int SearchIndex()
+    std::cout << "Inorder traversal: ";
+    treeBuilder.inorderTraversal(root);
+    std::cout << std::endl;
+
+    std::cout << "Postorder traversal: ";
+    treeBuilder.postorderTraversal(root);
+    std::cout << std::endl;
+
+    // Implement deletion of tree nodes
+
+    return 0;
+}

@@ -62,10 +62,7 @@ Status SearchBST(BiTree T, KeyType key, BiTree f, BiTree &p)
         return FALSE;
     } // 树为空时，p的值就是他的父结点的值，也是最后一个结点的值，p=f ，返回假值
     else if (EQ(key, T->data.key))
-    {
-        p = T;
-        return TRUE;
-    } // 找到结点,p=T,返回真值
+        return TRUE; // 找到结点,p=T,返回真值
     else if (LT(key, T->data.key))
         return SearchBST(T->lchild, key, T, p); // 去左子树找
     else

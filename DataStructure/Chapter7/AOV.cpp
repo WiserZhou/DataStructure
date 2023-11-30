@@ -5,7 +5,7 @@
 // 排序中，若AOV网无回路，则每个顶点入、出栈各一次，每个边表结点被检查一次，执行时间为O(n+e)；
 // 拓扑排序算法的时间复杂度为O(n+e)。
 // 如果采用邻接矩阵存储结构，则时间复杂行为O(n^2)。
-
+//*使用inDegree数组表示索引为i的结点的入度是否为零，若为零，则加入栈
 
 Status TopologicalSort(ALGraph G)
 {
@@ -16,13 +16,8 @@ Status TopologicalSort(ALGraph G)
     stack<int> S;
 
     for (int i = 1; i <= G.vexNum; ++i)
-    {
-        // 入度为0者进栈
-        if (!inDegree[i])
-        {
+        if (!inDegree[i]) // 入度为0者进栈
             S.push(i);
-        }
-    }
 
     int count = 0; // 计数器，对输出顶点计数
     // 用来存储入度为零的顶点
@@ -40,19 +35,12 @@ Status TopologicalSort(ALGraph G)
         {
             int k = p->adjVex;
             if (!(--inDegree[k]))
-            {
-                // 更新入度，0度入栈
-                S.push(k);
-            }
+                S.push(k); // 更新入度，0度入栈
         }
     }
 
     if (count < G.vexNum)
-    {
         return ERROR; // 存在环路，拓扑排序失败
-    }
     else
-    {
         return OK; // 拓扑排序成功
-    }
 }

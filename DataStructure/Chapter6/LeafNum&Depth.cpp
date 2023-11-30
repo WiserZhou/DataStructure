@@ -71,7 +71,7 @@ int IsCompleteBinaryTree(BiTNode *T)
 Status CreateBiTree(BiTree &T)
 {
     char ch;
-    std::cin >> ch;
+    cin >> ch;
     if (ch == ' ')
         T = NULL;
     else

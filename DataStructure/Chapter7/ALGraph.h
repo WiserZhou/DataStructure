@@ -1,5 +1,5 @@
+#pragma once
 #include "..\header\unity.h"
-
 #include <iostream>
 typedef char VertexType;
 typedef int VRType; // vex Relationship type
@@ -27,7 +27,7 @@ typedef struct
 {
     AdjList vertices; // 顶点列表
     int vexNum, arcNum;
-    int kind; // 图的种类标志
+    GraphKind kind; // 图的种类标志
 } ALGraph;
 
 void CreatAdjList(ALGraph &G)
@@ -97,7 +97,7 @@ void FindInDegree(ALGraph G, int inDegree[])
 
         while (p)
         {
-            inDegree[p->adjVex]++; // 遍历所有出边表，在每一个结点的inDegree上+1
+            ++inDegree[p->adjVex]; // 遍历所有出边表，在每一个结点的inDegree上+1
             p = p->nextArc;
         }
     }

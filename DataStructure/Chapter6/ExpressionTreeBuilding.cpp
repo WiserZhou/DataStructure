@@ -12,6 +12,7 @@ struct TreeNode
 };
 
 // 根据先缀表达式和栈逆序建立树的函数
+//*先缀表达式建树从后往前使用栈，后缀表达式建树从前往后使用栈
 TreeNode *buildTreeFromPrefixReverse(string s)
 {
     stack<TreeNode *> nodes;
@@ -39,7 +40,37 @@ TreeNode *buildTreeFromPrefixReverse(string s)
     }
     return nodes.top();
 }
+// 根据后缀表达式建树
+TreeNode *buildExpressionTree(const std::string &expression)
+{
+    std::stack<TreeNode *> nodeStack;
 
+    for (char currentChar : expression)
+    {
+        if (isdigit(currentChar) || isalpha(currentChar))
+        {
+            nodeStack.push(new TreeNode(currentChar));
+        }
+        else
+        {
+            TreeNode *newNode = new TreeNode(currentChar);
+            newNode->right = nodeStack.top();
+            nodeStack.pop();
+            newNode->left = nodeStack.top();
+            nodeStack.pop();
+            nodeStack.push(newNode);
+        }
+    }
+
+    if (!nodeStack.empty())
+    {
+        TreeNode *root = nodeStack.top();
+        nodeStack.pop();
+        return root;
+    }
+
+    return nullptr;
+}
 // 根据先缀表达式正序建立二叉树
 bool isInAlphabetSet(char ch)
 {
@@ -53,13 +84,10 @@ bool isInAlphabetSet(char ch)
 
 TreeNode *buildTreeFromPrefixRecursive(string s, int &index)
 {
-    if (index < 0)
-    {
+    if (index >= s.length())
         return nullptr; // Invalid index, return null
-    }
 
-    char currentChar = s[index];
-    index--;
+    char currentChar = s[index++];
 
     if (isInAlphabetSet(currentChar))
     {
@@ -85,13 +113,10 @@ TreeNode *buildTreeFromPrefix(string s)
 
 TreeNode *buildTreeFromPostfixRecursive(string s, int &index)
 {
-    if (index >= s.size())
-    {
+    if (index < 0)
         return nullptr; // Invalid index, return null
-    }
 
-    char currentChar = s[index];
-    index++;
+    char currentChar = s[index--];
 
     if (isInAlphabetSet(currentChar))
     {
@@ -103,15 +128,15 @@ TreeNode *buildTreeFromPostfixRecursive(string s, int &index)
     {
         // If it is an operator, create a root node and recursively build left and right subtrees
         TreeNode *node = new TreeNode(currentChar);
-        node->left = buildTreeFromPostfixRecursive(s, index);  // Recursively build the left subtree
         node->right = buildTreeFromPostfixRecursive(s, index); // Recursively build the right subtree
+        node->left = buildTreeFromPostfixRecursive(s, index);  // Recursively build the left subtree
         return node;
     }
 }
 
 TreeNode *buildTreeFromPostfix(string s)
 {
-    int index = 0; // Start from the beginning of the string
+    int index = s.length() - 1; // Start from the beginning of the string
     return buildTreeFromPostfixRecursive(s, index);
 }
 
@@ -189,35 +214,25 @@ TreeNode *buildTreeFromInfixByUser(string s)
             continue;
 
         if (isalpha(s[i]))
-        {
             nodes.push(new TreeNode(s[i]));
-        }
         else if (s[i] == '(')
-        {
             ops.push(s[i]);
-        }
         else if (s[i] == ')')
         {
             while (ops.top() != '(')
-            {
                 processOperator(ops, nodes);
-            }
             ops.pop(); // 弹出左括号
         }
         else
         { // 运算符号
             while (!ops.empty() && priority(s[i]) <= priority(ops.top()))
-            {
                 processOperator(ops, nodes);
-            }
             ops.push(s[i]); // 当前运算符号入栈
         }
     }
 
     while (!ops.empty())
-    {
         processOperator(ops, nodes);
-    }
 
     return nodes.top();
 }
@@ -236,8 +251,6 @@ TreeNode *buildTree(string s, int start, int end)
 
     return root;
 }
-
-// #include "TreeStructure.h"
 /**
  * 根据先缀表达式和中缀表达式建树
  */
@@ -255,9 +268,9 @@ int Search(char arr[], char key, int start, int end)
     return -1; // Key not found
 }
 
-// 表示当前先序遍历序列的起始索引
-// 表示当前中序遍历序列的起始索引
-// 表示当前子树的节点数量
+// ps表示当前先序遍历序列的起始索引
+// is表示当前中序遍历序列的起始索引
+// n表示当前子树的节点数量
 void CrtBT(BiTree &T, char pre[], char ino[], int ps, int is, int n)
 {
     // 已知pre[ps..ps+n-1]为二叉树的先序序列，
@@ -280,7 +293,8 @@ void CrtBT(BiTree &T, char pre[], char ino[], int ps, int is, int n)
             if (k == is + n - 1)                              // 如果k的位置就是中缀表达式的最后一个位置，说明他的右边没有结点，也就是右子树是空的
                 T->right = nullptr;
             else
-                CrtBT(T->right, pre, ino, ps + 1 + (k - is), k + 1, n - (k - is) - 1); // k-is是左子树的结点的个数，先缀表达式从ps+k-is+1开始，中缀表达式从k+1开始，个数就是总个数减去左边的个数，再减去中间的节点
+                CrtBT(T->right, pre, ino, ps + 1 + (k - is), k + 1, n - (k - is) - 1); // k-is是左子树的结点的个数，先缀表达式从ps+k-is+1开始，
+                                                                                       // 中缀表达式从k+1开始，个数就是总个数减去左边的个数，再减去中间的节点
         }
     }
 }

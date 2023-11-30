@@ -19,17 +19,17 @@ BiTNode *CopyTree(BiTNode *T)
     BiTree newRightPtr;
 
     if (!T)
-        return NULL;
-
+        return nullptr;
+        
     if (T->lchild)
         newLeftPtr = CopyTree(T->lchild); // 复制左子树
     else
-        newLeftPtr = NULL;
+        newLeftPtr = nullptr;
 
     if (T->rchild)
         newRightPtr = CopyTree(T->rchild); // 复制右子树
     else
-        newRightPtr = NULL;
+        newRightPtr = nullptr;
 
     BiTree newTree = GetTreeNode(T->data, newLeftPtr, newRightPtr);
 
