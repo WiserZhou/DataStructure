@@ -1,48 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <stack>
+#include <queue>
 #include <algorithm>
-
 using namespace std;
-//----- 栈的顺序存储表示 -----
-#define STACK_INIT_SIZE 100 // 栈容量
-#define STACK_INCREMENT 10  // 栈增量
-#include "../header/unity.h"
-typedef int SElemType;
-typedef struct SqStack
-{
-    SElemType *base;
-    SElemType *top;
-    int stackSize;
-} SqStack;
-
-Status InitStack(SqStack &S)
-{
-    S.base = (SElemType *)malloc(sizeof(SElemType) * STACK_INIT_SIZE);
-    S.top = S.base;
-    S.stackSize = STACK_INIT_SIZE;
-    return OK;
-}
-
-Status Push(SqStack &S, SElemType e)
-{
-    if (S.top - S.base >= S.stackSize)
-    {
-        S.base = (SElemType *)realloc(sizeof(SElemType) * (S.stackSize + STACK_INCREMENT));
-        if (!S.base)
-            exit(OVERFLOW);
-        S.top = S.base + S.stackSize;
-        S.stackSize += STACK_INCREMENT;
-    }
-    *S.top++ = e;
-    return OK;
-}
-
-Status Pop(SqStack &S, SElemType &e)
-{
-    if (S.top == S.base)
-        return NONE;
-    else
-        e = *(--S.top);
-    return OK;
-}
+// 3.设 h 是带表头结点的单链表的头指针，请完善下面逆置这个单
+//     链 表 的 程 序 。 即 原 链 表
+//     为(a1, a2, a3…an) ， 逆 置 后 变 为(an, an - 1…a2, a1)。(本题 6 分)

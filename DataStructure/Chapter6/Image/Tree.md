@@ -7,3 +7,6 @@
 
 后序线索化二叉树：
 ><https://blog.csdn.net/my_heart_/article/details/52087948>
+
+**哈夫曼树编码顺序，从上到下，01编码从左到右**
+![Alt text](image-1.png)

@@ -172,3 +172,18 @@ int getIndexByElem(LinkList L, ElemType e)
     }
     return ERROR;
 }
+
+//将单链表逆转
+void invert(LNode *h)
+{
+    LNode *s, *p;
+    p = h->link;
+    h->link = nullptr;
+    while (p != nullptr)
+    {
+        s = p;
+        p = p->link;
+        s->link = h->link;
+        h->link = s;
+    }
+}
