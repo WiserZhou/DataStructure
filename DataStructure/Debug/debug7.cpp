@@ -6,9 +6,10 @@ int main()
 {
     while (true)
     {
-        int a;
+        char a;
         cin >> a;
-        a = a % 13;
-        cout << a << endl;
+        int b = a - 'A' + 1;
+        b = b % 11;
+        cout << b << endl;
     }
 }

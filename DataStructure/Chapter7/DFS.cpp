@@ -120,3 +120,57 @@ bool hasSimplePathK(ALGraph &G, int start, int end, int k)
 
     return DFS(G, start, k, end);
 }
+
+// *DFS判断图是否有回路
+bool hasCycle()
+{
+    // 创建用于标记节点是否被访问过的数组
+    vector<bool> visited(num_vertices, false);
+
+    // 创建递归栈，用于标记当前递归调用路径上的节点
+    vector<bool> rec_stack(num_vertices, false);
+
+    // 遍历图中的每个节点
+    for (int i = 0; i < num_vertices; ++i)
+    {
+        // 如果当前节点未被访问过且存在环路，则返回 true
+        if (!visited[i] && dfs(i, visited, rec_stack))
+        {
+            return true;
+        }
+    }
+
+    // 图中不存在环路，返回 false
+    return false;
+}
+
+bool dfs(int node, vector<bool> &visited, vector<bool> &rec_stack)
+{
+    // 标记当前节点为已访问，并加入递归栈
+    visited[node] = true;
+    rec_stack[node] = true;
+
+    // 遍历当前节点的邻居节点
+    for (int neighbor : adj_list[node])
+    {
+        // 如果邻居节点未被访问过，则递归调用DFS
+        if (!visited[neighbor])
+        {
+            if (dfs(neighbor, visited, rec_stack))
+            {
+                return true; // 如果递归调用返回 true，说明存在环路，直接返回 true
+            }
+        }
+        // 如果邻居节点已经在递归栈中，说明存在环路，返回 true
+        else if (rec_stack[neighbor])
+        {
+            return true;
+        }
+    }
+
+    // 回溯时，取消当前节点在递归栈中的标记
+    rec_stack[node] = false;
+
+    // 当前路径上不存在环路，返回 false
+    return false;
+}

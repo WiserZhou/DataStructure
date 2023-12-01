@@ -11,7 +11,7 @@ typedef struct SNode
 
 void InitStack(LinkStack &S)
 {
-    // 注意头结点为栈顶位置，因为所有的操作都是从栈顶进行的，而且头结点好操作
+    // *注意头结点为栈顶位置，因为所有的操作都是从栈顶进行的，而且头结点好操作
     S = (SNode *)malloc(sizeof(SNode));
     if (!S)
         exit(OVERFLOW); // 存储分配失败

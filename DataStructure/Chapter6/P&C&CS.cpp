@@ -94,6 +94,8 @@ void PrintPath(std::stack<int> S)
     std::cout << std::endl;
 }
 #include <queue>
+
+// 森林转化为二叉树
 void CreateTree(CSTree &T)
 {
     T = nullptr;

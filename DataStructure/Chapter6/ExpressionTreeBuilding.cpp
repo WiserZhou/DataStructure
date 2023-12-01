@@ -273,9 +273,7 @@ int Search(char arr[], char key, int start, int end)
 // n表示当前子树的节点数量
 void CrtBT(BiTree &T, char pre[], char ino[], int ps, int is, int n)
 {
-    // 已知pre[ps..ps+n-1]为二叉树的先序序列，
-    // ino[is..is+n-1]为二叉树的中序序列，本算
-    // 法由此两个序列构造二叉链表
+    // 已知pre[ps..ps+n-1]为二叉树的先序序列，ino[is..is+n-1]为二叉树的中序序列，本算法由此两个序列构造二叉链表
     if (n == 0)
         T = nullptr;
     else

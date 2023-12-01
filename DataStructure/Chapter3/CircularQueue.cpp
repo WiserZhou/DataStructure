@@ -3,9 +3,12 @@ typedef int QElemType;
 typedef struct
 {
     QElemType *base; // 动态分配存储空间
-    int front;       // 头指针，若队列不空，指向队列头元素
-    int rear;        // 尾指针，若队列不空，指向队列尾元素的下一个位置
+    int front;       // *头指针，若队列不空，指向队列头元素
+    int rear;        // *尾指针，若队列不空，指向队列尾元素的下一个位置
 } SqQueue;
+
+//* 队空的时候头指针和尾指针都指向0号空间
+//* 队满的时候尾指针的下一位就是头指针
 #include "../header/unity.h"
 
 Status InitQueue(SqQueue &Q)
