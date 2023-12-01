@@ -3,6 +3,7 @@ typedef struct TreeNode
 {
     // 假设在树节点结构中还有其他字段
     int data;                // 举例：数据字段
+    int bf;                  // !平衡因子
     struct TreeNode *lchild; // 左子节点
     struct TreeNode *rchild; // 右子节点
 } *BSTree;

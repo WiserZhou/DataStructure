@@ -1,113 +1,117 @@
-
-
-// function Kruskal(graph):
-//     initialize an empty set to store the minimum spanning tree (MST)
-//     initialize a disjoint set data structure to track connected components
-
-//     sort all edges of the graph in non-decreasing order by weight
-
-//     for each vertex v in graph.vertices:
-//         makeSet(v)  // create a disjoint set for each vertex
-
-//     for each edge (u, v) in graph.edges:
-//         if findSet(u) ≠ findSet(v):  // check if adding the edge forms a cycle
-//             add (u, v) to the MST
-//             unionSets(u, v)  // merge the sets of u and v
-
-//     return the MST
-// 解释：
-
-// makeSet(v): 创建一个包含单个顶点v的新集合。
-// findSet(v): 返回包含顶点v的集合的代表元素。
-// unionSets(u, v): 将包含顶点u和顶点v的两个集合合并为一个集合。
+#include <iostream>
 #include <vector>
-// 定义边的数据结构
-struct Edge
+#include <algorithm>
+
+using namespace std;
+
+class Graph
 {
-    int u, v, weight;
+public:
+    int V, E;
+    vector<pair<int, pair<int, int>>> edges;
+
+    Graph(int v, int e) : V(v), E(e)
+    {
+        edges.resize(E);
+    }
+
+    void addEdge(int src, int dest, int weight)
+    {
+        edges.push_back({src, {dest, weight}});
+    }
+
+    vector<pair<int, pair<int, int>>> kruskalMST();
+    bool isCyclic(int parent, vector<bool> &visited, vector<vector<int>> &graph);
 };
 
-// 定义并查集的数据结构
-struct DisjointSet
+vector<pair<int, pair<int, int>>> Graph::kruskalMST()
 {
-    int *parent, *rank;
-    int n;
+    vector<pair<int, pair<int, int>>> result;
+    int e = 0; // 用于计数已选择的边
 
-    DisjointSet(int n)
+    // 将边按权重进行排序
+    sort(edges.begin(), edges.end(), [](const auto &a, const auto &b)
+         { return a.second.second < b.second.second; });
+
+    // 分配每个顶点一个父节点
+    vector<int> parent(V, -1);
+
+    // 选择 V-1 条边
+    while (result.size() < V - 1 && e < E)
     {
-        this->n = n;
-        parent = new int[n + 1];
-        rank = new int[n + 1];
+        pair<int, pair<int, int>> next_edge = edges[e++];
 
-        // 初始化每个顶点为一个独立的集合
-        for (int i = 1; i <= n; i++)
+        // 加入这条边不形成环，则加入结果集中
+        if (parent[next_edge.first] == -1 && parent[next_edge.second.first] == -1)
         {
-            parent[i] = i;
-            rank[i] = 0;
+            result.push_back(next_edge);
+
+            // 将新边加入图矩阵
+            vector<vector<int>> graph(V, vector<int>(V, 0));
+            for (const auto &edge : result)
+            {
+                graph[edge.first][edge.second.first] = edge.second.second;
+                graph[edge.second.first][edge.first] = edge.second.second;
+            }
+
+            // 检查是否形成环
+            vector<bool> visited(V, false);
+            if (isCyclic(next_edge.first, visited, graph))
+            {
+                result.pop_back(); // 如果形成环，则移除该边
+            }
+            else
+            {
+                // 更新父节点信息
+                parent[next_edge.first] = next_edge.second.first;
+                parent[next_edge.second.first] = next_edge.first;
+            }
         }
     }
 
-    // 查找集合的代表元素
-    int findSet(int u)
-    {
-        if (u != parent[u])
-            parent[u] = findSet(parent[u]);
-        return parent[u];
-    }
+    return result;
+}
 
-    // 合并两个集合
-    void unionSets(int u, int v)
-    {
-        int rootU = findSet(u);
-        int rootV = findSet(v);
-
-        if (rank[rootU] > rank[rootV])
-            parent[rootV] = rootU;
-        else if (rank[rootU] < rank[rootV])
-            parent[rootU] = rootV;
-        else
-        {
-            parent[rootV] = rootU;
-            rank[rootU]++;
-        }
-    }
-};
-
-// Kruskal算法函数
-void kruskal(vector<Edge> &edges, int n)
+bool Graph::isCyclic(int v, vector<bool> &visited, vector<vector<int>> &graph)
 {
-    vector<Edge> minimumSpanningTree;
-    DisjointSet disjointSet(n);
-
-    // 对边按权值升序排序
-    sort(edges.begin(), edges.end(), [](const Edge &a, const Edge &b)
-         { return a.weight < b.weight; });
-
-    int nComp = n; // 初始连通分量数等于顶点数
-
-    // 遍历排序后的边
-    for (const Edge &edge : edges)
+    if (!visited[v])
     {
-        int u = edge.u;
-        int v = edge.v;
-
-        // 检查边的两个端点是否属于不同的连通分量
-        if (disjointSet.findSet(u) != disjointSet.findSet(v))
+        visited[v] = true;
+        for (int i = 0; i < V; ++i)
         {
-            // 将边加入最小生成树
-            minimumSpanningTree.push_back(edge);
-
-            // 合并两个连通分量
-            disjointSet.unionSets(u, v);
-
-            // 连通分量数减一
-            nComp--;
-
-            // 如果连通分量数已经为1，说明所有顶点都在同一个集合中，算法结束
-            if (nComp == 1)
-                break;
+            if (graph[v][i] && !visited[i])
+            {
+                if (isCyclic(i, visited, graph))
+                {
+                    return true;
+                }
+            }
+            else if (graph[v][i] && visited[i])
+            {
+                return true;
+            }
         }
     }
+    return false;
+}
 
-    // 在这里可以根据需要对最小生成树进行进一步处理或输出
+int main()
+{
+    Graph g(4, 5);
+
+    g.addEdge(0, 1, 10);
+    g.addEdge(0, 2, 6);
+    g.addEdge(0, 3, 5);
+    g.addEdge(1, 3, 15);
+    g.addEdge(2, 3, 4);
+
+    vector<pair<int, pair<int, int>>> mst = g.kruskalMST();
+
+    cout << "Edges in MST:" << endl;
+    for (const auto &edge : mst)
+    {
+        cout << edge.first << " - " << edge.second.first << " : " << edge.second.second << endl;
+    }
+
+    return 0;
 }
