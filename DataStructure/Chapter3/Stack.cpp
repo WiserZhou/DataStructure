@@ -6,10 +6,12 @@ typedef int SElemType;
 typedef struct
 {
     SElemType *base; // 基地址
-    SElemType *top;  // 栈顶指针，指向栈顶元素的上面
+    SElemType *top;  // *栈顶指针，指向栈顶元素的上面
     int stacksize;   // 栈容量
 } SqStack;
 
+//*栈空的时候栈顶指针和基地址相同
+//* 栈顶指针指向栈顶元素的下一位
 Status InitStack(SqStack &S)
 {
     // 构造一个空栈S

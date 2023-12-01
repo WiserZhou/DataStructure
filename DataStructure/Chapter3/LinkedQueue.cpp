@@ -8,10 +8,11 @@ typedef struct QNode
 
 typedef struct
 {                   // 链队列类型
-    QueuePtr front; // 队头指针
-    QueuePtr rear;  // 队尾指针
+    QueuePtr front; // *队头指针,指向头结点
+    QueuePtr rear;  // *队尾指针，指向最后一个元素的结点
 } LinkQueue;
 
+//* 队空的时候头指针和尾指针都指向头结点
 // 链队列有头结点
 Status InitQueue(LinkQueue &Q)
 {
