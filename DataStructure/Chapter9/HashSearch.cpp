@@ -20,10 +20,11 @@ typedef struct
     int count; // 当前数据元素个数
     int size;  // hashsize[size]为当前容量
 } HashTable;
-#define MAX_SIZE 13
+#define MAX_SIZE 15
+#define HASH_KEY 13
 int Hash(KeyType K)
 {
-    return K;
+    return K % HASH_KEY;
 }
 void collision(int &p)
 {

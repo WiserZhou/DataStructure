@@ -79,21 +79,6 @@ void OutPath(CSTree T, string str)
         T = T->nextSibling; // 往右走前要出栈，因为右链域是兄弟，不能把叶子结点的值带到兄弟分支上去
     }
 }
-// void PrintPath(std::stack<int> S)
-// {
-//     // 将栈中的元素放入临时容器（vector）中
-//     std::vector<int> tempVector;
-//     while (!S.empty())
-//     {
-//         tempVector.push_back(S.top());
-//         S.pop();
-//     }
-
-//     // 逆序输出元素，以恢复栈的原始顺序
-//     for (auto it = tempVector.rbegin(); it != tempVector.rend(); ++it)
-//         std::cout << *it << " ";
-//     std::cout << std::endl;
-// }
 
 CSNode *CreateTreeNode(char ch)
 {
@@ -111,9 +96,9 @@ void CreateTree(CSTree &T)
     char fa, ch;
     CSTree p, r, s;
 
-    std::queue<CSTree> Q;
+    queue<CSTree> Q;
 
-    for (std::cin >> fa >> ch; ch != '#'; std::cin >> fa >> ch)
+    for (cin >> fa >> ch; ch != '#'; cin >> fa >> ch)
     {
         p = CreateTreeNode(ch);
 

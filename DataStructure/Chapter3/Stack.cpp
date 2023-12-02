@@ -10,7 +10,7 @@ typedef struct
     int stacksize;   // 栈容量
 } SqStack;
 
-//*栈空的时候栈顶指针和基地址相同
+//* 栈空的时候栈顶指针和基地址相同
 //* 栈顶指针指向栈顶元素的下一位
 Status InitStack(SqStack &S)
 {

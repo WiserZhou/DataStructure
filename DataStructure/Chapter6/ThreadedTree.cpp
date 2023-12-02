@@ -133,6 +133,5 @@ void InOrderThreading(BiThrTree Thr)
         }
         p = p->rchild; // 移动到右孩子，以继续中序遍历
     }
-    cout << "\n"; // 输出具有线索的节点总数
 }
 

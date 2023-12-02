@@ -7,7 +7,7 @@ typedef int TElemType;
 typedef TElemType SqBiTree[MAX_TREE_SIZE]; // 二叉树的顺序存储
 // 0号单元存储根结点
 
-// 使用满二叉树和当前的树进行一一对应
+// 使用完全二叉树和当前的树进行一一对应
 
 /**
  * 二叉链表
@@ -38,7 +38,7 @@ typedef struct TriTNode
 typedef struct BPTNode
 { // 结点结构
     TElemType data;
-    int *parent; // 指向双亲的指针
+    int parent; // 指向双亲的指针
     char LRTag;  // 左、右孩子标志域
 } BPTNode;
 /**

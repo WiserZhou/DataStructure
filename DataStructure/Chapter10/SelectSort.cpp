@@ -17,8 +17,8 @@ typedef struct
 // 选择排序
 void SelectSort(SqList &L)
 {
-    int i, j, min; // min存储L.r[i...n]中最小值的下标
-    for (i = 1; i < L.length; i++)
+    int i, j, min;                 // min存储L.r[i...n]中最小值的下标
+    for (i = 1; i < L.length; i++) // 从前往后，逐渐把最小的都放在最前面
     {
         min = i; // min初值为i
         for (j = i + 1; j <= L.length; j++)

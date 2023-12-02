@@ -93,9 +93,7 @@ bool IN(char ch, const char *OP)
     while (*OP != '\0')
     {
         if (ch == *OP)
-        {
             return true;
-        }
         OP++;
     }
     return false;
@@ -169,7 +167,6 @@ void CrtSubtree(BiTree &T, char c, std::stack<BiTree> &PTR)
 
     PTR.push(T);
 }
-
 /**
  * 首先，定义了两个栈，一个用于存储操作符（S），一个用于存储操作数的子树（PTR）。同时将字符'#'入栈作为栈底的标识，并初始化变量ch为表达式字符串的第一个字符。
  * 通过循环处理表达式字符串，直到操作符栈顶为 '#' 且当前字符也为 '#'，即处理完整个表达式字符串。

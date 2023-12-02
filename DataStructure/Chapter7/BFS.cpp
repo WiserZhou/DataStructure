@@ -1,24 +1,6 @@
 #include "MGraph.h"
 #include "ALGraph.h"
 
-// 伪代码
-// procedure BFS(graph, start_vertex):
-//     initialize an empty queue
-//     create a boolean array 'visited' and set all elements to false
-
-//     enqueue(start_vertex)
-//     visited[start_vertex] = true
-
-//     while the queue is not empty:
-//         current_vertex = dequeue()
-
-//         // Process the current vertex (e.g., print it)
-//         process(current_vertex)
-
-//         for each neighbor in graph.adjacent_vertices(current_vertex):
-//             if neighbor is not visited:
-//                 enqueue(neighbor)
-//                 visited[neighbor] = true
 // 如果使用邻接表表示图，则循环的总时间
 // 代价为 d0 + d1 + … + dn-1 = O(n+e)，其中的 di
 // 是顶点 i 的度。
@@ -37,12 +19,12 @@ void BFSTraverse(MGraph G)
         if (!visited[v])
         { // v 尚未访问
             visited[v] = true;
-            Visit(v, G); // 访问 v
-            Q.push(v);   // v 入队列
+            Q.push(v); // v 入队列
 
             while (!Q.empty())
             {
                 int u = Q.front(); // 队头元素出队并置为 u
+                Visit(v, G);       // 访问 v
                 Q.pop();
 
                 for (int w = FirstAdjVex(G, u); w != 0; w = NextAdjVex(G, u, w))
@@ -50,7 +32,6 @@ void BFSTraverse(MGraph G)
                     if (!visited[w])
                     {
                         visited[w] = true;
-                        Visit(w, G);
                         Q.push(w);
                     }
                 }
@@ -71,11 +52,11 @@ void BFSTraverse(ALGraph G, Status (*Visit)(int v))
         if (!visited[v])
         {
             visited[v] = true;
-            Visit(v);  // 访问u
             Q.push(v); // v入队列
             while (!Q.empty())
             {
                 int u = Q.front(); // 队头元素出队并置为u
+                Visit(w);
                 Q.pop();
                 for (ArcNode *p = G.vertices[u].firstArc; p != NULL; p = p->nextArc)
                 {
@@ -83,7 +64,7 @@ void BFSTraverse(ALGraph G, Status (*Visit)(int v))
                     if (!visited[w])
                     {
                         visited[w] = true;
-                        Visit(w);
+
                         Q.push(w);
                     }
                 }
@@ -99,16 +80,11 @@ int main()
     G.arcNum = 9;
     G.kind = UDG;
     for (int i = 1; i <= G.vexNum; i++)
-    {
         G.vex[i] = 'A' + i - 1;
-    }
     for (int i = 1; i <= G.vexNum; i++)
-    {
         for (int j = 1; j <= G.vexNum; j++)
-        {
             G.arc[i][j].adj = INFINITY;
-        }
-    }
+
     G.arc[1][2].adj = 1;
     G.arc[1][3].adj = 1;
     G.arc[1][5].adj = 1;

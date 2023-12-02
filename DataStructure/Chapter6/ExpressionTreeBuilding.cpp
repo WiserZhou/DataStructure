@@ -62,14 +62,7 @@ TreeNode *buildExpressionTree(const std::string &expression)
         }
     }
 
-    if (!nodeStack.empty())
-    {
-        TreeNode *root = nodeStack.top();
-        nodeStack.pop();
-        return root;
-    }
-
-    return nullptr;
+    return nodeStack.top();
 }
 // 根据先缀表达式正序建立二叉树
 bool isInAlphabetSet(char ch)
@@ -237,20 +230,6 @@ TreeNode *buildTreeFromInfixByUser(string s)
     return nodes.top();
 }
 
-// 递归创建二叉树的函数，不包含括号
-TreeNode *buildTree(string s, int start, int end)
-{
-    if (start > end)
-        return nullptr;
-
-    int mid = start + (end - start) / 2;
-    TreeNode *root = new TreeNode(s[mid]);
-
-    root->left = buildTree(s, start, mid - 1);
-    root->right = buildTree(s, mid + 1, end);
-
-    return root;
-}
 /**
  * 根据先缀表达式和中缀表达式建树
  */
@@ -259,12 +238,8 @@ typedef TreeNode *BiTree;
 int Search(char arr[], char key, int start, int end)
 {
     for (int i = start; i <= end; i++)
-    {
         if (arr[i] == key)
-        {
             return i;
-        }
-    }
     return -1; // Key not found
 }
 

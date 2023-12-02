@@ -1,19 +1,12 @@
 #include "MGraph.h"
 #include "ALGraph.h"
 #include <stack>
-// 伪代码
-//  procedure DFS(node):
-//      if node is not visited:
-//          mark node as visited
-//          process(node)
-//          for each neighbor in neighbors(node):
-//              DFS(neighbor)
-
 // 邻接表图的DFS
 // 如果用邻接表表示图，沿每个链可以找到某个
 // 顶点 v 的所有邻接顶点 w。由于总共有 2e 个边结点，
 // 所以扫描边的时间为O(e)。而且对所有顶点递归访问
 // 1次，所以遍历图的时间复杂性为O(n+e)。
+
 void DFS(ALGraph G, int v, bool *visited)
 { // 从顶点v出发，深度优先搜索遍历连通图 G
     visited[v] = true;
@@ -78,26 +71,19 @@ void DFS(MGraph G, int v, bool *visited)
 }
 
 //* 以下是基于深度优先搜索查看是否G中有start到end的长度为k的路径
-// 深度优先搜索
 bool DFS(ALGraph &G, int v, int k, int target)
 {
     visited[v] = true;
 
     if (k == 0 && v == target)
-    {
         return true; // 找到一条长度为k的路径
-    }
 
     for (ArcNode *arc = G.vertices[v].firstArc; arc; arc = arc->nextArc)
     {
         int adjVex = arc->adjVex;
         if (!visited[adjVex])
-        {
-            if (DFS(G, adjVex, k - 1, target))
-            {
+            if (DFS(G, adjVex, k - 1, target)) // 通过使用k-1的递归来完成长度为k的路径的证明
                 return true;
-            }
-        }
     }
 
     visited[v] = false; // 回溯，标记为未访问
@@ -108,15 +94,10 @@ bool DFS(ALGraph &G, int v, int k, int target)
 bool hasSimplePathK(ALGraph &G, int start, int end, int k)
 {
     if (k <= 0)
-    {
         return false; // k必须是正整数
-    }
-
     // 初始化visited数组
     for (int i = 0; i < G.vexNum; ++i)
-    {
         visited[i] = false;
-    }
 
     return DFS(G, start, k, end);
 }
@@ -132,13 +113,9 @@ bool hasCycle()
 
     // 遍历图中的每个节点
     for (int i = 0; i < num_vertices; ++i)
-    {
         // 如果当前节点未被访问过且存在环路，则返回 true
         if (!visited[i] && dfs(i, visited, rec_stack))
-        {
             return true;
-        }
-    }
 
     // 图中不存在环路，返回 false
     return false;

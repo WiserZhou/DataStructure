@@ -27,7 +27,7 @@ void Merge(RcdType SR[], RcdType TR[], int left, int middle, int right)
     // 初始化 index2 为第二个有序子序列的起始位置，index_merged 为新序列的起始位置
     for (index1 = left, index2 = middle + 1; index1 <= middle && index2 <= right;)
     {
-        // 比较两个子序列的元素，将较小（或较大）的元素放入新序列
+        // 比较两个子序列的元素，将较小（或较大）的元素放入新序列，只有在这里保证前面的小于等于后面的，才可以保持算法的稳定性
         if (LQ(SR[index1].key, SR[index2].key))
             TR[index_merged++] = SR[index1++];
         else

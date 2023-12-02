@@ -8,7 +8,15 @@ struct records
     int key; // 关键字
     // 其他数据成员
 };
-
+// 收集算法
+void Concatenate(std::queue<records> &Q0, std::queue<records> &Q1)
+{
+    while (!Q1.empty())
+    {
+        Q0.push(Q1.front());
+        Q1.pop();
+    }
+}
 // 基数排序
 void radixsort(int figure, std::queue<records> &A)
 {
@@ -28,28 +36,11 @@ void radixsort(int figure, std::queue<records> &A)
 
         // 将Q中的元素依次放入A中
         for (int i = 1; i <= 9; i++)
-        {
-            while (!Q[i].empty())
-            {
-                A.push(Q[i].front());       
-                Q[i].pop();
-            }
-        }
+            Concatenate(A, Q[i]);
     }
 }
 
-// 收集算法
-void Concatenate(std::queue<records> &Q0, std::queue<records> &Q1)
-{
-    if (!Q1.empty())
-    {
-        while (!Q1.empty())
-        {
-            Q0.push(Q1.front());
-            Q1.pop();
-        }
-    }
-}
+
 
 int main()
 {

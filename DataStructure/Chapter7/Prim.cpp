@@ -6,18 +6,13 @@ struct close
     VRType lowCost; // closeEdge[i].lowCost记录了顶点adjVex与i号顶点之间的临时最小权
 } closeEdge[MAX_VERTEX_NUM];
 
-// *说明： 如果 closeEdge[i].lowCost=0，则表示i号顶点已经纳入生成树中，即属于U，
-// *否则，i号顶点属于V-U，还没有纳入生成树中。
+// *说明： 如果 closeEdge[i].lowCost=0，则表示i号顶点已经纳入生成树中，即属于U，否则，i号顶点属于V-U，还没有纳入生成树中。
 // *closeEdge数组存放着每一个结点距离已经遍历过的结点的最短路径和相应的结点
 int LocateVex(MGraph G, VertexType u)
 {
     for (int i = 1; i <= G.vexNum; i++)
-    {
         if (u == G.vex[i])
-        {
             return i;
-        }
-    }
     return 0;
 }
 int Minimum(MGraph G)
@@ -25,13 +20,11 @@ int Minimum(MGraph G)
     VRType min = INFINITY;
     int k = 0;
     for (int i = 1; i <= G.vexNum; i++)
-    {
         if (min > closeEdge[i].lowCost && closeEdge[i].lowCost != 0)
         {
             min = closeEdge[i].lowCost;
             k = i;
         }
-    }
     return k;
 }
 // 时间复杂性主要体现在两层循环上，复杂性是O（n^2）
