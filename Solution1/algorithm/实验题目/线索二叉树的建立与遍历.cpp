@@ -48,7 +48,6 @@ a+b-d/e
 #include <iostream>
 #include <cstdlib>
 using namespace std;
-
 typedef struct BiThrNode//线索二叉树结点结构
 {
     char data;
@@ -85,7 +84,6 @@ void InThreading(BiThrTree p)//中序线索化以p为根的树
         {
             pre->RTag=1;
             pre->rchild=p;
-
         }
         pre=p;// 保持 pre 指向 p 的前驱
         InThreading(p->rchild);//右子树线索化
@@ -97,16 +95,12 @@ bool InOrderThreading(BiThrTree &Thrt,BiThrTree T) //构建中序线索链表
     Thrt->LTag=0;
     Thrt->RTag=1;
     Thrt->rchild=Thrt;
-
     if(!T) Thrt->lchild=Thrt;//如果T是空树
     else
     {
         Thrt->lchild=T;//下面两句为初始化Thrd的左子树指向真正的树根，Thrd为增加的头结点
         pre=Thrt;
-
         InThreading(T);
-
-
         pre->rchild=Thrt;// 下面三句处理最后一个结点,此时Thrd为根，pre 为最后一个结点
         pre->RTag=1;
         Thrt->rchild=pre;
@@ -130,8 +124,6 @@ void InOrderTraverse_Thr(BiThrTree T)
 }
 void CountOneChild(BiThrTree T,int &c)//计算叶子节点数量
 {
-
-
     BiThrTree p=T->lchild;
     while(p!=T)// 空树或遍历结束时，p==T
     {
@@ -146,7 +138,6 @@ void CountOneChild(BiThrTree T,int &c)//计算叶子节点数量
         }
         p=p->rchild;//如果p的右线索为0，或p的右指针为T，进至其右子树根
     }
-
 }
 int main()
 {

@@ -143,15 +143,14 @@ int main()
 {
     char sequence[100];
     scanf("%s", sequence); // 从标准输入读取字符序列
-
-    if (isPalindrome(sequence))
-    {
-        printf("1\n");
-    }
-    else
-    {
-        printf("0\n");
-    }
-
+    // if (isPalindrome(sequence))
+    // {
+    //     printf("1\n");
+    // }
+    // else
+    // {
+    //     printf("0\n");
+    // }
+    printf("%d",isPalindrome(sequence));
     return 0;
 }

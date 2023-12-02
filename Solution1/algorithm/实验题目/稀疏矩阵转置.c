@@ -1,6 +1,5 @@
 
 
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -9,8 +8,8 @@
 
 typedef struct
 {
-    int row;
-    int col;
+    int row; // 记录行值
+    int col; // 记录列值
     int value;
 } Term;
 

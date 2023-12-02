@@ -53,7 +53,7 @@ TreeNode *buildTree(string expr, int start, int end)
     {
         return nullptr;
     }
-    int pos = findLowestPriorityOperator(expr, start, end);
+    int pos = findLowestPriorityOperator(expr, start, end);//找到表达式中优先级最低的运算符的位置
     if (pos == -1)
     {
         for (int i = 0; i <= end - start; i++)

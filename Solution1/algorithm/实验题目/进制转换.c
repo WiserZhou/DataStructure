@@ -29,14 +29,14 @@ int isFull(Stack *stack)
 // 入栈，要判断一下栈是否已经满了
 void push(Stack *stack, int item)
 {
-    if (isFull(stack))  // 栈已满，无法入栈
+    if (isFull(stack)) // 栈已满，无法入栈
         return;
     stack->array[++stack->top] = item; // 栈顶指针加1，并将元素入栈
 }
 // 出栈
 int pop(Stack *stack)
 {
-    if (isEmpty(stack))  // 栈为空
+    if (isEmpty(stack)) // 栈为空
         return -1;
     return stack->array[stack->top--]; // 栈顶指针减1，并返回栈顶元素
 }

@@ -104,7 +104,7 @@ int evaluateExpression(char *expression)
         if (isdigit(expression[i]))
         { // 如果是数字，将数字字符转换为整数并入栈
             int operand = expression[i] - '0';
-            while (isdigit(expression[i + 1])) // 举个例子 21 先把2存储进去了，到时候再来一个数字，这个2扩大十倍了，固有此操作
+            while (isdigit(expression[i + 1])) // 举个例子 21 先把2存储进去了，到时候再来一个数字，这个2扩大十倍了，故有此操作
             {
                 operand = operand * 10 + (expression[i + 1] - '0');
                 i++;
@@ -134,10 +134,10 @@ int evaluateExpression(char *expression)
                 int operand2 = pop(operandStack);
                 int operand1 = pop(operandStack);
                 char operator= pop(operatorStack);
-                int result = executeOperation(operand1, operator, operand2);
+                int result = executeOperation(operand1, operator, operand2); // 就是优先级高的先计算
                 push(operandStack, result);
-            } // 重复,直到运算符栈为空或栈顶操作符的优先级小于当前读入的操作符的优先级
-            push(operatorStack, expression[i]);
+            }                                   // 重复,直到运算符栈为空或栈顶操作符的优先级小于当前读入的操作符的优先级
+            push(operatorStack, expression[i]); // 要是优先级小的话，那就是直接把该运算符直接入栈即可
             // 将当前读入的操作符压入运算符栈中
         }
     }
@@ -150,7 +150,7 @@ int evaluateExpression(char *expression)
         push(operandStack, result);
     }
     int finalResult = peek(operandStack); // 获取最终计算结果
-    free(operandStack->array);
+    free(operandStack->array);            // 这个释放的顺序是不能够写反的
     free(operandStack);
     free(operatorStack->array);
     free(operatorStack);
