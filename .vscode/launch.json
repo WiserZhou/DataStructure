@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/86186/Desktop/Codefile/DataStructure/Debug",
-      "program": "c:/Users/86186/Desktop/Codefile/DataStructure/Debug/build/Debug/outDebug",
+      "cwd": "c:/Users/86186/Desktop/Codefile/DataStructure/Chapter6",
+      "program": "c:/Users/86186/Desktop/Codefile/DataStructure/Chapter6/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
