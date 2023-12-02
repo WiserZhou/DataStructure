@@ -38,8 +38,8 @@ int main()
     for (char c : str)
     {
         if (isalpha(c))
-        { // 只考虑字母字符
-            // c = tolower(c); // 统一转换为小写字母
+        {                   // 只考虑字母字符
+            c = tolower(c); // 统一转换为小写字母
             ++charFreq[c];
         }
     }
@@ -74,7 +74,6 @@ int main()
     getHuffmanCode(nodes.front(), "", huffmanCode);
 
     // 输出结果
-    int minCodeLength = 0;
     for (auto p : charFreq)
     {
         char ch = p.first;
@@ -83,15 +82,24 @@ int main()
         for (auto hc : huffmanCode)
         {
             if (hc.first == ch)
-            {
                 cout << hc.second;
-                minCodeLength += freq * hc.second.size();
-            }
         }
         cout << endl;
     }
-    cout << minCodeLength << endl;
+
     // 计算最优码长
+    int minCodeLength = 0;
+    for (auto p : charFreq)
+    {
+        char ch = p.first;
+        int freq = p.second;
+        for (auto hc : huffmanCode)
+        {
+            if (hc.first == ch)
+                minCodeLength += freq * hc.second.size();
+        }
+    }
+    cout << minCodeLength << endl;
 
     // 释放内存
     for (Node *node : nodes)

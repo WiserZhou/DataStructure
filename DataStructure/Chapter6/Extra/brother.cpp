@@ -16,16 +16,14 @@ void In(TNode *p)
         return;
 
     In(p->ch);
-    if (p->data != '/')
-        cout << p->data;
+    cout << p->data;
     In(p->bro);
 }
 void pre(TNode *p)
 {
     if (p == nullptr)
         return;
-    if (p->data != '/')
-        cout << p->data;
+    cout << p->data;
     pre(p->ch);
     pre(p->bro);
 }
@@ -48,56 +46,30 @@ int depth(TNode *T)
         return depth1 > depth2 ? depth1 : depth2;
     }
 }
+
 void layer(TNode *p)
 {
     if (p == nullptr)
         return;
     queue<TNode *> q;
     q.push(p);
-    if (p->data != '/')
-        cout << p->data;
     while (!q.empty())
     {
         TNode *s = q.front();
-        // cout << s->data;
+        cout << s->data;
         q.pop();
 
         if (s->ch != nullptr)
         {
             s = s->ch;
-            if (s->data != '/')
-                cout << s->data;
             q.push(s);
 
             while (s->bro != nullptr)
             {
-                // if (s->data == 'b' && s->bro != nullptr)
-                //     cout << "****";
                 s = s->bro;
-                if (s->data != '/')
-                    cout << s->data;
-                // cout << " brother:->" << s->data;
                 q.push(s);
             }
         }
-    }
-}
-void pushBranch(TNode *&T, TNode *&s)
-{
-    if (T->ch == nullptr)
-    {
-        // cout << "\n"
-        //      << T->data << "'s child: " << s->data;
-        T->ch = s;
-    }
-    else
-    {
-        TNode *p = T->ch;
-        while (p->bro != nullptr)
-            p = p->bro;
-        // cout << "\n"
-        //      << p->data << "'s brother : " << s->data << "\n ";
-        p->bro = s;
     }
 }
 int NumOfLeaf(TNode *T)
@@ -111,45 +83,51 @@ int NumOfLeaf(TNode *T)
 }
 void showPath(TNode *T, string str)
 {
-    if (T)
+    while (T)
     {
-        string s = str;
         str.push_back(T->data);
-        showPath(T->ch, str); // 遍历孩子的时候要在字符串上加上一个新的字符，保证是向深处遍历
-        if (T->bro)
-            showPath(T->bro, s); // 这里就算没有兄弟结点，也不可以输出str，因为兄弟的尽头不是叶子结点
-    }
-    else
-    {
-        str.erase(0, 1);
-        cout << str << "\n";
-        return;
+        if (!T->ch)
+            cout << str << endl;
+        else
+            showPath(T->ch, str);
+
+        str.erase(str.end() - 1);
+        T = T->bro;
     }
 }
 int main()
 {
-    queue<TNode *> q;
-    string s;
-    cin >> s;
-    q.push(new TNode(s[2]));
+    queue<TNode *> Q;
+    TNode *p, *T, *r, *b;
 
-    TNode *T = q.front();
-    cin >> s;
-
-    while (!q.empty() && s[2] != '#')
+    char fa, in, ch;
+    for (cin >> fa >> in >> ch; ch != '#' || fa != '#'; cin >> fa >> in >> ch)
     {
-        TNode *character = q.front();
+        p = new TNode(ch);
+        Q.push(p);
 
-        if (s[0] == character->data)
-        {
-            TNode *ss = new TNode(s[2]);
-            pushBranch(character, ss);
-            q.push(ss);
-            cin >> s;
-        }
+        if (fa == '#')
+            T = p;
         else
         {
-            q.pop();
+            b = Q.front();
+
+            while (b->data != fa)
+            {
+                Q.pop();
+                b = Q.front();
+            }
+
+            if (!(b->ch))
+            {
+                b->ch = p;
+                r = p;
+            }
+            else
+            {
+                r->bro = p;
+                r = p;
+            }
         }
     }
 
@@ -161,7 +139,7 @@ int main()
     cout << "\n";
     layer(T);
     cout << '\n';
-    cout << depth(T) - 1;
+    cout << depth(T);
     cout << "\n";
     cout << NumOfLeaf(T) << "\n";
     string str;

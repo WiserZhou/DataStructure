@@ -1,3 +1,9 @@
+#include <stack>
+#include <iostream>
+#include <vector>
+#include <string>
+#include <queue>
+using namespace std;
 #define MAX_TREE_SIZE 100 // 树的最大节点数量
 typedef int ElemType;
 /**
@@ -57,44 +63,47 @@ int TreeDepth(CSTree T)
     }
 } // TreeDepth
 
-#include <stack>
-#include <iostream>
-#include <vector>
-void OutPath(CSTree T, std::stack<int> &S)
+// 输出从根到叶子结点的路径
+void OutPath(CSTree T, string str)
 {
-    // 输出森林中所有从根到叶的路径
     while (T)
     {
-        S.push(T->data);
+        str.push_back(T->data);
 
         if (!T->firstChild)
-            PrintPath(S);
+            cout << str << endl;
         else
-            OutPath(T->firstChild, S);
+            OutPath(T->firstChild, str);
 
-        S.pop();
+        str.erase(str.end() - 1);
         T = T->nextSibling; // 往右走前要出栈，因为右链域是兄弟，不能把叶子结点的值带到兄弟分支上去
     }
 }
-void PrintPath(std::stack<int> S)
+// void PrintPath(std::stack<int> S)
+// {
+//     // 将栈中的元素放入临时容器（vector）中
+//     std::vector<int> tempVector;
+//     while (!S.empty())
+//     {
+//         tempVector.push_back(S.top());
+//         S.pop();
+//     }
+
+//     // 逆序输出元素，以恢复栈的原始顺序
+//     for (auto it = tempVector.rbegin(); it != tempVector.rend(); ++it)
+//         std::cout << *it << " ";
+//     std::cout << std::endl;
+// }
+
+CSNode *CreateTreeNode(char ch)
 {
-    // 将栈中的元素放入临时容器（vector）中
-    std::vector<int> tempVector;
-    while (!S.empty())
-    {
-        tempVector.push_back(S.top());
-        S.pop();
-    }
-
-    // 逆序输出元素，以恢复栈的原始顺序
-    for (auto it = tempVector.rbegin(); it != tempVector.rend(); ++it)
-    {
-        std::cout << *it << " ";
-    }
-    std::cout << std::endl;
+    CSNode *p = new CSNode;
+    p = new CSNode; // Assuming GetTreeNode(ch) is equivalent to creating a new node
+    p->data = ch;
+    p->firstChild = nullptr;
+    p->nextSibling = nullptr;
+    return p;
 }
-#include <queue>
-
 // 森林转化为二叉树
 void CreateTree(CSTree &T)
 {
@@ -116,31 +125,53 @@ void CreateTree(CSTree &T)
         {
             s = Q.front();
 
-            while (s->data != fa) // 获得与输入的二元组匹配的父结点
+            while (s->data != fa) // 获得与输入的二元组匹配的父结点，使用循环，如果不匹配就一直进行
             {
                 Q.pop();
                 s = Q.front();
             }
 
             if (!(s->firstChild))
-            {
                 s->firstChild = p; // 对于s，表示当前正在遍历的结点，让新结点p直接作为他的左孩子
-                r = p;             // r用来表示正在进行连接的结点的位置
-            }
             else
-            {
                 r->nextSibling = p; // 让新结点p连接到当前正在进行连接操作的结点r上
-                r = p;
-            }
+            r = p;                  // r用来表示正在进行连接的结点的位置，注意此时连接兄弟的是他的孩子，而不是他本身
         }
     }
 }
-CSNode *CreateTreeNode(char ch)
+// 计算叶子结点的数量
+int NumOfLeaf(CSTree T)
 {
-    CSNode *p = new CSNode;
-    p = new CSNode; // Assuming GetTreeNode(ch) is equivalent to creating a new node
-    p->data = ch;
-    p->firstChild = nullptr;
-    p->nextSibling = nullptr;
-    return p;
+    if (T == nullptr)
+        return 0;
+    if (T->firstChild == nullptr)
+        return 1 + NumOfLeaf(T->nextSibling);
+    else
+        return NumOfLeaf(T->firstChild) + NumOfLeaf(T->nextSibling);
+}
+// 层次遍历
+void LevelTraversal(CSTree p)
+{
+    if (p == nullptr)
+        return;
+    queue<CSNode *> q;
+    q.push(p);
+    while (!q.empty())
+    {
+        CSTree s = q.front();
+        cout << s->data;
+        q.pop();
+
+        if (s->firstChild != nullptr)
+        {
+            s = s->firstChild;
+            q.push(s);
+
+            while (s->nextSibling != nullptr)
+            {
+                s = s->nextSibling;
+                q.push(s);
+            }
+        }
+    }
 }
